@@ -44,7 +44,12 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
             }
         }
-        val jvmTest by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation("io.mockk:mockk:1.12.2")
+            }
+        }
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.240-kotlin-1.5.30")
