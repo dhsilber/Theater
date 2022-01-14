@@ -1,0 +1,9 @@
+<root-tag>
+    <childless/>
+    <three-children>
+        <child-one/>
+        <child-two/>
+        <child-three/>
+    </three-children>
+    <childless/>
+</root-tag>
