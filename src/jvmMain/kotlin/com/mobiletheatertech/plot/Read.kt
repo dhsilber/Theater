@@ -5,7 +5,6 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.Node.ELEMENT_NODE
-import org.w3c.dom.NodeList
 import org.xml.sax.SAXException
 import java.io.IOException
 import javax.xml.parsers.DocumentBuilder
@@ -46,7 +45,7 @@ class Read {
     if (node.nodeType == ELEMENT_NODE) {
       val element = node as Element
       val tag = element.tagName
-      TagRegistry.register(tag)
+      TagRegistry.registerProvider(tag, element)
 
       var child = element.firstChild
       while (child != null) {
