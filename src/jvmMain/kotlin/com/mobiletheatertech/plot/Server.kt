@@ -12,44 +12,35 @@ import io.ktor.http.content.static
 import kotlinx.html.*
 
 fun HTML.index() {
-    head {
-        title("Hello from Ktor!")
+  head {
+    title("Hello from Ktor!")
+  }
+  body {
+    div {
+      +"Hello from Ktor"
     }
-    body {
-        div {
-            +"Hello from Ktor"
-        }
-        div {
-            id = "root"
-        }
-        script(src = "/static/Theater.js") {}
+    div {
+      id = "root"
     }
+    script(src = "/static/Theater.js") {}
+  }
 }
 
 fun main() {
-    Startup().startup()
-    server()
+  Startup().startup()
+  server()
 }
 
-class Startup {
-    fun startup() {
-        val filename = "tiny.xml"
-        val pathName = this.javaClass.classLoader.getResource(filename).file  //.readText()
-        val fileContent = this.javaClass.classLoader.getResource(filename).readText()
-        println("$pathName: $fileContent")
-        Read().input(pathName)
+
+fun server() {
+  embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
+    routing {
+      get("/") {
+        call.respondHtml(HttpStatusCode.OK, HTML::index)
+      }
+      static("/static") {
+        resources()
+      }
     }
-}
-
-fun server(){
-    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
-        routing {
-            get("/") {
-                call.respondHtml(HttpStatusCode.OK, HTML::index)
-            }
-            static("/static") {
-                resources()
-            }
-        }
-    }.start(wait = true)
+  }.start(wait = true)
 }
