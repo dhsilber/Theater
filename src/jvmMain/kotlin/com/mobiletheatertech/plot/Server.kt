@@ -27,7 +27,8 @@ fun HTML.index() {
 }
 
 fun main() {
-  Startup().startup()
+  Configuration
+  Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
   server()
 }
 

@@ -8,6 +8,10 @@ class Luminaire(val element: Element) {
     get() = errors.size > 0
   var type: String = getStringAttribute("type")
 
+  init {
+    println( "New Luminaire of type $type.")
+  }
+
   protected fun getStringAttribute(name: String): String {
     val value = element.getAttribute(name)
     if (value.isEmpty()) errors.add("Missing required $name attribute")
