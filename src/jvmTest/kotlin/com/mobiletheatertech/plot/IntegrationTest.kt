@@ -16,13 +16,12 @@ class IntegrationTest {
     Startup().startup(pathName)
 
     assertEquals(3 + existingCount, Luminaire.Instances.size)
-    val zero  = Luminaire.Instances[0 + existingCount]
-    val one  = Luminaire.Instances[1 + existingCount]
-    val two  = Luminaire.Instances[2 + existingCount]
+    val zero = Luminaire.Instances[0 + existingCount]
+    val one = Luminaire.Instances[1 + existingCount]
+    val two = Luminaire.Instances[2 + existingCount]
     assertFalse(zero.hasError)
-    assertFalse(one.hasError)
+    assertTrue(one.hasError)
     assertTrue(two.hasError)
-
   }
 
 }

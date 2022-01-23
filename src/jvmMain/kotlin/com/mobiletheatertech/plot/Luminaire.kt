@@ -7,14 +7,30 @@ class Luminaire(val element: Element) {
   val hasError: Boolean
     get() = errors.size > 0
   var type: String = getStringAttribute("type")
+  var address: Int = getPositiveIntegerAttribute("address")
 
   init {
-    println( "New Luminaire of type $type.")
+    println("New Luminaire of type $type, with address $address.")
   }
 
-  protected fun getStringAttribute(name: String): String {
+  private fun getStringAttribute(name: String): String {
     val value = element.getAttribute(name)
     if (value.isEmpty()) errors.add("Missing required $name attribute")
+    return value
+  }
+
+  private fun getPositiveIntegerAttribute(name: String): Int {
+    val valueString = element.getAttribute(name)
+    if (valueString.isEmpty()) {
+      errors.add("Missing required $name attribute")
+      return 0
+    }
+    var value = 0
+    try {
+      value = valueString.toInt()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read number from $name attribute")
+    }
     return value
   }
 
