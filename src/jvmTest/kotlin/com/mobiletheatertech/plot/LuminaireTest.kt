@@ -72,5 +72,17 @@ class LuminaireTest {
     assertEquals("Unable to read number from address attribute", instance.errors[0])
   }
 
+  @Test
+  fun `change in address updates element`() {
+    val element = IIOMetadataNode()
+    element.setAttribute("type", "Type value")
+    element.setAttribute("address", "124")
+    val instance = Luminaire.factory(element)
+
+    instance.address = 421
+
+    assertEquals("421", element.getAttribute("address"))
+  }
+
 
 }

@@ -8,6 +8,10 @@ class Luminaire(val element: Element) {
     get() = errors.size > 0
   var type: String = getStringAttribute("type")
   var address: Int = getPositiveIntegerAttribute("address")
+  set(value) {
+    field = value
+    element.setAttribute("address", value.toString())
+  }
 
   init {
     println("New Luminaire of type $type, with address $address.")
