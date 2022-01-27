@@ -27,6 +27,6 @@ class TagRegistryTest {
 
     TagRegistry.registerProvider(tag, element)
 
-    assertSame(element, StandIn.Companion.lastCreated?.element)
+    assertSame(element, StandIn.lastCreated?.element)
   }
 }

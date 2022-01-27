@@ -6,6 +6,6 @@ class Startup {
 
 
     println("Reading Theater Plot XML file at ${pathName}")
-    Read().input(pathName)
+    Xml.read(pathName)
   }
 }

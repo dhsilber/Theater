@@ -10,6 +10,7 @@ import java.util.regex.Pattern
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.test.assertNotEquals
 
 class BackupTest {
   lateinit var randomFileName: String

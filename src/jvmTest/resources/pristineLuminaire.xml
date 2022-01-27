@@ -1,0 +1,5 @@
+<root-tag>
+    <luminaire type="bozzle" address="321"/>
+    <luminaire type="frooble"/>
+    <luminaire/>
+</root-tag>

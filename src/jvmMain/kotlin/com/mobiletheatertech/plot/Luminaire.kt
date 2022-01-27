@@ -11,6 +11,7 @@ class Luminaire(val element: Element) {
   set(value) {
     field = value
     element.setAttribute("address", value.toString())
+    Xml.write()
   }
 
   init {

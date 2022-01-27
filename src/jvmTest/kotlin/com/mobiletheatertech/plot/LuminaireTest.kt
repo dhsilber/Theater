@@ -1,9 +1,15 @@
 package com.mobiletheatertech.plot
 
+import io.mockk.every
+import io.mockk.junit5.MockKExtension
+import io.mockk.mockkObject
+import io.mockk.verify
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.*
 
+@ExtendWith(MockKExtension::class)
 class LuminaireTest {
 
   @Test
@@ -73,16 +79,18 @@ class LuminaireTest {
   }
 
   @Test
-  fun `change in address updates element`() {
+  fun `change in address updates element and saves file`() {
     val element = IIOMetadataNode()
     element.setAttribute("type", "Type value")
     element.setAttribute("address", "124")
     val instance = Luminaire.factory(element)
+    mockkObject(Xml.Companion)
+    every { Xml.Companion.write() } returns Unit
 
     instance.address = 421
 
     assertEquals("421", element.getAttribute("address"))
+    verify { Xml.Companion.write() }
   }
-
 
 }
