@@ -15,7 +15,8 @@ class StartupTest {
 //    println("$pathName: $fileContent")
     Startup().startup(pathName)
     assertContains(TagRegistry.tagToCallback, Luminaire.Tag )
-    assertEquals(1, TagRegistry.tagToCallback.size)
+    assertContains(TagRegistry.tagToCallback, Wall.Tag )
+    assertEquals(2, TagRegistry.tagToCallback.size)
   }
 
 }

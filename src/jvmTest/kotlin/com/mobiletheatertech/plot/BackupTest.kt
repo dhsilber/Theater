@@ -64,6 +64,7 @@ class BackupTest {
     assertEquals(1, targetedBackupDirectory.list().size)
     val generatedFilename = targetedBackupDirectory.list()[0]
     val nowPattern = now.toString().split('.')[0] + "\\.\\d{6}Z\\.xml"
+    println(generatedFilename.toString())
     assertTrue(Pattern.matches(nowPattern, generatedFilename), "Unable to match $nowPattern")
     val generatedFile = File("$targetedBackupDirectory/$generatedFilename")
     val sourceContents = readString(File(sourcePathName).toPath())

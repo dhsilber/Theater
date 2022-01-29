@@ -13,13 +13,15 @@ import kotlin.test.*
 class LuminaireTest {
 
   @Test
-  fun `factory instantiates instance with element`() {
+  fun `is elemental`() {
     val element = IIOMetadataNode()
-    val existingcount = Luminaire.Instances.size
-    val instance = Luminaire.factory(element)
-    assertContains(Luminaire.Instances, instance)
-    assertEquals(1 + existingcount, Luminaire.Instances.size)
-    assertSame(element, instance.element)
+    val luminaire = Luminaire.factory(element)
+    assertIs<Elemental>(luminaire)
+  }
+
+  @Test
+  fun `companion has factory`() {
+    assertIs<CreateWithElement<Luminaire>>(Luminaire)
   }
 
   @Test
