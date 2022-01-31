@@ -12,7 +12,7 @@ import kotlin.test.assertSame
 @ExtendWith(MockKExtension::class)
 class CreateWithElementTest {
 
-  class FakeElemental(val element: Element) : Elemental() {
+  class FakeElemental(val elementPassthrough: Element) : Elemental(elementPassthrough) {
    companion object : CreateWithElement<FakeElemental>() {
       fun factory(element: Element):FakeElemental = create(element, ::FakeElemental)
     }

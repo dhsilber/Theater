@@ -2,10 +2,10 @@ package com.mobiletheatertech.plot
 
 import org.w3c.dom.Element
 
-class Luminaire(val element: Element) : Elemental() {
-  val errors = mutableListOf<String>()
-  val hasError: Boolean
-    get() = errors.size > 0
+class Luminaire(val elementPassthrough: Element) : Elemental(elementPassthrough) {
+//  val errors = mutableListOf<String>()
+//  val hasError: Boolean
+//    get() = errors.size > 0
   var type: String = getStringAttribute("type")
   var address: Int = getPositiveIntegerAttribute("address")
     set(value) {
