@@ -21,11 +21,11 @@ internal class XmlTest {
     mockkObject(TagRegistry)
     val tagCapture = slot<String>()
     val elementCapture = slot<Element>()
-    every { TagRegistry.registerProvider(tag = capture(tagCapture), element = capture(elementCapture)) } returns Unit
+    every { TagRegistry.registerProvider(tag = capture(tagCapture), xmlElement = capture(elementCapture)) } returns Unit
 
     Xml.Companion.read(pathName)
 
-    verify { TagRegistry.registerProvider(tag = "tag", element = any()) }
+    verify { TagRegistry.registerProvider(tag = "tag", xmlElement = any()) }
   }
 
   @Test
@@ -35,18 +35,18 @@ internal class XmlTest {
     mockkObject(TagRegistry)
     val tagCapture = slot<String>()
     val elementCapture = slot<Element>()
-    every { TagRegistry.registerProvider(tag = capture(tagCapture), element = capture(elementCapture)) } returns Unit
+    every { TagRegistry.registerProvider(tag = capture(tagCapture), xmlElement = capture(elementCapture)) } returns Unit
 
     Xml.Companion.read(pathName)
 
     verifySequence {
-      TagRegistry.registerProvider(tag = "root-tag", element = any())
-      TagRegistry.registerProvider(tag = "childless", element = any())
-      TagRegistry.registerProvider(tag = "three-children", element = any())
-      TagRegistry.registerProvider(tag = "child-one", element = any())
-      TagRegistry.registerProvider(tag = "child-two", element = any())
-      TagRegistry.registerProvider(tag = "child-three", element = any())
-      TagRegistry.registerProvider(tag = "childless", element = any())
+      TagRegistry.registerProvider(tag = "root-tag", xmlElement = any())
+      TagRegistry.registerProvider(tag = "childless", xmlElement = any())
+      TagRegistry.registerProvider(tag = "three-children", xmlElement = any())
+      TagRegistry.registerProvider(tag = "child-one", xmlElement = any())
+      TagRegistry.registerProvider(tag = "child-two", xmlElement = any())
+      TagRegistry.registerProvider(tag = "child-three", xmlElement = any())
+      TagRegistry.registerProvider(tag = "childless", xmlElement = any())
     }
   }
 

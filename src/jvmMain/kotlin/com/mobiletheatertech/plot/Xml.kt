@@ -100,11 +100,11 @@ class Xml {
 
     fun parse(node: Node) {
       if (node.nodeType == ELEMENT_NODE) {
-        val element = node as Element
-        val tag = element.tagName
-        TagRegistry.registerProvider(tag, element)
+        val xmlElement = node as Element
+        val tag = xmlElement.tagName
+        TagRegistry.registerProvider(tag, xmlElement)
 
-        var child = element.firstChild
+        var child = xmlElement.firstChild
         while (child != null) {
           parse(child)
           child = child.nextSibling

@@ -12,20 +12,20 @@ import kotlin.test.assertSame
 @ExtendWith(MockKExtension::class)
 class CreateWithElementTest {
 
-  class FakeElemental(val elementPassthrough: Element) : Elemental(elementPassthrough) {
-   companion object : CreateWithElement<FakeElemental>() {
-      fun factory(element: Element):FakeElemental = create(element, ::FakeElemental)
+  class FakeElemental(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
+    companion object : CreateWithXmlElement<FakeElemental>() {
+      fun factory(xmlElement: Element): FakeElemental = create(xmlElement, ::FakeElemental)
     }
   }
 
   @Test
   fun `factory instantiates instance with element`() {
-    val element = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode()
     val existingcount = FakeElemental.Instances.size
-    val instance = FakeElemental.factory(element)
+    val instance = FakeElemental.factory(xmlElement)
     assertContains(FakeElemental.Instances, instance)
     assertEquals(1 + existingcount, FakeElemental.Instances.size)
-    assertSame(element, instance.element)
+    assertSame(xmlElement, instance.xmlElement)
   }
 
 }

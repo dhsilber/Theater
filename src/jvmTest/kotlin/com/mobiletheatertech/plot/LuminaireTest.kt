@@ -13,23 +13,23 @@ import kotlin.test.*
 class LuminaireTest {
 
   @Test
-  fun `is elemental`() {
-    val element = IIOMetadataNode()
-    val luminaire = Luminaire.factory(element)
-    assertIs<Elemental>(luminaire)
+  fun `is xmlElemental`() {
+    val xmlElement = IIOMetadataNode()
+    val luminaire = Luminaire.factory(xmlElement)
+    assertIs<XmlElemental>(luminaire)
   }
 
   @Test
   fun `companion has factory`() {
-    assertIs<CreateWithElement<Luminaire>>(Luminaire)
+    assertIs<CreateWithXmlElement<Luminaire>>(Luminaire)
   }
 
   @Test
   fun `must have type attribute`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("type", "Type value")
-    element.setAttribute("address", "123")
-    val instance = Luminaire.factory(element)
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("type", "Type value")
+    xmlElement.setAttribute("address", "123")
+    val instance = Luminaire.factory(xmlElement)
 
     assertEquals("Type value", instance.type)
     assertFalse(instance.hasError)
@@ -37,9 +37,9 @@ class LuminaireTest {
 
   @Test
   fun `set error state when no type attribute`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("address", "123")
-    val instance = Luminaire.factory(element)
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("address", "123")
+    val instance = Luminaire.factory(xmlElement)
 
     assertTrue(instance.hasError)
     assertEquals(1, instance.errors.size)
@@ -48,10 +48,10 @@ class LuminaireTest {
 
   @Test
   fun `must have address attribute`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("type", "Type value")
-    element.setAttribute("address", "123")
-    val instance = Luminaire.factory(element)
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("type", "Type value")
+    xmlElement.setAttribute("address", "123")
+    val instance = Luminaire.factory(xmlElement)
 
     assertEquals(123, instance.address)
     assertFalse(instance.hasError)
@@ -59,9 +59,9 @@ class LuminaireTest {
 
   @Test
   fun `set error state when no address attribute`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("type", "Type value")
-    val instance = Luminaire.factory(element)
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("type", "Type value")
+    val instance = Luminaire.factory(xmlElement)
 
     assertTrue(instance.hasError)
     assertEquals(1, instance.errors.size)
@@ -70,10 +70,10 @@ class LuminaireTest {
 
   @Test
   fun `set error state when address attribute is not a number`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("type", "Type value")
-    element.setAttribute("address", "address value")
-    val instance = Luminaire.factory(element)
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("type", "Type value")
+    xmlElement.setAttribute("address", "address value")
+    val instance = Luminaire.factory(xmlElement)
 
     assertTrue(instance.hasError)
     assertEquals(1, instance.errors.size)
@@ -81,17 +81,17 @@ class LuminaireTest {
   }
 
   @Test
-  fun `change in address updates element and saves file`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("type", "Type value")
-    element.setAttribute("address", "124")
-    val instance = Luminaire.factory(element)
+  fun `change in address updates xmlElement and saves file`() {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("type", "Type value")
+    xmlElement.setAttribute("address", "124")
+    val instance = Luminaire.factory(xmlElement)
     mockkObject(Xml.Companion)
     every { Xml.Companion.write() } returns Unit
 
     instance.address = 421
 
-    assertEquals("421", element.getAttribute("address"))
+    assertEquals("421", xmlElement.getAttribute("address"))
     verify { Xml.Companion.write() }
   }
 

@@ -1,5 +1,6 @@
 package com.mobiletheatertech.plot
 
+import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
@@ -35,13 +36,18 @@ fun main() {
 
 fun server() {
   embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
-    routing {
-      get("/") {
-        call.respondHtml(HttpStatusCode.OK, HTML::index)
-      }
-      static("/static") {
-        resources()
-      }
-    }
+    web()
+    writeSvg()
   }.start(wait = true)
+}
+
+fun Application.web() {
+  routing {
+    get("/") {
+      call.respondHtml(HttpStatusCode.OK, HTML::index)
+    }
+    static("/static") {
+      resources()
+    }
+  }
 }

@@ -2,7 +2,7 @@ package com.mobiletheatertech.plot
 
 import org.w3c.dom.Element
 
-class Luminaire(val elementPassthrough: Element) : Elemental(elementPassthrough) {
+class Luminaire(val elementPassthrough: Element) : XmlElemental(elementPassthrough) {
 //  val errors = mutableListOf<String>()
 //  val hasError: Boolean
 //    get() = errors.size > 0
@@ -10,7 +10,7 @@ class Luminaire(val elementPassthrough: Element) : Elemental(elementPassthrough)
   var address: Int = getPositiveIntegerAttribute("address")
     set(value) {
       field = value
-      element.setAttribute("address", value.toString())
+      xmlElement.setAttribute("address", value.toString())
       Xml.write()
     }
 
@@ -19,13 +19,13 @@ class Luminaire(val elementPassthrough: Element) : Elemental(elementPassthrough)
   }
 
   private fun getStringAttribute(name: String): String {
-    val value = element.getAttribute(name)
+    val value = xmlElement.getAttribute(name)
     if (value.isEmpty()) errors.add("Missing required $name attribute")
     return value
   }
 
   private fun getPositiveIntegerAttribute(name: String): Int {
-    val valueString = element.getAttribute(name)
+    val valueString = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
       errors.add("Missing required $name attribute")
       return 0
@@ -39,9 +39,9 @@ class Luminaire(val elementPassthrough: Element) : Elemental(elementPassthrough)
     return value
   }
 
-  companion object : CreateWithElement<Luminaire>() {
+  companion object : CreateWithXmlElement<Luminaire>() {
     const val Tag = "luminaire"
-    fun factory(element: Element): Luminaire = create(element, ::Luminaire)
+    fun factory(xmlElement: Element): Luminaire = create(xmlElement, ::Luminaire)
   }
 
 }

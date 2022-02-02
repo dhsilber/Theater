@@ -14,34 +14,34 @@ class WallTest {
 
   @Test
   fun `is elemental`() {
-    val element = IIOMetadataNode()
-    val wall = Wall.factory(element)
-    assertIs<Elemental>(wall)
+    val xmlElement = IIOMetadataNode()
+    val wall = Wall.factory(xmlElement)
+    assertIs<XmlElemental>(wall)
   }
 
   @Test
   fun `companion has factory`() {
-    assertIs<CreateWithElement<Wall>>(Wall)
+    assertIs<CreateWithXmlElement<Wall>>(Wall)
   }
 
   @Test
   fun `has required attributes`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("x1", "0.1")
-    element.setAttribute("y1", "0.2")
-    element.setAttribute("x2", "0.3")
-    element.setAttribute("y2", "0.4")
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("x1", "0.1")
+    xmlElement.setAttribute("y1", "0.2")
+    xmlElement.setAttribute("x2", "0.3")
+    xmlElement.setAttribute("y2", "0.4")
 
-    val instance = Wall.factory(element)
+    val instance = Wall.factory(xmlElement)
 
     assertFalse(instance.hasError)
   }
 
   @Test
   fun `notes error for missing required attributes`() {
-    val element = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode()
 
-    val instance = Wall.factory(element)
+    val instance = Wall.factory(xmlElement)
 
     assertTrue(instance.hasError)
     assertEquals(4, instance.errors.size)
@@ -53,13 +53,13 @@ class WallTest {
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val element = IIOMetadataNode()
-    element.setAttribute("x1", "bogus.1")
-    element.setAttribute("y1", "bogus.2")
-    element.setAttribute("x2", "bogus.3")
-    element.setAttribute("y2", "bogus.4")
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("x1", "bogus.1")
+    xmlElement.setAttribute("y1", "bogus.2")
+    xmlElement.setAttribute("x2", "bogus.3")
+    xmlElement.setAttribute("y2", "bogus.4")
 
-    val instance = Wall.factory(element)
+    val instance = Wall.factory(xmlElement)
 
     assertTrue(instance.hasError)
     assertEquals(4, instance.errors.size)

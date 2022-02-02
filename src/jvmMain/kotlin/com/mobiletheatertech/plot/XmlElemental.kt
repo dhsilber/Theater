@@ -1,21 +1,20 @@
 package com.mobiletheatertech.plot
 
 import org.w3c.dom.Element
-import java.lang.reflect.Type
 
-abstract class Elemental(val element: Element) {
+abstract class XmlElemental(val xmlElement: Element) {
   val errors = mutableListOf<String>()
   val hasError: Boolean
     get() = errors.size > 0
 
-  val int = Int::class.java
+//  val int = Int::class.java
 
 //  fun attributes(attributes: Map<String, Type>){
 //
 //  }
 
   protected open fun getDoubleAttribute(name: String): Double {
-    val valueString: String = element.getAttribute(name)
+    val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
       errors.add("Missing required $name attribute")
       return 0.0

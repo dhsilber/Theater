@@ -7,13 +7,13 @@ import kotlin.test.assertSame
 
 class TagRegistryTest {
 
-  data class StandIn(override val element: Element) : XmlCompanion {
+  data class StandIn(override val xmlElement: Element) : XmlCompanion {
 
     companion object {
       var lastCreated: XmlCompanion? = null
 
-      fun callback(element: Element) {
-        lastCreated = StandIn(element)
+      fun callback(xmlElement: Element) {
+        lastCreated = StandIn(xmlElement)
       }
     }
   }
@@ -23,10 +23,10 @@ class TagRegistryTest {
 
     val tag = "TagRegistryTest tag"
     TagRegistry.registerConsumer(tag, StandIn::callback)
-    val element = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode()
 
-    TagRegistry.registerProvider(tag, element)
+    TagRegistry.registerProvider(tag, xmlElement)
 
-    assertSame(element, StandIn.lastCreated?.element)
+    assertSame(xmlElement, StandIn.lastCreated?.xmlElement)
   }
 }
