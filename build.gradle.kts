@@ -39,9 +39,12 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-server-netty:1.6.3")
-                implementation("io.ktor:ktor-html-builder:1.6.3")
+                implementation("io.ktor:ktor-server-core:1.6.7")
+                implementation("io.ktor:ktor-server-netty:1.6.7")
+                implementation("io.ktor:ktor-html-builder:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
+                implementation("org.apache.xmlgraphics:batik-dom:1.14")
+                implementation("org.apache.xmlgraphics:batik-svggen:1.14")
             }
         }
         val jvmTest by getting {
@@ -52,11 +55,15 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.240-kotlin-1.5.30")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.240-kotlin-1.5.30")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.281-kotlin-1.6.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.281-kotlin-1.6.10")
             }
         }
-        val jsTest by getting
+        val jsTest by getting {
+            dependencies {
+                implementation("io.github.mysticfall:kotlin-react-test:1.2.0")
+            }
+        }
     }
 }
 
