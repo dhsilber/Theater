@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot
 
+import CreateWithXmlElement
+import XmlElemental
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockkObject

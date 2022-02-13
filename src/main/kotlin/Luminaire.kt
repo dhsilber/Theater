@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot
 
+import CreateWithXmlElement
+import XmlElemental
 import org.w3c.dom.Element
 
 class Luminaire(val elementPassthrough: Element) : XmlElemental(elementPassthrough) {

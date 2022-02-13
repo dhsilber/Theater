@@ -1,5 +1,6 @@
 package com.mobiletheatertech.plot
 
+import TagRegistry
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.extension.ExtendWith

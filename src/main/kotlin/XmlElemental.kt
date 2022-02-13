@@ -1,5 +1,3 @@
-package com.mobiletheatertech.plot
-
 import org.w3c.dom.Element
 
 abstract class XmlElemental(val xmlElement: Element) {
@@ -12,6 +10,21 @@ abstract class XmlElemental(val xmlElement: Element) {
 //  fun attributes(attributes: Map<String, Type>){
 //
 //  }
+
+  protected open fun getFloatAttribute(name: String): Float {
+    val valueString: String = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
+      errors.add("Missing required $name attribute")
+      return 0.0f
+    }
+    var value = 0.0f
+    try {
+      value = valueString.toFloat()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read floating-point number from $name attribute")
+    }
+    return value
+  }
 
   protected open fun getDoubleAttribute(name: String): Double {
     val valueString: String = xmlElement.getAttribute(name)

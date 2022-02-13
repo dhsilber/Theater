@@ -1,75 +1,42 @@
+import org.jetbrains.compose.compose
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    kotlin("multiplatform") version "1.6.10"
-    application
+    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.compose") version "1.0.0"
 }
 
-group = "com.mobiletheatertech"
-version = "1.0-SNAPSHOT"
+group = "name.davidsilber"
+version = "1.0"
 
 repositories {
-    jcenter()
+    google()
     mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
-kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
-        withJava()
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
+dependencies {
+    implementation(compose.desktop.currentOs)
+    testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:1.12.2")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "13"
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "Theater"
+            packageVersion = "1.0.0"
         }
     }
-    js(LEGACY) {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
-    }
-    sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        val jvmMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-server-netty:1.6.3")
-                implementation("io.ktor:ktor-html-builder:1.6.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("io.mockk:mockk:1.12.2")
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.240-kotlin-1.5.30")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.240-kotlin-1.5.30")
-            }
-        }
-        val jsTest by getting
-    }
-}
-
-application {
-    mainClass.set("com.mobiletheatertech.plot.ServerKt")
-}
-
-tasks.named<Copy>("jvmProcessResources") {
-    val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
-    from(jsBrowserDistribution)
-}
-
-tasks.named<JavaExec>("run") {
-    dependsOn(tasks.named<Jar>("jvmJar"))
-    classpath(tasks.named<Jar>("jvmJar"))
 }

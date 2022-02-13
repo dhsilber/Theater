@@ -1,5 +1,6 @@
 package com.mobiletheatertech.plot
 
+import XmlCompanion
 import org.junit.jupiter.api.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode

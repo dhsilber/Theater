@@ -1,5 +1,3 @@
-package com.mobiletheatertech.plot
-
 import org.w3c.dom.Element
 
 class TagRegistry {
