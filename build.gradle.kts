@@ -18,6 +18,8 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("org.apache.xmlgraphics:batik-dom:1.14")
+    implementation("org.apache.xmlgraphics:batik-svggen:1.14")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.2")
 }

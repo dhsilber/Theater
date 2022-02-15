@@ -19,7 +19,7 @@ class Display {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
-      x: Int, y: Int
+      x: Int, y: Int, text: String
 //      resetter: (text: String) -> Unit
     ) {
       var x10 by remember { mutableStateOf(0) }
@@ -56,6 +56,7 @@ class Display {
         }
 
       }
+      Text( text)
 
 //      for (instance in Wall.Instances) {
 //        Text(instance.toString())
