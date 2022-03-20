@@ -1,26 +1,31 @@
+package tests
+
 import com.mobiletheatertech.plot.Backup
 import com.mobiletheatertech.plot.Configuration
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
+import io.mockk.clearAllMocks
+import org.junit.After
+import org.junit.Test
 import java.io.File
-import java.nio.file.Files.readString
+import java.nio.file.Files
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 import java.util.regex.Pattern
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import kotlin.test.assertNotEquals
 
 class BackupTest {
   lateinit var randomFileName: String
 
   fun setup() {
     randomFileName = UUID.randomUUID().toString()
+    println( "randomFileName: $randomFileName")
     Configuration.backupDirectory = "/tmp/$randomFileName/backup"
+    Backup.BackupDirectory = File(Configuration.backupDirectory)
+
   }
 
-  @AfterEach
+  @After
   fun cleanUp() {
     File("/tmp/$randomFileName").delete()
   }
@@ -28,7 +33,7 @@ class BackupTest {
   @Test
   fun `creates backup directory if it does not exist`() {
     setup()
-    Backup.BackupDirectory = File(Configuration.backupDirectory)
+//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     assertFalse(Backup.BackupDirectory.exists())
 
     Backup.backup("")
@@ -39,7 +44,7 @@ class BackupTest {
   @Test
   fun `creates targeted backup directory for specified file if it does not exist`() {
     setup()
-    Backup.BackupDirectory = File(Configuration.backupDirectory)
+//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     val filename = "tiny.xml"
     val targetedBackupDirectory = File("${Configuration.backupDirectory}/$filename".removeSuffix(".xml"))
     assertFalse(targetedBackupDirectory.exists())
@@ -53,9 +58,10 @@ class BackupTest {
   @Test
   fun `copies file into targeted backup directory with name being incrementally larger numbers plus xml suffix`() {
     setup()
-    Backup.BackupDirectory = File(Configuration.backupDirectory)
+//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     val filename = "larger.xml"
     val targetedBackupDirectory = File("${Configuration.backupDirectory}/$filename".removeSuffix(".xml"))
+    println( "targetedBackupDirectory: $targetedBackupDirectory")
     val sourcePathName = this.javaClass.classLoader.getResource(filename)!!.file
 
     Backup.backup(sourcePathName)
@@ -67,10 +73,8 @@ class BackupTest {
     println(generatedFilename.toString())
     assertTrue(Pattern.matches(nowPattern, generatedFilename), "Unable to match $nowPattern")
     val generatedFile = File("$targetedBackupDirectory/$generatedFilename")
-    val sourceContents = readString(File(sourcePathName).toPath())
-    assertEquals(sourceContents, readString(generatedFile.toPath()))
+    val sourceContents = Files.readString(File(sourcePathName).toPath())
+    assertEquals(sourceContents, Files.readString(generatedFile.toPath()))
   }
 
 }
-
-

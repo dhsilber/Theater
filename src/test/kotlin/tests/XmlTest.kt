@@ -1,19 +1,44 @@
-package com.mobiletheatertech.plot
+package com.mobiletheatertech.plot.tests
 
 import TagRegistry
+import Xml
+import com.mobiletheatertech.plot.Backup
+import com.mobiletheatertech.plot.Svg
 import io.mockk.*
-import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.extension.ExtendWith
 import org.w3c.dom.Element
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
+import kotlin.test.AfterTest
 
-@ExtendWith(MockKExtension::class)
 internal class XmlTest {
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Backup)
+    unmockkObject(TagRegistry)
+  }
+
+//  fun resetXmlDom() {
+//    val field = Xml.getThis()::class.java.getDeclaredField("dom")
+//
+//    with (field) {
+//      isAccessible=true
+//      set(Xml.dom, null)
+//    }
+//  }
+//
+//  @Test
+//  fun `write with uninitialized Xml dom does nothing`() {
+//    mockkObject(Xml.Companion)
+//    unmockkObject(Xml.Companion)
+//    resetXmlDom()
+////    mockkObject(Backup)
+//
+//    Xml.write()
+//  }
 
   @Test
   fun `read registers root element's tag`() {
@@ -66,14 +91,14 @@ internal class XmlTest {
   fun `write backs up file`() {
     val filename = "larger.xml"
     val pathName = this.javaClass.classLoader.getResource(filename)!!.file
-    Xml.Companion.PathName = pathName
+    Xml.read(pathName)
     mockkObject(Backup)
     val pathnameCapture = slot<String>()
     every { Backup.backup(sourcePathName = capture(pathnameCapture)) } returns Unit
 
     Xml.write()
 
-    verify { Backup.backup(sourcePathName = pathName) }
+    verify { Backup.backup(sourcePathName = any()) }
   }
 
   @Test

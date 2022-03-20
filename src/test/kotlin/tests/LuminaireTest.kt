@@ -1,18 +1,21 @@
-package com.mobiletheatertech.plot
+package tests
 
 import CreateWithXmlElement
 import XmlElemental
+import com.mobiletheatertech.plot.Luminaire
 import io.mockk.every
-import io.mockk.junit5.MockKExtension
 import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.*
 
-@ExtendWith(MockKExtension::class)
 class LuminaireTest {
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml.Companion)
+  }
 
   @Test
   fun `is xmlElemental`() {

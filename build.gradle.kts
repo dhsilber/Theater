@@ -3,8 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0"
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.compose") version "1.0.1"
 }
 
 group = "name.davidsilber"
@@ -20,16 +20,25 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.apache.xmlgraphics:batik-dom:1.14")
     implementation("org.apache.xmlgraphics:batik-svggen:1.14")
+
+//    implementation( "org.jetbrains.compose.components:components-splitpane-desktop:1.0.1")
+//    implementation(project(":SplitPane:library"))
+
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.2")
+    testImplementation("org.jetbrains.compose.ui:ui-test-junit4:1.0.1")
+
+//    testImplementation("androidx.compose.ui:ui-test-manifest:1.0.1")
+
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnit()
+//    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "13"
+    kotlinOptions.jvmTarget = "15"
 }
 
 compose.desktop {

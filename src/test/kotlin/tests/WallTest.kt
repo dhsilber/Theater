@@ -1,17 +1,15 @@
-package com.mobiletheatertech.plot
+package tests
 
 import CreateWithXmlElement
 import XmlElemental
-import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import com.mobiletheatertech.plot.Wall
+import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-@ExtendWith(MockKExtension::class)
 class WallTest {
 
   @Test

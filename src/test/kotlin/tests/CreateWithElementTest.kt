@@ -1,22 +1,19 @@
-package com.mobiletheatertech.plot
+package tests
 
 import CreateWithXmlElement
 import XmlElemental
-import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
-@ExtendWith(MockKExtension::class)
 class CreateWithElementTest {
 
   class FakeElemental(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
     companion object : CreateWithXmlElement<FakeElemental>() {
-      fun factory(xmlElement: Element): FakeElemental = create(xmlElement, ::FakeElemental)
+      fun factory(xmlElement: Element): FakeElemental = create(xmlElement, CreateWithElementTest::FakeElemental)
     }
   }
 

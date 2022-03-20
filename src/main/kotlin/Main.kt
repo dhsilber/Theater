@@ -1,10 +1,7 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 import androidx.compose.material.MaterialTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,20 +14,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.mobiletheatertech.plot.Configuration
 import com.mobiletheatertech.plot.Startup
 import com.mobiletheatertech.plot.Svg
+//import org.jetbrains.compose.splitpane.demo.uiTop
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Preview
 fun App() {
-  Configuration
-  Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
-
 
   var text by remember { mutableStateOf("Hello, World!") }
   var x by remember { mutableStateOf(0) }
@@ -43,31 +39,33 @@ fun App() {
   MaterialTheme {
 
     val asdf = remember { mutableStateOf("0") }
-    Column()
-    {
-      Row(
-        Modifier
-          .fillMaxSize()
-          .onPointerEvent(PointerEventType.Press) {
-            text = it.awtEvent.locationOnScreen?.toString().orEmpty()
-            x = it.awtEvent.locationOnScreen.x
-            y = it.awtEvent.locationOnScreen.y
-          },
-        Arrangement.spacedBy(5.dp)
-      ) {
 
-//      Text(text)
+    Row(
+      Modifier
+        .fillMaxSize()
+        .onPointerEvent(PointerEventType.Press) {
+          text = it.awtEvent.locationOnScreen?.toString().orEmpty()
+          x = it.awtEvent.locationOnScreen.x
+          y = it.awtEvent.locationOnScreen.y
+        },
+      Arrangement.spacedBy(5.dp)
+    ) {
+      Column(
+        Modifier.padding(8.dp)
+      )
+      {
+        WallButton()
         Button(onClick = { Svg.write() }) {
           Text("Write SVG")
         }
-        Display.display(
-          x, y, text,
-//        ::setter
-        )
-
       }
-      Text(text)
+      Display.display(
+        x, y, text,
+//        ::setter
+      )
+
     }
+  }
 //
 //    var text by remember { mutableStateOf("Hello, World!") }
 //
@@ -77,10 +75,13 @@ fun App() {
 //    }) {
 //      Text(text)
 //    }
-  }
 }
 
+
 fun main() = application {
+  Configuration
+  Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
+
   Window(onCloseRequest = ::exitApplication, title = "Looky here!") {
     App()
   }

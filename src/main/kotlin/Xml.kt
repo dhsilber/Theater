@@ -25,6 +25,10 @@ class Xml {
 
     lateinit var dom: Document
 
+    fun getThis() : Xml.Companion {
+      return this
+    }
+
     fun read(pathName: String) {
       PathName = pathName
 
@@ -53,6 +57,9 @@ class Xml {
     }
 
     fun write() {
+      if (! ::dom.isInitialized)
+        return
+
       Backup.backup(PathName)
 
 //      https://stackoverflow.com/questions/2453105/writing-to-a-xml-file-in-java
