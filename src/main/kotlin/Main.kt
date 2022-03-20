@@ -82,8 +82,14 @@ fun App() {
 fun main() = application {
   Configuration
   Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
+  val title = try {
+    Venue.Instances[0].building + " - " + Venue.Instances[0].room
+  }
+  catch(exception: Exception) {
+    "Missing venue"
+  }
 
-  Window(onCloseRequest = ::exitApplication, title = "Looky here!") {
+  Window(onCloseRequest = ::exitApplication, title = title) {
     App()
   }
 }

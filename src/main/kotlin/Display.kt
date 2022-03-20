@@ -57,7 +57,7 @@ class Display {
           y20 = y
 //          println( "($x, $y)")
 //          println( "($x10, $y10) to ($x20, $y20)")
-          Wall.create(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
+          Wall.createNew(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
         }
         for (instance in Wall.Instances) {
 //          Text(instance.toString())

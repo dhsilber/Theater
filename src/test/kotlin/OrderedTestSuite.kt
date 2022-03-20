@@ -2,7 +2,7 @@ import com.mobiletheatertech.plot.tests.XmlTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import tests.BackupTest
-import tests.LuminaireTest
+import tests.entities.LuminaireTest
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(

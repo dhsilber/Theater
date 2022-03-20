@@ -51,7 +51,7 @@ class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
     const val Tag = "wall"
     fun factory(xmlElement: Element): Wall = create(xmlElement, ::Wall)
 
-    fun create(x1: Float, y1: Float, x2: Float, y2: Float) {
+    fun createNew(x1: Float, y1: Float, x2: Float, y2: Float) {
       val element = Xml.dom.createElement("wall")
       element.setAttribute("x1", x1.toString())
       element.setAttribute("y1", y1.toString())

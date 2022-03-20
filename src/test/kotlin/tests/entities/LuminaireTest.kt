@@ -1,26 +1,35 @@
-package tests
+package tests.entities
 
 import CreateWithXmlElement
+import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Luminaire
+import com.mobiletheatertech.plot.Wall
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import io.mockk.verify
 import javax.imageio.metadata.IIOMetadataNode
-import kotlin.test.*
+import kotlin.test.AfterTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class LuminaireTest {
 
   @AfterTest
   fun cleanup() {
-    unmockkObject(Xml.Companion)
+    unmockkObject(Xml)
   }
 
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
+
     val luminaire = Luminaire.factory(xmlElement)
+
     assertIs<XmlElemental>(luminaire)
   }
 
@@ -29,60 +38,43 @@ class LuminaireTest {
     assertIs<CreateWithXmlElement<Luminaire>>(Luminaire)
   }
 
-  @Test
-  fun `must have type attribute`() {
+
+  @org.junit.Test
+  fun `has required attributes`() {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("address", "123")
+
     val instance = Luminaire.factory(xmlElement)
 
     assertEquals("Type value", instance.type)
-    assertFalse(instance.hasError)
-  }
-
-  @Test
-  fun `set error state when no type attribute`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("address", "123")
-    val instance = Luminaire.factory(xmlElement)
-
-    assertTrue(instance.hasError)
-    assertEquals(1, instance.errors.size)
-    assertEquals("Missing required type attribute", instance.errors[0])
-  }
-
-  @Test
-  fun `must have address attribute`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("type", "Type value")
-    xmlElement.setAttribute("address", "123")
-    val instance = Luminaire.factory(xmlElement)
-
     assertEquals(123, instance.address)
     assertFalse(instance.hasError)
   }
 
-  @Test
-  fun `set error state when no address attribute`() {
+  @org.junit.Test
+  fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("type", "Type value")
+
     val instance = Luminaire.factory(xmlElement)
 
     assertTrue(instance.hasError)
-    assertEquals(1, instance.errors.size)
-    assertEquals("Missing required address attribute", instance.errors[0])
+    assertEquals("Missing required type attribute", instance.errors[0])
+    assertEquals("Missing required address attribute", instance.errors[1])
+    assertEquals(2, instance.errors.size)
   }
 
-  @Test
-  fun `set error state when address attribute is not a number`() {
+  @org.junit.Test
+  fun `notes error for badly specified attributes`() {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("type", "Type value")
-    xmlElement.setAttribute("address", "address value")
+    xmlElement.setAttribute("address", "bogus.1")
+
     val instance = Luminaire.factory(xmlElement)
 
     assertTrue(instance.hasError)
+    assertEquals("Unable to read positive integer from address attribute", instance.errors[0])
     assertEquals(1, instance.errors.size)
-    assertEquals("Unable to read number from address attribute", instance.errors[0])
   }
 
   @Test
@@ -91,13 +83,13 @@ class LuminaireTest {
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("address", "124")
     val instance = Luminaire.factory(xmlElement)
-    mockkObject(Xml.Companion)
-    every { Xml.Companion.write() } returns Unit
+    mockkObject(Xml)
+    every { Xml.write() } returns Unit
 
     instance.address = 421
 
     assertEquals("421", xmlElement.getAttribute("address"))
-    verify { Xml.Companion.write() }
+    verify { Xml.write() }
   }
 
 }

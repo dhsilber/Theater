@@ -11,6 +11,33 @@ abstract class XmlElemental(val xmlElement: Element) {
 //
 //  }
 
+  fun getStringAttribute(name: String): String {
+    val value = xmlElement.getAttribute(name)
+    if (value.isEmpty()) {
+      errors.add("Missing required $name attribute")
+    }
+    return value
+  }
+
+  fun getOptionalStringAttribute(name: String): String {
+    return xmlElement.getAttribute(name)
+  }
+
+  fun getPositiveIntegerAttribute(name: String): Int {
+    val valueString = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
+      errors.add("Missing required $name attribute")
+      return 0
+    }
+    var value = 0
+    try {
+      value = valueString.toInt()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read positive integer from $name attribute")
+    }
+    return value
+  }
+
   protected open fun getFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
