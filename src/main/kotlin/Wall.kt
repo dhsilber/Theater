@@ -5,11 +5,9 @@ import CreateWithXmlElement
 import Line
 import XmlElemental
 import androidx.compose.foundation.shape.GenericShape
-import androidx.compose.runtime.Composable
+//import androidx.compose.runtime.Composable
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-
-import androidx.compose.foundation.Canvas
 
 class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
   val x1 = getFloatAttribute("x1")
@@ -53,7 +51,7 @@ class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
     const val Tag = "wall"
     fun factory(xmlElement: Element): Wall = create(xmlElement, ::Wall)
 
-    fun factorial( x1: Float, y1: Float, x2: Float, y2: Float) {
+    fun create(x1: Float, y1: Float, x2: Float, y2: Float) {
       val element = Xml.dom.createElement("wall")
       element.setAttribute("x1", x1.toString())
       element.setAttribute("y1", y1.toString())

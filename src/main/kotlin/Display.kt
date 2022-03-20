@@ -1,20 +1,14 @@
-import androidx.compose.material.Text
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.awt.awtEvent
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.mobiletheatertech.plot.Wall
 
@@ -25,7 +19,7 @@ class Display {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
-      x: Int, y: Int, text: String
+      drawingWalls: Boolean, x: Int, y: Int, text: String
 //      resetter: (text: String) -> Unit
     ) {
       var x10 by remember { mutableStateOf(0) }
@@ -56,14 +50,14 @@ class Display {
             }
           }
       ) {
-        if (x != x20) {
+        if (drawingWalls && x != x20) {
           x10 = x20
           y10 = y20
           x20 = x
           y20 = y
 //          println( "($x, $y)")
 //          println( "($x10, $y10) to ($x20, $y20)")
-          Wall.factorial(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
+          Wall.create(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
         }
         for (instance in Wall.Instances) {
 //          Text(instance.toString())

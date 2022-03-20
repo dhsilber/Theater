@@ -3,15 +3,14 @@ package com.mobiletheatertech.plot.tests
 import TagRegistry
 import Xml
 import com.mobiletheatertech.plot.Backup
-import com.mobiletheatertech.plot.Svg
 import io.mockk.*
 import org.w3c.dom.Element
 import java.io.File
 import java.nio.file.Files
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.AfterTest
 
 internal class XmlTest {
 
@@ -20,25 +19,6 @@ internal class XmlTest {
     unmockkObject(Backup)
     unmockkObject(TagRegistry)
   }
-
-//  fun resetXmlDom() {
-//    val field = Xml.getThis()::class.java.getDeclaredField("dom")
-//
-//    with (field) {
-//      isAccessible=true
-//      set(Xml.dom, null)
-//    }
-//  }
-//
-//  @Test
-//  fun `write with uninitialized Xml dom does nothing`() {
-//    mockkObject(Xml.Companion)
-//    unmockkObject(Xml.Companion)
-//    resetXmlDom()
-////    mockkObject(Backup)
-//
-//    Xml.write()
-//  }
 
   @Test
   fun `read registers root element's tag`() {

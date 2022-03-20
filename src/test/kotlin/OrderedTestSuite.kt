@@ -1,11 +1,8 @@
 import com.mobiletheatertech.plot.tests.XmlTest
-import failing.*
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
-import tests.LuminaireTest
 import tests.BackupTest
-import tests.PointTest
-import tests.WallTest
+import tests.LuminaireTest
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(

@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.mobiletheatertech.plot.Configuration
 import com.mobiletheatertech.plot.Startup
 import com.mobiletheatertech.plot.Svg
+
 //import org.jetbrains.compose.splitpane.demo.uiTop
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -38,7 +38,7 @@ fun App() {
 
   MaterialTheme {
 
-    val asdf = remember { mutableStateOf("0") }
+    var drawingWalls by remember { mutableStateOf(false) }
 
     Row(
       Modifier
@@ -54,12 +54,13 @@ fun App() {
         Modifier.padding(8.dp)
       )
       {
-        WallButton()
+        WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
         Button(onClick = { Svg.write() }) {
           Text("Write SVG")
         }
       }
       Display.display(
+        drawingWalls,
         x, y, text,
 //        ::setter
       )
