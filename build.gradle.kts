@@ -41,6 +41,8 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "15"
 }
 
+// Todo: see this for packaging info:
+// https://github.com/JetBrains/compose-jb/blob/master/tutorials/Native_distributions_and_local_execution/README.md
 compose.desktop {
     application {
         mainClass = "MainKt"
