@@ -2,15 +2,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.mobiletheatertech.plot.Wall
+import entities.Wall
+import display.drawContent
 
 class Display {
 
@@ -42,7 +41,7 @@ class Display {
 //            println("Event ${it.awtEvent}")
 ////            resetter(it.awtEvent.locationOnScreen.toString())
 //          }
-          .clipToBounds()
+//          .clipToBounds()
           .onSizeChanged {
             with(density) {
               width = it.width.toDp()
@@ -59,19 +58,12 @@ class Display {
 //          println( "($x10, $y10) to ($x20, $y20)")
           Wall.createNew(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
         }
-        for (instance in Wall.Instances) {
-//          Text(instance.toString())
-          val (x1, y1, x2, y2) = instance.draw()
-//          with(density) {
 
-          drawLine(Color.Black, Offset(x1, y1), Offset(x2, y2))
-//          }
-//          drawLine(Color.Magenta, Offset(x10.toFloat(), y10.toFloat()), Offset(x20.toFloat(), y20.toFloat()))
-
-        }
+        drawContent(this)
 
       }
-      println(width.toString() + "," + height.toString())
+      Text("Width: $width - height: $height")
+      println("Width: $width - height: $height")
 
 //      for (instance in Wall.Instances) {
 //        Text(instance.toString())

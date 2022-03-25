@@ -1,11 +1,7 @@
-package com.mobiletheatertech.plot
+package entities
 
-//import kotlinx.xhtml.dom.append
 import CreateWithXmlElement
-import Line
 import XmlElemental
-import androidx.compose.foundation.shape.GenericShape
-//import androidx.compose.runtime.Composable
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -23,25 +19,15 @@ class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
 //  var end = Point( x2, y2, 0.0 )
 
   fun svg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
-    println("Drawing the wall from $x1,$y1 to $x2,$y2.")
-
-    val svgElement = svgDocuemnt.createElementNS(svgNamespace, "line")
-    svgElement.setAttribute("x1", x1.toString())
-    svgElement.setAttribute("y1", y1.toString())
-    svgElement.setAttribute("x2", x2.toString())
-    svgElement.setAttribute("y2", y2.toString())
-    svgElement.setAttribute("stroke", "black")
-    svgElement.setAttribute("stroke-width", "2");
-    parentElement.appendChild(svgElement)
   }
 
-  //  @Composable
-  fun draw(): Line = Line(x1, y1, x2, y2)
-
-  fun shape() = GenericShape { _, _ ->
-    moveTo(x1, y1)
-    lineTo(x2, y2)
-  }
+//  //  @Composable
+//  fun draw(): Line = Line(x1, y1, x2, y2)
+//
+//  fun shape() = GenericShape { _, _ ->
+//    moveTo(x1, y1)
+//    lineTo(x2, y2)
+//  }
 
   override fun toString(): String {
     return "Wall from ($x1, $y1) to ($x2, $y2)."

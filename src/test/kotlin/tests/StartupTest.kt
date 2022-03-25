@@ -1,9 +1,11 @@
 package tests
 
 import TagRegistry
-import com.mobiletheatertech.plot.Luminaire
+import entities.Luminaire
 import com.mobiletheatertech.plot.Startup
-import com.mobiletheatertech.plot.Wall
+import entities.Wall
+import entities.Proscenium
+import entities.Venue
 import org.junit.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -20,10 +22,11 @@ class StartupTest {
     TagRegistry.tagToCallback.clear()
     Startup().startup(pathName)
     assertContains(TagRegistry.tagToCallback, Venue.Tag)
+    assertContains(TagRegistry.tagToCallback, Proscenium.Tag)
     assertContains(TagRegistry.tagToCallback, Luminaire.Tag)
     assertContains(TagRegistry.tagToCallback, Wall.Tag)
     println(TagRegistry.tagToCallback)
-    assertEquals(3, TagRegistry.tagToCallback.size)
+    assertEquals(4, TagRegistry.tagToCallback.size)
   }
 
 }

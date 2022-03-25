@@ -2,7 +2,7 @@ package tests.entities
 
 import CreateWithXmlElement
 import XmlElemental
-import com.mobiletheatertech.plot.Wall
+import entities.Wall
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
@@ -24,6 +24,11 @@ class WallTest {
   @Test
   fun `companion has factory`() {
     assertIs<CreateWithXmlElement<Wall>>(Wall)
+  }
+
+  @Test
+  fun `companion has tag`() {
+    assertEquals("wall", Wall.Tag )
   }
 
   @Test

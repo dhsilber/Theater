@@ -1,3 +1,7 @@
+package entities
+
+import CreateWithXmlElement
+import XmlElemental
 import org.w3c.dom.Element
 
 class Venue(elementPassthrough: Element) : XmlElemental(elementPassthrough) {

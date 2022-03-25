@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot
 
+import display.drawSvgContent
+import entities.Wall
 import org.apache.batik.dom.GenericDOMImplementation
 import org.apache.batik.svggen.SVGGraphics2D
 import org.w3c.dom.DOMImplementation
@@ -29,8 +31,7 @@ class Svg {
 
       root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
 
-      for( instance in Wall.Instances)
-        instance.svg(document, namespace, root)
+      drawSvgContent(document, namespace, root)
 
 
 //        System.out.println( "In create. Pathname: " + pathname );

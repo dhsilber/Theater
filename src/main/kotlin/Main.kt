@@ -16,10 +16,13 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
 import com.mobiletheatertech.plot.Startup
 import com.mobiletheatertech.plot.Svg
+import entities.Venue
 
 //import org.jetbrains.compose.splitpane.demo.uiTop
 
@@ -88,8 +91,9 @@ fun main() = application {
   catch(exception: Exception) {
     "Missing venue"
   }
+  val state = rememberWindowState(placement = WindowPlacement.Maximized)
 
-  Window(onCloseRequest = ::exitApplication, title = title) {
+  Window(onCloseRequest = ::exitApplication, title = title, state = state) {
     App()
   }
 }

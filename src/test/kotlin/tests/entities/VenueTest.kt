@@ -1,10 +1,8 @@
 package tests.entities
 
 import CreateWithXmlElement
-import Venue
+import entities.Venue
 import XmlElemental
-import com.mobiletheatertech.plot.Luminaire
-import com.mobiletheatertech.plot.Wall
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
@@ -26,6 +24,11 @@ class VenueTest {
   @Test
   fun `companion has factory`() {
     assertIs<CreateWithXmlElement<Venue>>(Venue)
+  }
+
+  @Test
+  fun `companion has tag`() {
+    assertEquals("venue", Venue.Tag )
   }
 
   @Test

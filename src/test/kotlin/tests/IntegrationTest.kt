@@ -2,7 +2,7 @@ package tests
 
 import com.mobiletheatertech.plot.Backup
 import com.mobiletheatertech.plot.Configuration
-import com.mobiletheatertech.plot.Luminaire
+import entities.Luminaire
 import com.mobiletheatertech.plot.Startup
 import org.junit.Test
 import java.io.File

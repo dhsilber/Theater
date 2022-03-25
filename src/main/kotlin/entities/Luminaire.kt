@@ -1,4 +1,4 @@
-package com.mobiletheatertech.plot
+package entities
 
 import CreateWithXmlElement
 import XmlElemental

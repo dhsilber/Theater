@@ -3,8 +3,7 @@ package tests.entities
 import CreateWithXmlElement
 import Xml
 import XmlElemental
-import com.mobiletheatertech.plot.Luminaire
-import com.mobiletheatertech.plot.Wall
+import entities.Luminaire
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
@@ -38,6 +37,10 @@ class LuminaireTest {
     assertIs<CreateWithXmlElement<Luminaire>>(Luminaire)
   }
 
+  @org.junit.Test
+  fun `companion has tag`() {
+    assertEquals("luminaire", Luminaire.Tag )
+  }
 
   @org.junit.Test
   fun `has required attributes`() {

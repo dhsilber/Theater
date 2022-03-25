@@ -53,6 +53,24 @@ abstract class XmlElemental(val xmlElement: Element) {
     return value
   }
 
+  protected open fun getPositiveFloatAttribute(name: String): Float {
+    val valueString: String = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
+      errors.add("Missing required $name attribute")
+      return 0.0f
+    }
+    var value = 0.0f
+    try {
+      value = valueString.toFloat()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read positive floating-point number from $name attribute")
+    }
+    if (0 > value) {
+      errors.add("Unable to read positive floating-point number from $name attribute")
+    }
+    return value
+  }
+
   protected open fun getDoubleAttribute(name: String): Double {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
@@ -63,7 +81,26 @@ abstract class XmlElemental(val xmlElement: Element) {
     try {
       value = valueString.toDouble()
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read floating-point number from $name attribute")
+      errors.add("Unable to read double number from $name attribute")
+    }
+    return value
+  }
+
+  protected open fun getPositiveDoubleAttribute(name: String): Double {
+    val valueString: String = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
+      errors.add("Missing required $name attribute")
+      return 0.0
+    }
+    var value = 0.0
+    try {
+      value = valueString.toDouble()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read positive double number from $name attribute")
+    }
+    if (0 > value) {
+      errors.add("Unable to read positive double number from $name attribute")
+      return 0.0
     }
     return value
   }

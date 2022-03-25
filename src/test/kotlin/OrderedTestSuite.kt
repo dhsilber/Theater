@@ -4,6 +4,8 @@ import org.junit.runners.Suite
 import tests.BackupTest
 import tests.entities.LuminaireTest
 
+//https://github.com/junit-team/junit4/wiki/aggregating-tests-in-suites
+
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
 //  TagRegistryTest::class,
