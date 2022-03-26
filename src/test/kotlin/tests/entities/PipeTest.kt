@@ -1,20 +1,14 @@
 package tests.entities
 
 import CreateWithXmlElement
-import entities.Pipe
 import XmlElemental
+import entities.Pipe
 import entities.Proscenium
-import io.mockk.every
-import io.mockk.mockkObject
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.tuple
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 class PipeTest {
 
@@ -22,9 +16,9 @@ class PipeTest {
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val luminaire = Pipe.factory(xmlElement)
+    val pipe = Pipe.factory(xmlElement)
 
-    assertIs<XmlElemental>(luminaire)
+    assertIs<XmlElemental>(pipe)
   }
 
   @Test

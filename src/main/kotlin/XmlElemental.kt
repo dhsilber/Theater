@@ -23,6 +23,24 @@ abstract class XmlElemental(val xmlElement: Element) {
     return xmlElement.getAttribute(name)
   }
 
+  fun getBooleanAttribute(name: String): Boolean {
+    val valueString = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
+      return false
+    }
+    try {
+      val value = valueString.toInt()
+      if (1 != value) {
+        errors.add("Unable to read boolean 1 from $name attribute")
+        return false
+      }
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read boolean 1 from $name attribute")
+      return false
+    }
+    return true
+  }
+
   fun getPositiveIntegerAttribute(name: String): Int {
     val valueString = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
@@ -57,6 +75,23 @@ abstract class XmlElemental(val xmlElement: Element) {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
       errors.add("Missing required $name attribute")
+      return 0.0f
+    }
+    var value = 0.0f
+    try {
+      value = valueString.toFloat()
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read positive floating-point number from $name attribute")
+    }
+    if (0 > value) {
+      errors.add("Unable to read positive floating-point number from $name attribute")
+    }
+    return value
+  }
+
+  protected open fun getOptionalPositiveFloatAttribute(name: String): Float {
+    val valueString: String = xmlElement.getAttribute(name)
+    if (valueString.isEmpty()) {
       return 0.0f
     }
     var value = 0.0f

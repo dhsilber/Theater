@@ -4,6 +4,7 @@ import TagRegistry
 import Xml
 import com.mobiletheatertech.plot.Startup
 import entities.Luminaire
+import entities.LuminaireDefinition
 import entities.Pipe
 import entities.Proscenium
 import entities.Venue
@@ -27,6 +28,7 @@ class StartupTest {
     Startup().startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsOnlyKeys(
+      LuminaireDefinition.Tag,
       Venue.Tag,
       Proscenium.Tag,
       Wall.Tag,
