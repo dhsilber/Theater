@@ -1,9 +1,11 @@
 package display
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import entities.Pipe
 import entities.Wall
 import entities.Proscenium
 
@@ -26,7 +28,9 @@ fun drawContent(drawScope: DrawScope) {
 //          drawLine(Color.Magenta, Offset(x10.toFloat(), y10.toFloat()), Offset(x20.toFloat(), y20.toFloat()))
 
   }
-
+  for (instance in Pipe.Instances) {
+    instance.draw(drawScope)
+  }
 }
 
 fun Proscenium.draw(drawScope: DrawScope) {
@@ -52,4 +56,8 @@ fun Proscenium.draw(drawScope: DrawScope) {
 fun Wall.draw(drawScope: DrawScope) {
 //  println(toString())
   drawScope.drawLine(Color.Black, Offset(x1, y1), Offset(x2, y2))
+}
+
+fun Pipe.draw(drawScope: DrawScope) {
+  drawScope.drawRect(Color.Black, Offset(x,y), Size(length, Pipe.Diameter))
 }

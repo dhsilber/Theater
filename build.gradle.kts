@@ -27,6 +27,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.2")
     testImplementation("org.jetbrains.compose.ui:ui-test-junit4:1.0.1")
+    testImplementation("org.assertj:assertj-core:3.12.0")
 
 //    testImplementation("androidx.compose.ui:ui-test-manifest:1.0.1")
 

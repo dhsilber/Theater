@@ -23,7 +23,16 @@ class Proscenium(elementPassthrough: Element) : XmlElemental(elementPassthrough)
 
   companion object : CreateWithXmlElement<Proscenium>() {
     const val Tag = "proscenium"
+
     fun factory(xmlElement: Element): Proscenium = create(xmlElement, ::Proscenium)
+
+    fun inUse(): Boolean {
+      return Instances.size > 0
+    }
+
+    fun get() : Proscenium {
+      return Instances.get(0)
+    }
   }
 }
 

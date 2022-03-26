@@ -5,7 +5,7 @@ import XmlElemental
 import org.w3c.dom.Element
 
 class Venue(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
-var building = getStringAttribute("building")
+  var building = getStringAttribute("building")
   var room = getStringAttribute("room")
   var width = getPositiveIntegerAttribute("width")
   var depth = getPositiveIntegerAttribute("depth")

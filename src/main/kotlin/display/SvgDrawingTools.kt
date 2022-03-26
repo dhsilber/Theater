@@ -39,6 +39,23 @@ fun drawCircle(svgDocuemnt: Document, svgNamespace: String, parentElement: Eleme
   return svgElement
 }
 
+
+fun drawRectangle(svgDocuemnt: Document, svgNamespace: String, parentElement: Element, x1: Float,
+                  y1: Float,
+                  x2: Float,
+                  y2: Float):Element {
+  val svgElement = svgDocuemnt.createElementNS(svgNamespace,"g")
+  svgElement.appendChild(drawLine(svgDocuemnt, svgNamespace, parentElement, x1, y1, x1, y2))
+  svgElement.appendChild(drawLine(svgDocuemnt, svgNamespace, parentElement, x1, y2, x2, y2))
+  svgElement.appendChild(drawLine(svgDocuemnt, svgNamespace, parentElement, x2, y2, x2, y1))
+  svgElement.appendChild(drawLine(svgDocuemnt, svgNamespace, parentElement, x2, y1, x1, y1))
+  parentElement.appendChild(svgElement)
+
+  return svgElement
+}
+
+
+
 fun Element.addAttribute(name:String, value:String) : Element {
   this.setAttribute(name,value)
   return this

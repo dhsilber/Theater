@@ -3,6 +3,7 @@ package tests.entities
 import CreateWithXmlElement
 import XmlElemental
 import entities.Proscenium
+import entities.Venue
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
@@ -29,6 +30,43 @@ class ProsceniumTest {
   @Test
   fun `companion has tag`() {
     assertEquals("proscenium", Proscenium.Tag )
+  }
+
+  @Test
+  fun `companion has test for the absence of a proscenium in this venue`() {
+    Proscenium.Instances.clear()
+    val venueElement = IIOMetadataNode()
+    venueElement.setAttribute("building", "Building value")
+    venueElement.setAttribute("room", "Room value")
+    venueElement.setAttribute("width", "12")
+    venueElement.setAttribute("depth", "23")
+    venueElement.setAttribute("height", "34")
+    Venue.factory(venueElement)
+
+    assertEquals(false, Proscenium.inUse() )
+  }
+
+  @Test
+  fun `companion has test for the presence of a proscenium in this venue`() {
+    val venueElement = IIOMetadataNode()
+    venueElement.setAttribute("building", "Building value")
+    venueElement.setAttribute("room", "Room value")
+    venueElement.setAttribute("width", "12")
+    venueElement.setAttribute("depth", "23")
+    venueElement.setAttribute("height", "34")
+    Venue.factory(venueElement)
+    val prosceniumElement = IIOMetadataNode()
+    prosceniumElement.setAttribute("x", "1.2")
+    prosceniumElement.setAttribute("y", "2.3")
+    prosceniumElement.setAttribute("z", "3.4")
+    prosceniumElement.setAttribute("height", "4.5")
+    prosceniumElement.setAttribute("width", "5.6")
+    prosceniumElement.setAttribute("depth", "6.7")
+    assertEquals(false, Proscenium.inUse() )
+
+    Proscenium.factory(prosceniumElement)
+
+    assertEquals(true, Proscenium.inUse() )
   }
 
   @Test

@@ -1,5 +1,6 @@
 package display
 
+import entities.Pipe
 import entities.Proscenium
 import entities.Wall
 import org.w3c.dom.Document
@@ -10,6 +11,9 @@ fun drawSvgContent(svgDocuemnt: Document, svgNamespace: String, parentElement: E
     instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
   }
   for (instance in Wall.Instances) {
+    instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
+  }
+  for (instance in Pipe.Instances) {
     instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
   }
 }
@@ -43,4 +47,10 @@ fun Wall.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Ele
 //  println("Drawing the wall from $x1,$y1 to $x2,$y2.")
 
   drawLine(svgDocuemnt, svgNamespace, parentElement, x1, y1, x2, y2)
+}
+
+fun Pipe.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
+//  println("Drawing the wall from $x1,$y1 to $x2,$y2.")
+
+  drawRectangle(svgDocuemnt, svgNamespace, parentElement, x, y, x + length, y+ Pipe.Diameter)
 }

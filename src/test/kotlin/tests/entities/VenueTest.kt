@@ -3,6 +3,7 @@ package tests.entities
 import CreateWithXmlElement
 import entities.Venue
 import XmlElemental
+import entities.Proscenium
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals

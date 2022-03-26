@@ -20,7 +20,7 @@ class WallButtonTest {
     composeTestRule.setContent {
       var drawingWalls = false
 //      Text("Wall")
-      WallButton(drawingWalls, {} )
+      WallButton(drawingWalls, {})
     }
 
     val button = composeTestRule.onNodeWithText("Wall")
@@ -48,7 +48,7 @@ class WallButtonTest {
   fun `button invokes function on click`() {
     var drawingWalls: Boolean = false
     composeTestRule.setContent {
-      WallButton(drawingWalls, {drawingWalls = !drawingWalls} )
+      WallButton(drawingWalls, { drawingWalls = !drawingWalls })
     }
     val button = composeTestRule.onNodeWithText("Wall")
 
