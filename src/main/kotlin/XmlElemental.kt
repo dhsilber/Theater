@@ -53,6 +53,25 @@ abstract class XmlElemental(val xmlElement: Element) {
     } catch (exception: NumberFormatException) {
       errors.add("Unable to read positive integer from $name attribute")
     }
+    if (0 > value) {
+      errors.add("Unable to read positive integer from $name attribute")
+    }
+    return value
+  }
+
+  fun getOptionalPositiveIntegerAttribute(name: String): Int {
+    val valueString = xmlElement.getAttribute(name)
+    var value = 0
+    try {
+      if (!valueString.isEmpty()) {
+        value = valueString.toInt()
+      }
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read positive integer from $name attribute")
+    }
+    if (0 > value) {
+      errors.add("Unable to read positive integer from $name attribute")
+    }
     return value
   }
 
