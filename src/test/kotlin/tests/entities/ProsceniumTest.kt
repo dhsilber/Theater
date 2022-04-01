@@ -17,7 +17,7 @@ class ProsceniumTest {
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val luminaire = Proscenium.factory(xmlElement)
+    val luminaire = Proscenium.factory(xmlElement, null)
 
     assertIs<XmlElemental>(luminaire)
   }
@@ -41,7 +41,7 @@ class ProsceniumTest {
     venueElement.setAttribute("width", "12")
     venueElement.setAttribute("depth", "23")
     venueElement.setAttribute("height", "34")
-    Venue.factory(venueElement)
+    Venue.factory(venueElement, null)
 
     assertEquals(false, Proscenium.inUse() )
   }
@@ -54,7 +54,7 @@ class ProsceniumTest {
     venueElement.setAttribute("width", "12")
     venueElement.setAttribute("depth", "23")
     venueElement.setAttribute("height", "34")
-    Venue.factory(venueElement)
+    Venue.factory(venueElement, null)
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
@@ -64,7 +64,7 @@ class ProsceniumTest {
     prosceniumElement.setAttribute("depth", "6.7")
     assertEquals(false, Proscenium.inUse() )
 
-    Proscenium.factory(prosceniumElement)
+    Proscenium.factory(prosceniumElement, null)
 
     assertEquals(true, Proscenium.inUse() )
   }
@@ -79,7 +79,7 @@ class ProsceniumTest {
     xmlElement.setAttribute("width", "5.6")
     xmlElement.setAttribute("depth", "6.7")
 
-    val instance = Proscenium.factory(xmlElement)
+    val instance = Proscenium.factory(xmlElement, null)
 
     assertEquals(1.2f, instance.x)
     assertEquals(2.3f, instance.y)
@@ -94,7 +94,7 @@ class ProsceniumTest {
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = Proscenium.factory(xmlElement)
+    val instance = Proscenium.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals(6, instance.errors.size)
@@ -116,7 +116,7 @@ class ProsceniumTest {
     xmlElement.setAttribute("width", "-5.6")
     xmlElement.setAttribute("depth", "bogus 6.7")
 
-    val instance = Proscenium.factory(xmlElement)
+    val instance = Proscenium.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals("Unable to read floating-point number from x attribute", instance.errors[0])

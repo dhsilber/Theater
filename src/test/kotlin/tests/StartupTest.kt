@@ -9,6 +9,7 @@ import entities.Pipe
 import entities.Proscenium
 import entities.Venue
 import entities.Wall
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.slot
@@ -16,9 +17,15 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
 import kotlin.test.assertEquals
 
 class StartupTest {
+  @AfterTest
+  fun cleanup(){
+    clearAllMocks()
+  }
+
   @Test
   fun `registers Plot objects to get their XML elements`() {
     TagRegistry.tagToCallback.clear()
@@ -50,6 +57,7 @@ class StartupTest {
 
   @Test
   fun `reorders pipe coordinates when we have a proscenium`() {
+    Proscenium.Instances.clear()
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
@@ -62,7 +70,7 @@ class StartupTest {
     mockkObject(Xml)
     mockkObject(Pipe)
     every { Xml.read(any()) } answers {
-      Proscenium.factory(prosceniumElement)
+      Proscenium.factory(prosceniumElement, null)
     }
     every { Pipe.reorientForProsceniumOrigin()} returns Unit
 

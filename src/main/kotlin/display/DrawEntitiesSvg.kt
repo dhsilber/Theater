@@ -1,5 +1,7 @@
 package display
 
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import entities.Pipe
 import entities.Proscenium
 import entities.Wall
@@ -13,9 +15,15 @@ fun drawSvgContent(svgDocuemnt: Document, svgNamespace: String, parentElement: E
   for (instance in Wall.Instances) {
     instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
   }
+  println("SVG Pipes:")
   for (instance in Pipe.Instances) {
+    println(instance)
     instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
   }
+
+  drawCircle(svgDocuemnt, svgNamespace, parentElement, 349f+ 36f,1037f, 70f)
+    .addAttribute("stroke", "red")
+
 }
 
 fun Proscenium.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
@@ -45,12 +53,14 @@ fun Proscenium.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElemen
 
 fun Wall.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
 //  println("Drawing the wall from $x1,$y1 to $x2,$y2.")
-
   drawLine(svgDocuemnt, svgNamespace, parentElement, x1, y1, x2, y2)
 }
 
 fun Pipe.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
-//  println("Drawing the wall from $x1,$y1 to $x2,$y2.")
-
-  drawRectangle(svgDocuemnt, svgNamespace, parentElement, x, y, x + length, y+ Pipe.Diameter)
+  drawRectangle(svgDocuemnt, svgNamespace, parentElement, x, y, x + length, y + Pipe.Diameter)
+  val offsetToCenter = length / 2
+  dependents.forEach {
+    val location = x + it.location + offsetToCenter
+    drawLine(svgDocuemnt, svgNamespace, parentElement, location, y - 4, location, y + 4)
+  }
 }

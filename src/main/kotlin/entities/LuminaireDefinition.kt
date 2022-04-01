@@ -4,7 +4,7 @@ import CreateWithXmlElement
 import XmlElemental
 import org.w3c.dom.Element
 
-class LuminaireDefinition(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
+class LuminaireDefinition(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   var name = getStringAttribute("name")
   var weight = getPositiveFloatAttribute("weight")
   var complete = getBooleanAttribute("complete")
@@ -24,7 +24,8 @@ class LuminaireDefinition(elementPassthrough: Element) : XmlElemental(elementPas
     const val Tag = "luminaire-definition"
     const val Diameter = 2f
 
-    fun factory(xmlElement: Element): LuminaireDefinition = create(xmlElement, ::LuminaireDefinition)
+    fun factory(xmlElement: Element, parentEntity: XmlElemental?): LuminaireDefinition =
+      create(xmlElement, parentEntity, ::LuminaireDefinition)
   }
 }
 

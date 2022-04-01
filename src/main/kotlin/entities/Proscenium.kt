@@ -4,7 +4,7 @@ import CreateWithXmlElement
 import XmlElemental
 import org.w3c.dom.Element
 
-class Proscenium(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
+class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   var x = getFloatAttribute("x")
   var y = getFloatAttribute("y")
   var z = getFloatAttribute("z")
@@ -24,7 +24,8 @@ class Proscenium(elementPassthrough: Element) : XmlElemental(elementPassthrough)
   companion object : CreateWithXmlElement<Proscenium>() {
     const val Tag = "proscenium"
 
-    fun factory(xmlElement: Element): Proscenium = create(xmlElement, ::Proscenium)
+    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Proscenium =
+      create(xmlElement, parentEntity, ::Proscenium)
 
     fun inUse(): Boolean {
       return Instances.size > 0

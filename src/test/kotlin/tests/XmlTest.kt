@@ -1,7 +1,8 @@
-package com.mobiletheatertech.plot.tests
+package tests
 
 import TagRegistry
 import Xml
+import XmlElemental
 import com.mobiletheatertech.plot.Backup
 import io.mockk.*
 import org.w3c.dom.Element
@@ -12,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-internal class XmlTest {
+class XmlTest {
 
   @AfterTest
   fun cleanup() {
@@ -27,11 +28,16 @@ internal class XmlTest {
     mockkObject(TagRegistry)
     val tagCapture = slot<String>()
     val elementCapture = slot<Element>()
-    every { TagRegistry.registerProvider(tag = capture(tagCapture), xmlElement = capture(elementCapture)) } returns Unit
+    val entityCapture = slot<XmlElemental>()
+    every { TagRegistry.registerProvider(
+      tag = capture(tagCapture),
+      xmlElement = capture(elementCapture),
+      parentEntity = capture(entityCapture)
+    ) } returns null
 
     Xml.Companion.read(pathName)
 
-    verify { TagRegistry.registerProvider(tag = "tag", xmlElement = any()) }
+    verify { TagRegistry.registerProvider(tag = "tag", xmlElement = any(), parentEntity = any()) }
   }
 
   @Test
@@ -41,18 +47,23 @@ internal class XmlTest {
     mockkObject(TagRegistry)
     val tagCapture = slot<String>()
     val elementCapture = slot<Element>()
-    every { TagRegistry.registerProvider(tag = capture(tagCapture), xmlElement = capture(elementCapture)) } returns Unit
+    val entityCapture = slot<XmlElemental>()
+    every { TagRegistry.registerProvider(
+      tag = capture(tagCapture),
+      xmlElement = capture(elementCapture),
+      parentEntity = capture(entityCapture)
+    ) } returns null
 
     Xml.Companion.read(pathName)
 
-    verifySequence {
-      TagRegistry.registerProvider(tag = "root-tag", xmlElement = any())
-      TagRegistry.registerProvider(tag = "childless", xmlElement = any())
-      TagRegistry.registerProvider(tag = "three-children", xmlElement = any())
-      TagRegistry.registerProvider(tag = "child-one", xmlElement = any())
-      TagRegistry.registerProvider(tag = "child-two", xmlElement = any())
-      TagRegistry.registerProvider(tag = "child-three", xmlElement = any())
-      TagRegistry.registerProvider(tag = "childless", xmlElement = any())
+    verifyOrder {
+      TagRegistry.registerProvider(tag = "root-tag", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "childless", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "three-children", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "child-one", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "child-two", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "child-three", xmlElement = any(), parentEntity = any())
+      TagRegistry.registerProvider(tag = "childless", xmlElement = any(), parentEntity = any())
     }
   }
 

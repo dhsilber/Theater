@@ -90,6 +90,19 @@ abstract class XmlElemental(val xmlElement: Element) {
     return value
   }
 
+  protected open fun getOptionalFloatAttribute(name: String): Float {
+    val valueString: String = xmlElement.getAttribute(name)
+    var value = 0.0f
+    try {
+      if (!valueString.isEmpty()) {
+        value = valueString.toFloat()
+      }
+    } catch (exception: NumberFormatException) {
+      errors.add("Unable to read floating-point number from $name attribute")
+    }
+    return value
+  }
+
   protected open fun getPositiveFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {

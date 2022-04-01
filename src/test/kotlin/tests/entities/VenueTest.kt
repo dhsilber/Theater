@@ -17,7 +17,7 @@ class VenueTest {
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val luminaire = Venue.factory(xmlElement)
+    val luminaire = Venue.factory(xmlElement, null)
 
     assertIs<XmlElemental>(luminaire)
   }
@@ -41,7 +41,7 @@ class VenueTest {
     xmlElement.setAttribute("depth", "23")
     xmlElement.setAttribute("height", "34")
 
-    val instance = Venue.factory(xmlElement)
+    val instance = Venue.factory(xmlElement, null)
 
     assertEquals("Building value", instance.building)
     assertEquals("Room value", instance.room)
@@ -61,7 +61,7 @@ class VenueTest {
     xmlElement.setAttribute("height", "34")
     xmlElement.setAttribute("circuiting", "Circuiting value")
 
-    val instance = Venue.factory(xmlElement)
+    val instance = Venue.factory(xmlElement, null)
 
     assertEquals("Circuiting value", instance.circuiting)
     assertFalse(instance.hasError)
@@ -71,7 +71,7 @@ class VenueTest {
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = Venue.factory(xmlElement)
+    val instance = Venue.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals(5, instance.errors.size)
@@ -91,7 +91,7 @@ class VenueTest {
     xmlElement.setAttribute("depth", "bogus.2")
     xmlElement.setAttribute("height", "bogus.3")
 
-    val instance = Venue.factory(xmlElement)
+    val instance = Venue.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals("Unable to read positive integer from width attribute", instance.errors[0])

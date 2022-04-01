@@ -5,7 +5,7 @@ import XmlElemental
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
-class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
+class Wall(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   val x1 = getFloatAttribute("x1")
   val y1 = getFloatAttribute("y1")
   val x2 = getFloatAttribute("x2")
@@ -35,7 +35,8 @@ class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
 
   companion object : CreateWithXmlElement<Wall>() {
     const val Tag = "wall"
-    fun factory(xmlElement: Element): Wall = create(xmlElement, ::Wall)
+    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Wall =
+      create(xmlElement, parentEntity, ::Wall)
 
     fun createNew(x1: Float, y1: Float, x2: Float, y2: Float) {
       val element = Xml.dom.createElement("wall")
@@ -47,7 +48,7 @@ class Wall(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
       element.setAttribute("stroke-width", "2");
       Xml.dom.documentElement.appendChild(element)
 
-      factory(element)
+      factory(element, null)
     }
   }
 

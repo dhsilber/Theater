@@ -16,7 +16,7 @@ class WallTest {
   fun `is elemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val wall = Wall.factory(xmlElement)
+    val wall = Wall.factory(xmlElement, null)
 
     assertIs<XmlElemental>(wall)
   }
@@ -39,7 +39,7 @@ class WallTest {
     xmlElement.setAttribute("x2", "0.3")
     xmlElement.setAttribute("y2", "0.4")
 
-    val instance = Wall.factory(xmlElement)
+    val instance = Wall.factory(xmlElement, null)
 
     assertEquals(0.1F, instance.x1)
     assertEquals(0.2F, instance.y1)
@@ -52,7 +52,7 @@ class WallTest {
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = Wall.factory(xmlElement)
+    val instance = Wall.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals("Missing required x1 attribute", instance.errors[0])
@@ -70,7 +70,7 @@ class WallTest {
     xmlElement.setAttribute("x2", "bogus.3")
     xmlElement.setAttribute("y2", "bogus.4")
 
-    val instance = Wall.factory(xmlElement)
+    val instance = Wall.factory(xmlElement, null)
 
     assertTrue(instance.hasError)
     assertEquals("Unable to read floating-point number from x1 attribute", instance.errors[0])

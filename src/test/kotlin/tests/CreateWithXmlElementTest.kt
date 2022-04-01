@@ -9,21 +9,22 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
-class CreateWithElementTest {
+class CreateWithXmlElementTest {
 
-  class FakeElemental(elementPassthrough: Element) : XmlElemental(elementPassthrough) {
+  class FakeElemental(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
     companion object : CreateWithXmlElement<FakeElemental>() {
-      fun factory(xmlElement: Element): FakeElemental = create(xmlElement, CreateWithElementTest::FakeElemental)
+      fun factory(xmlElement: Element, parentEntity: XmlElemental?): FakeElemental =
+        create(xmlElement, parentEntity, CreateWithXmlElementTest::FakeElemental)
     }
   }
 
   @Test
   fun `factory instantiates instance with element`() {
     val xmlElement = IIOMetadataNode()
-    val existingcount = FakeElemental.Instances.size
-    val instance = FakeElemental.factory(xmlElement)
+    val existingCount = FakeElemental.Instances.size
+    val instance = FakeElemental.factory(xmlElement, null)
     assertContains(FakeElemental.Instances, instance)
-    assertEquals(1 + existingcount, FakeElemental.Instances.size)
+    assertEquals(1 + existingCount, FakeElemental.Instances.size)
     assertSame(xmlElement, instance.xmlElement)
   }
 

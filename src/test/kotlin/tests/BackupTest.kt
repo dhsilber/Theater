@@ -19,10 +19,8 @@ class BackupTest {
 
   fun setup() {
     randomFileName = UUID.randomUUID().toString()
-    println( "randomFileName: $randomFileName")
     Configuration.backupDirectory = "/tmp/$randomFileName/backup"
     Backup.BackupDirectory = File(Configuration.backupDirectory)
-
   }
 
   @After
@@ -33,7 +31,6 @@ class BackupTest {
   @Test
   fun `creates backup directory if it does not exist`() {
     setup()
-//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     assertFalse(Backup.BackupDirectory.exists())
 
     Backup.backup("")
@@ -44,7 +41,6 @@ class BackupTest {
   @Test
   fun `creates targeted backup directory for specified file if it does not exist`() {
     setup()
-//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     val filename = "tiny.xml"
     val targetedBackupDirectory = File("${Configuration.backupDirectory}/$filename".removeSuffix(".xml"))
     assertFalse(targetedBackupDirectory.exists())
@@ -58,10 +54,8 @@ class BackupTest {
   @Test
   fun `copies file into targeted backup directory with name being incrementally larger numbers plus xml suffix`() {
     setup()
-//    Backup.BackupDirectory = File(Configuration.backupDirectory)
     val filename = "larger.xml"
     val targetedBackupDirectory = File("${Configuration.backupDirectory}/$filename".removeSuffix(".xml"))
-    println( "targetedBackupDirectory: $targetedBackupDirectory")
     val sourcePathName = this.javaClass.classLoader.getResource(filename)!!.file
 
     Backup.backup(sourcePathName)
@@ -70,7 +64,6 @@ class BackupTest {
     assertEquals(1, targetedBackupDirectory.list().size)
     val generatedFilename = targetedBackupDirectory.list()[0]
     val nowPattern = now.toString().split('.')[0] + "\\.\\d{6}Z\\.xml"
-    println(generatedFilename.toString())
     assertTrue(Pattern.matches(nowPattern, generatedFilename), "Unable to match $nowPattern")
     val generatedFile = File("$targetedBackupDirectory/$generatedFilename")
     val sourceContents = Files.readString(File(sourcePathName).toPath())

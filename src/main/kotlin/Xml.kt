@@ -25,7 +25,7 @@ class Xml {
 
     lateinit var dom: Document
 
-    fun getThis() : Xml.Companion {
+    fun getThis(): Xml.Companion {
       return this
     }
 
@@ -53,11 +53,11 @@ class Xml {
 
       val root = dom.documentElement
 
-      parse(root)
+      parse(root, null)
     }
 
     fun write() {
-      if (! ::dom.isInitialized)
+      if (!::dom.isInitialized)
         return
 
       Backup.backup(PathName)
@@ -104,15 +104,15 @@ class Xml {
 
     }
 
-    fun parse(node: Node) {
+    fun parse(node: Node, parentEntity: XmlElemental?) {
       if (node.nodeType == ELEMENT_NODE) {
         val xmlElement = node as Element
         val tag = xmlElement.tagName
-        TagRegistry.registerProvider(tag, xmlElement)
+        val entity = TagRegistry.registerProvider(tag, xmlElement, parentEntity)
 
         var child = xmlElement.firstChild
         while (child != null) {
-          parse(child)
+          parse(child, entity)
           child = child.nextSibling
         }
       }

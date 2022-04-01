@@ -28,7 +28,9 @@ fun drawContent(drawScope: DrawScope) {
 //          drawLine(Color.Magenta, Offset(x10.toFloat(), y10.toFloat()), Offset(x20.toFloat(), y20.toFloat()))
 
   }
+  println("Compose Pipes:")
   for (instance in Pipe.Instances) {
+    println(instance)
     instance.draw(drawScope)
   }
 }
@@ -59,5 +61,10 @@ fun Wall.draw(drawScope: DrawScope) {
 }
 
 fun Pipe.draw(drawScope: DrawScope) {
-  drawScope.drawRect(Color.Black, Offset(x,y), Size(length, Pipe.Diameter))
+  drawScope.drawRect(Color.Black, Offset(x, y), Size(length, Pipe.Diameter))
+  val offsetToCenter = length / 2
+  dependents.forEach {
+    val location = x + it.location + offsetToCenter
+    drawScope.drawLine(Color.Black, Offset(location, y - 4), Offset(location, y + 4))
+  }
 }

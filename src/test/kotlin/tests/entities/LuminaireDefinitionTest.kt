@@ -1,21 +1,13 @@
 package tests.entities
 
 import CreateWithXmlElement
-import entities.LuminaireDefinition
 import XmlElemental
-import entities.Proscenium
-import entities.Venue
-import io.mockk.every
-import io.mockk.mockkObject
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.tuple
+import entities.LuminaireDefinition
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 class LuminaireDefinitionTest {
 
@@ -23,7 +15,7 @@ class LuminaireDefinitionTest {
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val element = LuminaireDefinition.factory(xmlElement)
+    val element = LuminaireDefinition.factory(xmlElement, null)
 
     assertIs<XmlElemental>(element)
   }
@@ -44,7 +36,7 @@ class LuminaireDefinitionTest {
     xmlElement.setAttribute("name", "name")
     xmlElement.setAttribute("weight", "1.2")
 
-    val instance = LuminaireDefinition.factory(xmlElement)
+    val instance = LuminaireDefinition.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.name).isEqualTo("name")
@@ -62,7 +54,7 @@ class LuminaireDefinitionTest {
     xmlElement.setAttribute("width", "2.3")
     xmlElement.setAttribute("length", "3.4")
 
-    val instance = LuminaireDefinition.factory(xmlElement)
+    val instance = LuminaireDefinition.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.complete).isEqualTo(true)
@@ -76,7 +68,7 @@ class LuminaireDefinitionTest {
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = LuminaireDefinition.factory(xmlElement)
+    val instance = LuminaireDefinition.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
@@ -96,7 +88,7 @@ class LuminaireDefinitionTest {
     xmlElement.setAttribute("width", "-2.3")
     xmlElement.setAttribute("length", "-3.4")
 
-    val instance = LuminaireDefinition.factory(xmlElement)
+    val instance = LuminaireDefinition.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue

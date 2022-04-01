@@ -1,0 +1,5 @@
+<plot>
+    <pipe id="pipeId" x="1" y="2" z="3" length="4">
+        <luminaire type="par" location="2" />
+    </pipe>
+</plot>

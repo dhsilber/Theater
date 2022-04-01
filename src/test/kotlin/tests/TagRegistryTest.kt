@@ -1,40 +1,44 @@
 package tests
 
 import TagRegistry
-import XmlCompanion
-import org.assertj.core.api.JUnitSoftAssertions
+import XmlElemental
+import entities.Venue
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.Rule
 import org.junit.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
-import kotlin.test.assertNotNull
-import kotlin.test.assertSame
 
 class TagRegistryTest {
-  class StandIn(override val xmlElement: Element) : XmlCompanion {
-    companion object {
-      var lastCreated: XmlCompanion? = null
+  class StandIn(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
 
-      fun callback(xmlElement: Element) {
-        lastCreated = StandIn(xmlElement)
+    companion object {
+      var lastCreated: StandIn? = null
+
+      fun callback(xmlElement: Element, parentEntity: XmlElemental?): XmlElemental {
+        lastCreated = StandIn(xmlElement, parentEntity)
+        return Venue(xmlElement, null)
       }
     }
   }
 
   @Test
   fun `register a tag with an associated callback method`() {
-    val tag = "TagRegistryTesttag"
+    val tag = "TagRegistryTestTag"
     TagRegistry.tagToCallback.remove(tag)
 
-    TagRegistry.registerConsumer(tag, StandIn.Companion::callback)
+    TagRegistry.registerTagProcessor(tag, StandIn.Companion::callback)
+
+    println("Stored: ${TagRegistry.tagToCallback[tag]}")
+    println("Actual: ${StandIn.Companion::callback}")
 
     val xmlElement = IIOMetadataNode()
-    TagRegistry.registerProvider("wall", xmlElement)
-    TagRegistry.registerProvider(tag, xmlElement)
+    TagRegistry.registerProvider("wall", xmlElement, null)
+    TagRegistry.registerProvider(tag, xmlElement, null)
     SoftAssertions().apply {
+//      assertThat(TagRegistry.tagToCallback[tag]).isSameAs(StandIn.Companion::callback)
       assertThat(StandIn.lastCreated).isNotNull
-      assertThat(xmlElement).isSameAs(StandIn.lastCreated?.xmlElement)
+      assertThat(StandIn.lastCreated!!.xmlElement).isSameAs(xmlElement)
     }.assertAll()
   }
 }
