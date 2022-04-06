@@ -57,7 +57,7 @@ fun Proscenium.draw(drawScope: DrawScope) {
 
 fun Wall.draw(drawScope: DrawScope) {
 //  println(toString())
-  drawScope.drawLine(Color.Black, Offset(x1, y1), Offset(x2, y2))
+  drawScope.drawLine(Color.Black, start.toOffset(), end.toOffset())
 }
 
 fun Pipe.draw(drawScope: DrawScope) {

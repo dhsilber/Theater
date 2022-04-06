@@ -1,6 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
+import Point
 import XmlElemental
 import entities.Wall
 import org.junit.Test
@@ -41,10 +42,8 @@ class WallTest {
 
     val instance = Wall.factory(xmlElement, null)
 
-    assertEquals(0.1F, instance.x1)
-    assertEquals(0.2F, instance.y1)
-    assertEquals(0.3F, instance.x2)
-    assertEquals(0.4F, instance.y2)
+    assertEquals(Point(0.1F,0.2f,0f), instance.start)
+    assertEquals(Point(0.3F,0.4f,0f), instance.end)
     assertFalse(instance.hasError)
   }
 

@@ -9,6 +9,8 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 fun drawSvgContent(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
+//  create a viewport here to surround the rest of the svg commands
+//      see https://stackoverflow.com/questions/2724415/how-to-resize-an-svg-with-batik-and-display-it
   for (instance in Proscenium.Instances) {
     instance.drawSvg(svgDocuemnt, svgNamespace, parentElement)
   }
@@ -53,7 +55,7 @@ fun Proscenium.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElemen
 
 fun Wall.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {
 //  println("Drawing the wall from $x1,$y1 to $x2,$y2.")
-  drawLine(svgDocuemnt, svgNamespace, parentElement, x1, y1, x2, y2)
+  drawLine(svgDocuemnt, svgNamespace, parentElement, start, end)
 }
 
 fun Pipe.drawSvg(svgDocuemnt: Document, svgNamespace: String, parentElement: Element) {

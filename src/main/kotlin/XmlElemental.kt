@@ -90,6 +90,13 @@ abstract class XmlElemental(val xmlElement: Element) {
     return value
   }
 
+  protected open fun getPointAttribute(xName: String, yName: String): Point {
+    val x = getFloatAttribute(xName)
+    val y = getFloatAttribute(yName)
+
+    return Point(x, y, 0f)
+  }
+
   protected open fun getOptionalFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     var value = 0.0f

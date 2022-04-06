@@ -136,12 +136,12 @@ class LuminaireTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to find pipe \"unavailablepipe\" to hang this on",
         "Unable to read floating-point number from location attribute",
         "Unable to read positive integer from dimmer attribute",
         "Unable to read positive integer from channel attribute",
         "Unable to read positive integer from address attribute",
         "Unable to read floating-point number from rotation attribute",
+        "Unable to find pipe \"unavailablepipe\" to hang this on",
       )
     }.assertAll()
   }

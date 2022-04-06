@@ -10,9 +10,9 @@ import kotlin.test.assertEquals
  * @since 0.0.2
  */
 class PointTest {
-  var x = 1.0
-  var y = 2.0
-  var z = 3.0
+  var x = 1.0f
+  var y = 2.0f
+  var z = 3.0f
 
   @Test
   fun storesCoordinates() {

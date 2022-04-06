@@ -47,6 +47,7 @@ class Display {
               width = it.width.toDp()
               height = it.height.toDp()
             }
+
           }
       ) {
         if (drawingWalls && x != x20) {
@@ -74,14 +75,3 @@ class Display {
     }
   }
 }
-
-//private operator fun Int.getValue(nothing: Nothing?, property: KProperty<Int>): Int {
-//
-//}
-
-data class Line(
-  val x1: Float,
-  val y1: Float,
-  val x2: Float,
-  val y2: Float,
-)
