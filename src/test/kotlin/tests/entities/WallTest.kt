@@ -4,12 +4,11 @@ import CreateWithXmlElement
 import Point
 import XmlElemental
 import entities.Wall
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 class WallTest {
 
@@ -29,7 +28,7 @@ class WallTest {
 
   @Test
   fun `companion has tag`() {
-    assertEquals("wall", Wall.Tag )
+    assertThat(Wall.Tag).isEqualTo("wall")
   }
 
   @Test
@@ -42,9 +41,11 @@ class WallTest {
 
     val instance = Wall.factory(xmlElement, null)
 
-    assertEquals(Point(0.1F,0.2f,0f), instance.start)
-    assertEquals(Point(0.3F,0.4f,0f), instance.end)
-    assertFalse(instance.hasError)
+    SoftAssertions().apply {
+      assertThat(instance.start).isEqualTo(Point(0.1F, 0.2f, 0f))
+      assertThat(instance.end).isEqualTo(Point(0.3F, 0.4f, 0f))
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
   }
 
   @Test
@@ -53,12 +54,15 @@ class WallTest {
 
     val instance = Wall.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals("Missing required x1 attribute", instance.errors[0])
-    assertEquals("Missing required y1 attribute", instance.errors[1])
-    assertEquals("Missing required x2 attribute", instance.errors[2])
-    assertEquals("Missing required y2 attribute", instance.errors[3])
-    assertEquals(4, instance.errors.size)
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "Missing required x1 attribute",
+        "Missing required y1 attribute",
+        "Missing required x2 attribute",
+        "Missing required y2 attribute",
+      )
+    }.assertAll()
   }
 
   @Test
@@ -71,13 +75,14 @@ class WallTest {
 
     val instance = Wall.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals("Unable to read floating-point number from x1 attribute", instance.errors[0])
-    assertEquals("Unable to read floating-point number from y1 attribute", instance.errors[1])
-    assertEquals("Unable to read floating-point number from x2 attribute", instance.errors[2])
-    assertEquals("Unable to read floating-point number from y2 attribute", instance.errors[3])
-    assertEquals(4, instance.errors.size)
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "Unable to read floating-point number from x1 attribute",
+        "Unable to read floating-point number from y1 attribute",
+        "Unable to read floating-point number from x2 attribute",
+        "Unable to read floating-point number from y2 attribute",
+      )
+    }.assertAll()
   }
-
-
 }

@@ -5,20 +5,18 @@ import Xml
 import XmlElemental
 import entities.Luminaire
 import entities.Pipe
-import entities.Venue
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.unmockkObject
 import io.mockk.verify
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 class LuminaireTest {
 
@@ -43,7 +41,7 @@ class LuminaireTest {
 
   @Test
   fun `companion has tag`() {
-    assertEquals("luminaire", Luminaire.Tag)
+    Assertions.assertThat(Luminaire.Tag).isEqualTo("luminaire")
   }
 
   @Test
@@ -206,7 +204,7 @@ class LuminaireTest {
 
     instance.address = 421
 
-    assertEquals("421", xmlElement.getAttribute("address"))
+    assertThat(xmlElement.getAttribute("address")).isEqualTo("421")
     verify { Xml.write() }
   }
 

@@ -12,7 +12,6 @@ import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
-import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class PipeTest {
@@ -33,7 +32,7 @@ class PipeTest {
 
   @Test
   fun `companion has tag`() {
-    assertEquals("pipe", Pipe.Tag)
+    assertThat(Pipe.Tag).isEqualTo("pipe")
   }
 
   @Test
@@ -107,9 +106,9 @@ class PipeTest {
     prosceniumElement.setAttribute("height", "4.5")
     prosceniumElement.setAttribute("width", "5.6")
     prosceniumElement.setAttribute("depth", "6.7")
-    assertEquals(false, Proscenium.inUse())
+    assertThat(Proscenium.inUse()).isFalse
     Proscenium.factory(prosceniumElement, null)
-    assertEquals(true, Proscenium.inUse())
+    assertThat(Proscenium.inUse()).isTrue
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "10")
@@ -212,7 +211,10 @@ class PipeTest {
 
     Pipe.sortDependents()
 
-    assertThat(pipe.dependents).containsExactly(Locator(-17.6f, luminaire2), Locator(17.6f, luminaire))
+    assertThat(pipe.dependents).containsExactly(
+      Locator(-17.6f, luminaire2),
+      Locator(17.6f, luminaire)
+    )
 
   }
 }

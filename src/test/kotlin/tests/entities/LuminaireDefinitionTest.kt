@@ -3,10 +3,10 @@ package tests.entities
 import CreateWithXmlElement
 import XmlElemental
 import entities.LuminaireDefinition
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
-import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class LuminaireDefinitionTest {
@@ -27,7 +27,7 @@ class LuminaireDefinitionTest {
 
   @Test
   fun `companion has tag`() {
-    assertEquals("luminaire-definition", LuminaireDefinition.Tag)
+    Assertions.assertThat(LuminaireDefinition.Tag).isEqualTo("luminaire-definition")
   }
 
   @Test
