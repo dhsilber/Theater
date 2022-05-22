@@ -7,6 +7,9 @@ import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
 import entities.Proscenium
+import entities.SetPiece
+import entities.SetPlatform
+import entities.Shape
 import entities.Venue
 import entities.Wall
 import io.mockk.clearAllMocks
@@ -41,6 +44,9 @@ class StartupTest {
       Wall.Tag,
       Pipe.Tag,
       Luminaire.Tag,
+      SetPiece.Tag,
+      SetPlatform.Tag,
+      Shape.Tag,
     )
   }
 
@@ -57,7 +63,7 @@ class StartupTest {
 
   @Test
   fun `reorders pipe coordinates when we have a proscenium`() {
-    Proscenium.Instances.clear()
+    Proscenium.instances.clear()
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
@@ -81,7 +87,7 @@ class StartupTest {
 
   @Test
   fun `does not reorder pipe coordinates when we have no proscenium`() {
-    Proscenium.Instances.clear()
+    Proscenium.instances.clear()
     mockkObject(Xml)
     mockkObject(Pipe)
     every { Xml.read(any()) } returns Unit

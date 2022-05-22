@@ -28,11 +28,11 @@ class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : Xml
       create(xmlElement, parentEntity, ::Proscenium)
 
     fun inUse(): Boolean {
-      return Instances.size > 0
+      return instances.size > 0
     }
 
     fun get() : Proscenium {
-      return Instances.get(0)
+      return instances.get(0)
     }
   }
 }

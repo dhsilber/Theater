@@ -21,10 +21,10 @@ class CreateWithXmlElementTest {
   @Test
   fun `factory instantiates instance with element`() {
     val xmlElement = IIOMetadataNode()
-    val existingCount = FakeElemental.Instances.size
+    val existingCount = FakeElemental.instances.size
     val instance = FakeElemental.factory(xmlElement, null)
-    assertContains(FakeElemental.Instances, instance)
-    assertEquals(1 + existingCount, FakeElemental.Instances.size)
+    assertContains(FakeElemental.instances, instance)
+    assertEquals(1 + existingCount, FakeElemental.instances.size)
     assertSame(xmlElement, instance.xmlElement)
   }
 

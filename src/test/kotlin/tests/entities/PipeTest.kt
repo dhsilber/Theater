@@ -16,6 +16,16 @@ import kotlin.test.assertIs
 
 class PipeTest {
 
+  fun minimalXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("id", "name")
+    xmlElement.setAttribute("x", "1.2")
+    xmlElement.setAttribute("y", "2.3")
+    xmlElement.setAttribute("z", "3.4")
+    xmlElement.setAttribute("length", "4.5")
+    return xmlElement
+  }
+
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
@@ -36,15 +46,13 @@ class PipeTest {
   }
 
   @Test
-  fun `has required attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("id", "name")
-    xmlElement.setAttribute("x", "1.2")
-    xmlElement.setAttribute("y", "2.3")
-    xmlElement.setAttribute("z", "3.4")
-    xmlElement.setAttribute("length", "4.5")
+  fun `companion factory builds correct type`() {
+    assertIs<Pipe>(Pipe.factory(minimalXml(), null))
+  }
 
-    val instance = Pipe.factory(xmlElement, null)
+  @Test
+  fun `has required attributes`() {
+    val instance = Pipe.factory(minimalXml(), null)
 
     SoftAssertions().apply {
       assertThat(instance.id).isEqualTo("name")
@@ -98,7 +106,7 @@ class PipeTest {
 
   @Test
   fun `reorient using proscenium coordinates`() {
-    Proscenium.Instances.clear()
+    Proscenium.instances.clear()
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "120")
     prosceniumElement.setAttribute("y", "230")
@@ -128,7 +136,7 @@ class PipeTest {
 
   @Test
   fun `find pipe by id`() {
-    Pipe.Instances.clear()
+    Pipe.instances.clear()
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "10")
@@ -144,7 +152,7 @@ class PipeTest {
 
   @Test
   fun `do not find pipe by id`() {
-    Pipe.Instances.clear()
+    Pipe.instances.clear()
 
     val foundPipe = Pipe.queryById("name")
 
@@ -153,13 +161,13 @@ class PipeTest {
 
   @Test
   fun `find pipe by xml element`() {
-    Pipe.Instances.clear()
-    Luminaire.Instances.clear()
+    Pipe.instances.clear()
+    Luminaire.instances.clear()
     val filename = "pipeAndLuminaire.xml"
     val pathName = this.javaClass.classLoader.getResource(filename)!!.file
     Startup().startup(pathName)
-    val luminaireXml = Luminaire.Instances[0].xmlElement
-    val pipeXml = Pipe.Instances[0].xmlElement
+    val luminaireXml = Luminaire.instances[0].xmlElement
+    val pipeXml = Pipe.instances[0].xmlElement
 
     val foundPipe = Pipe.queryByXmlElement(luminaireXml.parentNode as Element)
 
@@ -171,12 +179,12 @@ class PipeTest {
 
   @Test
   fun `do not find pipe by xml element`() {
-    Pipe.Instances.clear()
-    Luminaire.Instances.clear()
+    Pipe.instances.clear()
+    Luminaire.instances.clear()
     val filename = "luminaire.xml"
     val pathName = this.javaClass.classLoader.getResource(filename)!!.file
     Startup().startup(pathName)
-    val luminaireXml = Luminaire.Instances[0].xmlElement
+    val luminaireXml = Luminaire.instances[0].xmlElement
 
     val foundPipe = Pipe.queryByXmlElement(luminaireXml)
 
@@ -185,7 +193,7 @@ class PipeTest {
 
   @Test
   fun `keeps track of child entities according to location on pipe`() {
-    Pipe.Instances.clear()
+    Pipe.instances.clear()
     val pipeElement = IIOMetadataNode()
     pipeElement.setAttribute("id", "name")
     pipeElement.setAttribute("x", "10")

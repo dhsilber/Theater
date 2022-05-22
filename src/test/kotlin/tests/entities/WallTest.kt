@@ -1,7 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
-import Point
+import VenuePoint
 import XmlElemental
 import entities.Wall
 import org.assertj.core.api.Assertions.assertThat
@@ -11,6 +11,15 @@ import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertIs
 
 class WallTest {
+
+  fun minimalXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("x1", "0.1")
+    xmlElement.setAttribute("y1", "0.2")
+    xmlElement.setAttribute("x2", "0.3")
+    xmlElement.setAttribute("y2", "0.4")
+    return xmlElement
+  }
 
   @Test
   fun `is elemental`() {
@@ -32,18 +41,17 @@ class WallTest {
   }
 
   @Test
-  fun `has required attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("x1", "0.1")
-    xmlElement.setAttribute("y1", "0.2")
-    xmlElement.setAttribute("x2", "0.3")
-    xmlElement.setAttribute("y2", "0.4")
+  fun `companion factory builds correct type`() {
+    assertIs<Wall>(Wall.factory(minimalXml(), null))
+  }
 
-    val instance = Wall.factory(xmlElement, null)
+  @Test
+  fun `has required attributes`() {
+    val instance = Wall.factory(minimalXml(), null)
 
     SoftAssertions().apply {
-      assertThat(instance.start).isEqualTo(Point(0.1F, 0.2f, 0f))
-      assertThat(instance.end).isEqualTo(Point(0.3F, 0.4f, 0f))
+      assertThat(instance.start).isEqualTo(VenuePoint(0.1F, 0.2f, 0f))
+      assertThat(instance.end).isEqualTo(VenuePoint(0.3F, 0.4f, 0f))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }

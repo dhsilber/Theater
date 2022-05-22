@@ -13,6 +13,17 @@ import kotlin.test.assertTrue
 
 class ProsceniumTest {
 
+  fun minimalXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("x", "1.2")
+    xmlElement.setAttribute("y", "2.3")
+    xmlElement.setAttribute("z", "3.4")
+    xmlElement.setAttribute("height", "4.5")
+    xmlElement.setAttribute("width", "5.6")
+    xmlElement.setAttribute("depth", "6.7")
+    return xmlElement
+  }
+
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
@@ -33,28 +44,33 @@ class ProsceniumTest {
   }
 
   @Test
+  fun `companion factory builds correct type`() {
+    assertIs<Proscenium>(Proscenium.factory(minimalXml(), null))
+  }
+
+  @Test
   fun `companion has test for the absence of a proscenium in this venue`() {
-    Proscenium.Instances.clear()
-    val venueElement = IIOMetadataNode()
-    venueElement.setAttribute("building", "Building value")
-    venueElement.setAttribute("room", "Room value")
-    venueElement.setAttribute("width", "12")
-    venueElement.setAttribute("depth", "23")
-    venueElement.setAttribute("height", "34")
-    Venue.factory(venueElement, null)
+    Proscenium.instances.clear()
+//    val venueElement = IIOMetadataNode()
+//    venueElement.setAttribute("building", "Building value")
+//    venueElement.setAttribute("room", "Room value")
+//    venueElement.setAttribute("width", "12")
+//    venueElement.setAttribute("depth", "23")
+//    venueElement.setAttribute("height", "34")
+//    Venue.factory(venueElement, null)
 
     assertEquals(false, Proscenium.inUse() )
   }
 
   @Test
   fun `companion has test for the presence of a proscenium in this venue`() {
-    val venueElement = IIOMetadataNode()
-    venueElement.setAttribute("building", "Building value")
-    venueElement.setAttribute("room", "Room value")
-    venueElement.setAttribute("width", "12")
-    venueElement.setAttribute("depth", "23")
-    venueElement.setAttribute("height", "34")
-    Venue.factory(venueElement, null)
+//    val venueElement = IIOMetadataNode()
+//    venueElement.setAttribute("building", "Building value")
+//    venueElement.setAttribute("room", "Room value")
+//    venueElement.setAttribute("width", "12")
+//    venueElement.setAttribute("depth", "23")
+//    venueElement.setAttribute("height", "34")
+//    Venue.factory(venueElement, null)
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
@@ -71,15 +87,7 @@ class ProsceniumTest {
 
   @Test
   fun `has required attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("x", "1.2")
-    xmlElement.setAttribute("y", "2.3")
-    xmlElement.setAttribute("z", "3.4")
-    xmlElement.setAttribute("height", "4.5")
-    xmlElement.setAttribute("width", "5.6")
-    xmlElement.setAttribute("depth", "6.7")
-
-    val instance = Proscenium.factory(xmlElement, null)
+    val instance = Proscenium.factory(minimalXml(), null)
 
     assertEquals(1.2f, instance.x)
     assertEquals(2.3f, instance.y)

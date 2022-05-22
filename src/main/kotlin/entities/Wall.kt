@@ -1,18 +1,17 @@
 package entities
 
 import CreateWithXmlElement
-import Point
+import VenuePoint
 import XmlElemental
-import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 class Wall(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
-  var start = getPointAttribute("x1", "y1")
-  var end = getPointAttribute( "x2", "y2" )
+  var start = getVenuePointAttribute("x1", "y1")
+  var end = getVenuePointAttribute( "x2", "y2" )
 
   init {
     println("New wall from $start to $end.")
-    println("Extants: $Point")
+    println("Extants: $VenuePoint")
   }
 
   override fun toString(): String {

@@ -1,6 +1,6 @@
 package display
 
-import Point
+import VenuePoint
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -31,8 +31,8 @@ fun drawLine(
   svgDocuemnt: Document,
   svgNamespace: String,
   parentElement: Element,
-  start: Point,
-  end: Point
+  start: VenuePoint,
+  end: VenuePoint
 ): Element {
   val svgElement = svgDocuemnt.createElementNS(svgNamespace, "line")
   svgElement.setAttribute("x1", start.x.toString())
@@ -66,9 +66,11 @@ fun drawCircle(
   return svgElement
 }
 
-
 fun drawRectangle(
-  svgDocuemnt: Document, svgNamespace: String, parentElement: Element, x1: Float,
+  svgDocuemnt: Document,
+  svgNamespace: String,
+  parentElement: Element,
+  x1: Float,
   y1: Float,
   x2: Float,
   y2: Float

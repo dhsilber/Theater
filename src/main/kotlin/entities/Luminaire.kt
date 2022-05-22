@@ -3,9 +3,8 @@ package entities
 import CreateWithXmlElement
 import XmlElemental
 import org.w3c.dom.Element
-import kotlin.reflect.typeOf
 
-class Luminaire(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
+class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   var on = getOptionalStringAttribute("on")
   var type = getStringAttribute("type")
   var location = getFloatAttribute("location")
@@ -24,14 +23,13 @@ class Luminaire(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlE
   var info = getOptionalStringAttribute("info")
   var label = getOptionalStringAttribute("label")
   var rotation = getOptionalFloatAttribute("rotation")
-  val parentEntity = parentEntity
 
-  fun queryParentPipe(): Pipe? {
+  private fun queryParentPipe(): Pipe? {
     if (null !== parentEntity && parentEntity is Pipe) {
       parentEntity.hang(this)
     }
     var pipe: Pipe? = null
-    if (!on.isEmpty()) {
+    if (on.isNotEmpty()) {
       // find Pipe that has matching name
       pipe = Pipe.queryById(on)
       if (null === pipe) {

@@ -14,7 +14,7 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
   var dependents = mutableSetOf<Locator>()
 
   init {
-    println("New ${this.toString()}")
+    println("New $this")
     println("Errors: $errors")
   }
 
@@ -42,7 +42,7 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
 
     fun reorientForProsceniumOrigin() {
       val proscenium = Proscenium.get()
-      Instances.forEach {
+      instances.forEach {
         it.x += proscenium.x
         it.y = proscenium.y - it.y
         it.z += proscenium.z
@@ -50,7 +50,7 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
     }
 
     fun sortDependents() {
-      Instances.forEach {
+      instances.forEach {
         it.dependents = it.dependents.toSortedSet {
             locator1, locator2 -> locator1.location.compareTo(locator2.location)
         }
@@ -58,8 +58,8 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
     }
 
     fun queryById(id: String): Pipe? {
-      Instances.forEach {
-        if (id.equals(it.id)) {
+      instances.forEach {
+        if (id == it.id) {
           return it
         }
       }
@@ -67,7 +67,7 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
     }
 
     fun queryByXmlElement(element: Element): Pipe? {
-      Instances.forEach {
+      instances.forEach {
         if (element === it.xmlElement) {
           return it
         }

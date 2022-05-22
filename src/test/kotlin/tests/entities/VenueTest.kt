@@ -1,9 +1,8 @@
 package tests.entities
 
 import CreateWithXmlElement
-import entities.Venue
 import XmlElemental
-import entities.Proscenium
+import entities.Venue
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
@@ -12,6 +11,16 @@ import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class VenueTest {
+
+  fun minimalXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("building", "Building value")
+    xmlElement.setAttribute("room", "Room value")
+    xmlElement.setAttribute("width", "12")
+    xmlElement.setAttribute("depth", "23")
+    xmlElement.setAttribute("height", "34")
+    return xmlElement
+  }
 
   @Test
   fun `is xmlElemental`() {
@@ -33,15 +42,13 @@ class VenueTest {
   }
 
   @Test
-  fun `has required attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("building", "Building value")
-    xmlElement.setAttribute("room", "Room value")
-    xmlElement.setAttribute("width", "12")
-    xmlElement.setAttribute("depth", "23")
-    xmlElement.setAttribute("height", "34")
+  fun `companion factory builds correct type`() {
+    assertIs<Venue>(Venue.factory(minimalXml(), null))
+  }
 
-    val instance = Venue.factory(xmlElement, null)
+  @Test
+  fun `has required attributes`() {
+    val instance = Venue.factory(minimalXml(), null)
 
     assertEquals("Building value", instance.building)
     assertEquals("Room value", instance.room)

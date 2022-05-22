@@ -11,6 +11,13 @@ import kotlin.test.assertIs
 
 class LuminaireDefinitionTest {
 
+  fun minimalXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("name", "name")
+    xmlElement.setAttribute("weight", "1.2")
+    return xmlElement
+  }
+
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
@@ -31,12 +38,13 @@ class LuminaireDefinitionTest {
   }
 
   @Test
-  fun `has required attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("name", "name")
-    xmlElement.setAttribute("weight", "1.2")
+  fun `companion factory builds correct type`() {
+    assertIs<LuminaireDefinition>(LuminaireDefinition.factory(minimalXml(), null))
+  }
 
-    val instance = LuminaireDefinition.factory(xmlElement, null)
+  @Test
+  fun `has required attributes`() {
+    val instance = LuminaireDefinition.factory(minimalXml(), null)
 
     SoftAssertions().apply {
       assertThat(instance.name).isEqualTo("name")

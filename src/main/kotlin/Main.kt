@@ -86,7 +86,7 @@ fun main() = application {
   Configuration
   Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
   val title = try {
-    Venue.Instances[0].building + " - " + Venue.Instances[0].room
+    Venue.instances[0].building + " - " + Venue.instances[0].room
   }
   catch(exception: Exception) {
     "Missing venue"

@@ -1,5 +1,7 @@
 package display
 
+import Point
+import VenuePoint
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -8,16 +10,19 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import entities.Pipe
 import entities.Wall
 import entities.Proscenium
+import entities.SetPiece
+import entities.SetPlatform
+import entities.Shape
 
 fun drawContent(drawScope: DrawScope) {
-  println("Prosceniums: ${Proscenium.Instances.size}")
-  for (instance in Proscenium.Instances) {
+  println("Prosceniums: ${Proscenium.instances.size}")
+  for (instance in Proscenium.instances) {
     println(instance.toString())
 //          val (x1, y1, x2, y2) =
     instance.draw(drawScope)
 //          drawLine(Color.Black, Offset(x1, y1), Offset(x2, y2))
   }
-  for (instance in Wall.Instances) {
+  for (instance in Wall.instances) {
 //          Text(instance.toString())
 //          val (x1, y1, x2, y2) =
     instance.draw(drawScope)
@@ -29,7 +34,11 @@ fun drawContent(drawScope: DrawScope) {
 
   }
   println("Compose Pipes:")
-  for (instance in Pipe.Instances) {
+  for (instance in Pipe.instances) {
+    println(instance)
+    instance.draw(drawScope)
+  }
+  for (instance in SetPiece.instances) {
     println(instance)
     instance.draw(drawScope)
   }
@@ -68,3 +77,44 @@ fun Pipe.draw(drawScope: DrawScope) {
     drawScope.drawLine(Color.Black, Offset(location, y - 4), Offset(location, y + 4))
   }
 }
+
+fun SetPiece.draw(drawScope: DrawScope) {
+  println("Drawing SetPiece at $origin ")
+  for (platform in parts) {
+    platform.draw(drawScope, origin.venue)
+  }
+}
+
+fun SetPlatform.draw(drawScope: DrawScope, placement: VenuePoint) {
+  println("Drawing SetPlatform at $placement + $origin ")
+  for (shape in shapes) {
+    shape.draw(drawScope, placement + origin)
+  }
+}
+
+fun Shape.draw(drawScope: DrawScope, placement: VenuePoint) {
+  val originOffset = Point( 0 - rectangle.width / 2, 0 - rectangle.depth / 2, 0f  )
+  drawScope.drawRect(
+    color = Color.Black,
+    topLeft = (placement + originOffset ).toOffset(),
+    size = Size(rectangle.width, rectangle.depth),
+    style = Stroke(width = 2f),
+  )
+  println("Drawing shape at $placement with ${rectangle.width}, ${rectangle.depth}")
+//  for(platform in parts) {
+//    platform.draw(origin)
+//  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
