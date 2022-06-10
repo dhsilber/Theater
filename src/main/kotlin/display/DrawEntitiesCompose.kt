@@ -46,9 +46,7 @@ fun drawContent(drawScope: DrawScope) {
     println(instance)
     instance.draw(drawScope)
   }
-
 }
-
 
 fun Proscenium.draw(drawScope: DrawScope) {
 //  println(toString())

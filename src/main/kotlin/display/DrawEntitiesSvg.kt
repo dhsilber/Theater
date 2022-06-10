@@ -66,11 +66,12 @@ fun Wall.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Ele
 }
 
 fun Pipe.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
-  drawRectangle(svgDocument, svgNamespace, parentElement, origin.x, origin.y, origin.x + length, origin.y + Pipe.Diameter)
+  val place = origin.venue
+  drawRectangle(svgDocument, svgNamespace, parentElement, place.x, place.y, place.x + length, place.y + Pipe.Diameter)
   val offsetToCenter = length / 2
   dependents.forEach {
-    val location = origin.x + it.location + offsetToCenter
-    drawLine(svgDocument, svgNamespace, parentElement, location, origin.y - 4, location, origin.y + 4)
+    val location = place.x + it.location + offsetToCenter
+    drawLine(svgDocument, svgNamespace, parentElement, location, place.y - 4, location, place.y + 4)
   }
 }
 
