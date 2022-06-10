@@ -15,7 +15,6 @@ class Display {
 
   companion object {
 
-
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(

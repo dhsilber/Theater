@@ -1,22 +1,18 @@
 package display
 
 import Grid
-import coordinates.Point
-import coordinates.VenuePoint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.unit.dp
 import coordinates.PagePoint
-import coordinates.StagePoint
+import coordinates.Point
+import coordinates.VenuePoint
 import entities.Pipe
-import entities.Wall
 import entities.Proscenium
 import entities.SetPiece
 import entities.SetPlatform
 import entities.Shape
-import org.jetbrains.skia.Paint
+import entities.Wall
 
 fun drawContent(drawScope: DrawScope) {
   Grid.instance.draw(drawScope)
@@ -24,10 +20,10 @@ fun drawContent(drawScope: DrawScope) {
   println("Prosceniums: ${Proscenium.instances.size}")
   for (instance in Proscenium.instances) {
     println(instance.toString())
-//          val (x1, y1, x2, y2) =
     instance.draw(drawScope)
 //          drawLine(Color.Black, PagePoint.offset(x1, y1), PagePoint.offset(x2, y2))
   }
+
   for (instance in Wall.instances) {
 //          Text(instance.toString())
 //          val (x1, y1, x2, y2) =
@@ -39,116 +35,20 @@ fun drawContent(drawScope: DrawScope) {
 //          drawLine(Color.Magenta, PagePoint.offset(x10.toFloat(), y10.toFloat()), PagePoint.offset(x20.toFloat(), y20.toFloat()))
 
   }
+
   println("Compose Pipes:")
   for (instance in Pipe.instances) {
     println(instance)
     instance.draw(drawScope)
   }
+
   for (instance in SetPiece.instances) {
     println(instance)
     instance.draw(drawScope)
   }
+
 }
 
-fun Grid.draw(drawScope: DrawScope) {
-  PagePoint.Setup(drawScope.size)
-  Grid.Setup(drawScope.size)
-  println("When drawing grid (${Grid}), VenuePoint extremes are: ${VenuePoint}")
-
-  drawScope.drawLine(Color.Green, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(0f, Grid.Depth - 0))
-  drawScope.drawLine(Color.Red, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(Grid.Width, 0f))
-  drawScope.drawLine(Color.Blue,
-    PagePoint.pageOffset(0f, Grid.Depth - 0),
-    PagePoint.pageOffset(Grid.Width, Grid.Depth - 0))
-  drawScope.drawLine(Color.Cyan, PagePoint.pageOffset(Grid.Width, 0f), PagePoint.pageOffset(Grid.Width, Grid.Depth))
-
-  val negativeXFromOrigin = ((StagePoint.OriginX(0f) + PagePoint.OffsetX)/ Grid.MeasureSize).toInt()
-  val xStart =
-    StagePoint.OriginX(0f) - (negativeXFromOrigin * Grid.MeasureSize) //VenuePoint.SmallX + (VenuePoint.SmallX % Grid.MeasureSize)
-  val xFinish = VenuePoint.LargeX + (VenuePoint.LargeX % Grid.MeasureSize)
-  val yTop = 0f
-//  val yBottom = yTop + (VenuePoint.LargeY - VenuePoint.SmallY)
-
-  var xCounter = 0 - negativeXFromOrigin * 4
-  var xMarker = xStart
-  while (xFinish >= xMarker) {
-    drawScope.drawLine(
-      Color.Gray,
-      PagePoint.drawingOffset(xMarker, yTop),
-      PagePoint.drawingOffset(xMarker, Grid.Depth),
-      alpha = 0.2f,
-    )
-    var xNumberPosition = xMarker * PagePoint.Scale + PagePoint.OffsetX + Grid.ContentSpacer
-    xNumberPosition += if(Proscenium.inUse()) 0f else Grid.ContentSpacer
-    drawScope.drawContext.canvas.nativeCanvas.drawString(
-      xCounter.toString(),
-//      xMarker.dp.value * PagePoint.Scale,
-      xNumberPosition,
-      30f,
-      org.jetbrains.skia.Font(),
-      Paint(),
-    )
-    xMarker += Grid.MeasureSize
-    xCounter += 4
-  }
-
-  val negativeYFromOrigin = (StagePoint.OriginY(0f) / Grid.MeasureSize).toInt()
-  val yStart = StagePoint.OriginY(0f) - (negativeYFromOrigin * Grid.MeasureSize)
-  //VenuePoint.SmallY + VenuePoint.SmallY % Grid.MeasureSize
-  val yFinish = VenuePoint.LargeY + VenuePoint.LargeY % Grid.MeasureSize
-  val xBegin = 0f - PagePoint.OffsetX
-//  val xEnd = xBegin + (VenuePoint.LargeX - VenuePoint.SmallY)
-
-  var yCounter = 0 - negativeYFromOrigin * 4
-  var yMarker = yStart
-  while (yFinish >= yMarker) {
-    drawScope.drawLine(
-      Color.Gray,
-      PagePoint.drawingOffset(xBegin, yMarker),
-      PagePoint.drawingOffset(Grid.Width - PagePoint.OffsetX, yMarker),
-      alpha = 0.3f,
-    )
-    val yNumberPosition = yMarker * PagePoint.Scale + PagePoint.OffsetY + Grid.ContentSpacer
-    val direction = if(Proscenium.inUse()) -1 else 1
-    drawScope.drawContext.canvas.nativeCanvas.drawString(
-      (yCounter * direction).toString(),
-      10f,
-//      yMarker.dp.value * PagePoint.Scale,
-      yNumberPosition,
-
-      org.jetbrains.skia.Font(),
-      Paint(),
-    )
-    yMarker += Grid.MeasureSize
-    yCounter += 4
-  }
-
-
-//  StagePoint.OriginX(0f)
-//
-//
-//  var x = PagePoint.OffsetX
-//  while (x > 0f) {
-//    x -= Grid.MeasureSize * 2
-//  }
-//  while (x < Grid.Width) {
-//    drawScope.drawRect(Color.Cyan,
-//      PagePoint.pageOffset(x, 4f),
-//      PagePoint.size(Grid.MeasureSize, Grid.ScaleSpacer))
-//
-//    x += Grid.MeasureSize * 2
-//  }
-//
-//  drawScope.drawContext.canvas.nativeCanvas.drawString("123", 30f, 30f, org.jetbrains.skia.Font(), Paint())
-//
-//  drawScope.drawRect(Color.Cyan,
-//    PagePoint.pageOffset(Grid.ScaleSpacer, Grid.ContentSpacer),
-//    PagePoint.size(Grid.ScaleSpacer, Grid.MeasureSize))
-}
-
-//private infix fun <A, B> Pair<A, B>.step(measureSize: B): Any {
-//
-//}
 
 fun Proscenium.draw(drawScope: DrawScope) {
 //  println(toString())
