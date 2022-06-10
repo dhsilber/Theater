@@ -1,4 +1,4 @@
-import androidx.compose.ui.geometry.Offset
+package coordinates
 
 /**
  * Represent a point in the plot space.
@@ -26,14 +26,18 @@ data class VenuePoint(
     LargeZ = if (z > LargeZ) z else LargeZ
   }
 
-  fun toOffset() = Offset(x, y)
+  fun toOffset() = PagePoint.drawingOffset(x, y)
 
-  operator fun plus(pointOffset: PointOffset): VenuePoint {
-    return VenuePoint(x + pointOffset.x, y + pointOffset.y, z + pointOffset.z)
-  }
+//  operator fun plus(pointOffset: PointOffset): VenuePoint {
+//    return VenuePoint(x + pointOffset.x, y + pointOffset.y, z + pointOffset.z)
+//  }
 
   operator fun plus(point: Point): VenuePoint {
     return VenuePoint(x + point.x, y + point.y, z + point.z)
+  }
+
+  operator fun plus(point: StagePoint): VenuePoint {
+    return VenuePoint(x + point.x, y - point.y, z + point.z)
   }
 
   companion object {
@@ -44,6 +48,13 @@ data class VenuePoint(
     var LargeX = Float.MIN_VALUE
     var LargeY = Float.MIN_VALUE
     var LargeZ = Float.MIN_VALUE
+
+    val VenueWidth
+      get() = LargeX - SmallX
+
+    val VenueDepth
+      get() = LargeY - SmallY
+
 
     override fun toString(): String {
       return "Small: ($SmallX, $SmallY, $SmallZ)  Large: ($LargeX, $LargeY, $LargeZ)"

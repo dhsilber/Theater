@@ -2,15 +2,17 @@ package entities
 
 import CreateWithXmlElement
 import XmlElemental
+import coordinates.VenuePoint
 import org.w3c.dom.Element
 
 class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
-  var x = getFloatAttribute("x")
-  var y = getFloatAttribute("y")
-  var z = getFloatAttribute("z")
+  private var x = getFloatAttribute("x")
+  private var y = getFloatAttribute("y")
+  private var z = getFloatAttribute("z")
   var height = getPositiveFloatAttribute("height")
   var width = getPositiveFloatAttribute("width")
   var depth = getPositiveFloatAttribute("depth")
+  var origin = VenuePoint(x, y, z)
 
   init {
     println("New ${this.toString()}")
@@ -31,7 +33,7 @@ class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : Xml
       return instances.size > 0
     }
 
-    fun get() : Proscenium {
+    fun get(): Proscenium {
       return instances.get(0)
     }
   }

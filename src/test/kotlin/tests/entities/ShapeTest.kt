@@ -1,7 +1,6 @@
 package tests.entities
 
 import CreateWithXmlElement
-import PointOffset
 import Rectangle
 import Xml
 import XmlElemental
@@ -85,7 +84,7 @@ class ShapeTest {
 //    val instance = Shape.factory(xmlElement, null)
 //
 //    SoftAssertions().apply {
-//      assertThat(instance.origin).isEqualTo(PointOffset(width,depth,z))
+//      assertThat(instance.origin).isEqualTo(coordinates.PointOffset(width,depth,z))
 //      assertThat(instance.hasError).isFalse
 //    }.assertAll()
 //  }

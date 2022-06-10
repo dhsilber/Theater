@@ -1,6 +1,6 @@
-package tests
+package tests.coordinates
 
-import PointOffset
+import coordinates.PointOffset
 import org.assertj.core.api.SoftAssertions
 import kotlin.test.Test
 

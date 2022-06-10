@@ -1,6 +1,6 @@
-package tests
+package tests.coordinates
 
-import StagePoint
+import coordinates.StagePoint
 import entities.Proscenium
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode

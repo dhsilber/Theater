@@ -2,14 +2,17 @@ package entities
 
 import CreateWithXmlElement
 import XmlElemental
+import coordinates.StagePoint
 import org.w3c.dom.Element
 
 class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   var id = getStringAttribute("id")
-  var x = getFloatAttribute("x")
-  var y = getFloatAttribute("y")
-  var z = getFloatAttribute("z")
+  private var x = getFloatAttribute("x")
+  private var y = getFloatAttribute("y")
+  private var z = getFloatAttribute("z")
   var length = getPositiveFloatAttribute("length")
+  var origin = StagePoint(x, y, z)
+//  var end = StagePoint(x + length, y + Pipe.Diameter, z + Pipe.Diameter)
 
   var dependents = mutableSetOf<Locator>()
 
@@ -35,24 +38,26 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
 
     fun postParsingCleanup() {
       if (Proscenium.inUse()) {
-        reorientForProsceniumOrigin()
+//        reorientForProsceniumOrigin()
       }
       sortDependents()
     }
 
-    fun reorientForProsceniumOrigin() {
-      val proscenium = Proscenium.get()
-      instances.forEach {
-        it.x += proscenium.x
-        it.y = proscenium.y - it.y
-        it.z += proscenium.z
-      }
-    }
+//    fun reorientForProsceniumOrigin() {
+//      val proscenium = Proscenium.get()
+//      instances.forEach {
+//        it.x += proscenium.x
+//        it.y = proscenium.y - it.y
+//        it.z += proscenium.z
+//        it.origin = StagePoint(it.x, it.y, it.z)
+////        it.end = StagePoint(it.x + it.length, it.y + Diameter, it.z + Diameter)
+//      }
+//    }
 
     fun sortDependents() {
       instances.forEach {
-        it.dependents = it.dependents.toSortedSet {
-            locator1, locator2 -> locator1.location.compareTo(locator2.location)
+        it.dependents = it.dependents.toSortedSet { locator1, locator2 ->
+          locator1.location.compareTo(locator2.location)
         }
       }
     }

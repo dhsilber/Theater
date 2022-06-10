@@ -1,8 +1,9 @@
 package tests.entities
 
 import CreateWithXmlElement
-import VenuePoint
+import coordinates.VenuePoint
 import XmlElemental
+import coordinates.StagePoint
 import entities.SetPiece
 import entities.SetPlatform
 import org.assertj.core.api.Assertions.assertThat
@@ -49,7 +50,7 @@ class SetPieceTest {
     val instance = SetPiece.factory(minimalXml(), null)
 
     SoftAssertions().apply {
-      assertThat(instance.origin).isEqualTo(VenuePoint(0.1F, 0.2f, 0f))
+      assertThat(instance.origin).isEqualTo(StagePoint(0.1F, 0.2f, 0f))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }

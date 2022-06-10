@@ -1,6 +1,6 @@
 package display
 
-import VenuePoint
+import coordinates.VenuePoint
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 

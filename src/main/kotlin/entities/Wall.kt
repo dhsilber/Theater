@@ -1,7 +1,7 @@
 package entities
 
 import CreateWithXmlElement
-import VenuePoint
+import coordinates.VenuePoint
 import XmlElemental
 import org.w3c.dom.Element
 

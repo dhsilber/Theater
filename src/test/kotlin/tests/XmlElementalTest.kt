@@ -1,9 +1,9 @@
 package tests
 
-import Point
-import PointOffset
+import coordinates.Point
+import coordinates.PointOffset
 import Rectangle
-import VenuePoint
+import coordinates.VenuePoint
 import XmlElemental
 import org.assertj.core.api.Assertions.assertThat
 import org.w3c.dom.Element
@@ -23,8 +23,8 @@ class XmlElementalTest {
   class GenericEntity(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
     var venuePoint = getVenuePointAttribute("venue-x", "venue-y")
     var stagePoint = getStagePointAttribute("stage-x", "stage-y")
-    val pointOffsetXYZ = getPointOffsetAttribute("offset-x", "offset-y", "offset-z")
-    val pointOffsetXY = getPointOffsetAttribute("offset-x", "offset-y")
+//    val pointOffsetXYZ = getPointOffsetAttribute("offset-x", "offset-y", "offset-z")
+//    val pointOffsetXY = getPointOffsetAttribute("offset-x", "offset-y")
     val rectangle = getRectangleAttribute("rectangle")
   }
 
@@ -59,17 +59,17 @@ class XmlElementalTest {
     assertThat(generic.stagePoint.initial).isEqualTo(Point(stageX, stageY, 0f))
   }
 
-  @Test
-  fun `getPointOffsetAttribute gets PointOffset at zero altitude`() {
-    val generic = GenericEntity(minimalXml(), null)
-    assertThat(generic.pointOffsetXY).isEqualTo(PointOffset(offsetX, offsetY, 0f))
-  }
-
-  @Test
-  fun `getPointOffsetAttribute gets PointOffset `() {
-    val generic = GenericEntity(minimalXml(), null)
-    assertThat(generic.pointOffsetXYZ).isEqualTo(PointOffset(offsetX, offsetY, offsetZ))
-  }
+//  @Test
+//  fun `getPointOffsetAttribute gets PointOffset at zero altitude`() {
+//    val generic = GenericEntity(minimalXml(), null)
+//    assertThat(generic.pointOffsetXY).isEqualTo(PointOffset(offsetX, offsetY, 0f))
+//  }
+//
+//  @Test
+//  fun `getPointOffsetAttribute gets PointOffset `() {
+//    val generic = GenericEntity(minimalXml(), null)
+//    assertThat(generic.pointOffsetXYZ).isEqualTo(PointOffset(offsetX, offsetY, offsetZ))
+//  }
 
   @Test
   fun `getRectangleAttribute`() {

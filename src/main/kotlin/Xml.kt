@@ -1,5 +1,6 @@
 import com.mobiletheatertech.plot.Backup
 import com.mobiletheatertech.plot.exception.InvalidXMLException
+import coordinates.VenuePoint
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -109,6 +110,8 @@ class Xml {
         val xmlElement = node as Element
         val tag = xmlElement.tagName
         val entity = TagRegistry.registerProvider(tag, xmlElement, parentEntity)
+
+        println("After reading $entity, VenuePoint extremes are: ${VenuePoint}")
 
         var child = xmlElement.firstChild
         while (child != null) {

@@ -1,3 +1,7 @@
+import coordinates.Point
+import coordinates.PointOffset
+import coordinates.StagePoint
+import coordinates.VenuePoint
 import org.w3c.dom.Element
 
 abstract class XmlElemental(val xmlElement: Element) {
@@ -104,7 +108,26 @@ abstract class XmlElemental(val xmlElement: Element) {
     return StagePoint(x, y, 0f)
   }
 
-  protected open fun getPointOffsetAttribute(xName: String, yName: String, zName: String = ""): PointOffset {
+  protected open fun getStagePointAttribute(xName: String, yName: String, zName: String): StagePoint {
+    val x = getFloatAttribute(xName)
+    val y = getFloatAttribute(yName)
+    val z = getFloatAttribute(zName)
+
+    return StagePoint(x, y, z)
+  }
+
+//  protected open fun getPointOffsetAttribute(xName: String, yName: String, zName: String = ""): PointOffset {
+//    val x = getFloatAttribute(xName)
+//    val y = getFloatAttribute(yName)
+//    var z = 0f
+//    if (zName.isNotEmpty()) {
+//      z = getOptionalFloatAttribute(zName)
+//    }
+//
+//    return PointOffset(x, y, z)
+//  }
+
+  protected open fun getPointAttribute(xName: String, yName: String, zName: String = ""): Point {
     val x = getFloatAttribute(xName)
     val y = getFloatAttribute(yName)
     var z = 0f
@@ -112,7 +135,7 @@ abstract class XmlElemental(val xmlElement: Element) {
       z = getOptionalFloatAttribute(zName)
     }
 
-    return PointOffset(x, y, z)
+    return Point(x, y, z)
   }
 
   protected open fun getOptionalFloatAttribute(name: String): Float {

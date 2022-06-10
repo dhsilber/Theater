@@ -1,3 +1,5 @@
+package coordinates
+
 import entities.Proscenium
 
 data class PointOffset(

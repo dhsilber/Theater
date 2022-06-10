@@ -1,8 +1,7 @@
 package display
 
-import Point
-import VenuePoint
-import androidx.compose.ui.graphics.drawscope.DrawScope
+import coordinates.Point
+import coordinates.VenuePoint
 import entities.Pipe
 import entities.Proscenium
 import entities.SetPiece
@@ -38,17 +37,17 @@ fun drawSvgContent(svgDocument: Document, svgNamespace: String, parentElement: E
 
 fun Proscenium.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
 //  println("Drawing the proscenium.")
-  drawLine(svgDocument, svgNamespace, parentElement, x - 17f, y - 17f, x + 17f, y + 17f)
+  drawLine(svgDocument, svgNamespace, parentElement, origin.x - 17f, origin.y - 17f, origin.x + 17f, origin.y + 17f)
     .addAttribute("stroke", "cyan")
-  drawLine(svgDocument, svgNamespace, parentElement, x + 17f, y - 17f, x - 17f, y + 17f)
+  drawLine(svgDocument, svgNamespace, parentElement, origin.x + 17f, origin.y - 17f, origin.x - 17f, origin.y + 17f)
     .addAttribute("stroke", "cyan")
-  drawCircle(svgDocument, svgNamespace, parentElement, x, y, 17f)
+  drawCircle(svgDocument, svgNamespace, parentElement, origin.x, origin.y, 17f)
     .addAttribute("stroke", "cyan")
 
-  val startX = x - width / 2
-  val startY = y
-  val endX = x + width / 2
-  val endY = y + depth
+  val startX = origin.x - width / 2
+  val startY = origin.y
+  val endX = origin.x + width / 2
+  val endY = origin.y + depth
   // SR end of proscenium arch
   drawLine(svgDocument, svgNamespace, parentElement, startX, startY, startX, endY)
   // SL end of proscenium arch
@@ -67,11 +66,11 @@ fun Wall.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Ele
 }
 
 fun Pipe.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
-  drawRectangle(svgDocument, svgNamespace, parentElement, x, y, x + length, y + Pipe.Diameter)
+  drawRectangle(svgDocument, svgNamespace, parentElement, origin.x, origin.y, origin.x + length, origin.y + Pipe.Diameter)
   val offsetToCenter = length / 2
   dependents.forEach {
-    val location = x + it.location + offsetToCenter
-    drawLine(svgDocument, svgNamespace, parentElement, location, y - 4, location, y + 4)
+    val location = origin.x + it.location + offsetToCenter
+    drawLine(svgDocument, svgNamespace, parentElement, location, origin.y - 4, location, origin.y + 4)
   }
 }
 

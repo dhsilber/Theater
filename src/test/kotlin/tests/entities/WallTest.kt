@@ -1,7 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
-import VenuePoint
+import coordinates.VenuePoint
 import XmlElemental
 import entities.Wall
 import org.assertj.core.api.Assertions.assertThat

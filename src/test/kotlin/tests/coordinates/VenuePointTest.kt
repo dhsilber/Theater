@@ -1,6 +1,6 @@
-package tests
+package tests.coordinates
 
-import VenuePoint
+import coordinates.VenuePoint
 import org.assertj.core.api.SoftAssertions
 import kotlin.test.Test
 

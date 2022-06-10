@@ -1,9 +1,10 @@
 package tests.entities
 
 import CreateWithXmlElement
-import PointOffset
+import coordinates.PointOffset
 import Xml
 import XmlElemental
+import coordinates.Point
 import entities.SetPiece
 import entities.SetPlatform
 import entities.Shape
@@ -75,7 +76,8 @@ class SetPlatformTest {
     val instance = SetPlatform.factory(minimalXml(), minimalSetPiece())
 
     SoftAssertions().apply {
-      assertThat(instance.origin).isEqualTo(PointOffset(x, y, 0f))
+//      assertThat(instance.origin).isEqualTo(PointOffset(x, y, 0f))
+      assertThat(instance.origin).isEqualTo(Point(x, y, 0f))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
@@ -88,7 +90,8 @@ class SetPlatformTest {
     val instance = SetPlatform.factory(xmlElement, minimalSetPiece())
 
     SoftAssertions().apply {
-      assertThat(instance.origin).isEqualTo(PointOffset(x, y, z))
+//      assertThat(instance.origin).isEqualTo(PointOffset(x, y, z))
+      assertThat(instance.origin).isEqualTo(Point(x, y, z))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }

@@ -15,6 +15,7 @@ class Display {
 
   companion object {
 
+
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
@@ -26,8 +27,8 @@ class Display {
       var x20 by remember { mutableStateOf(0) }
       var y20 by remember { mutableStateOf(0) }
       val density = LocalDensity.current
-      var width by remember { mutableStateOf(0.dp) }
-      var height by remember { mutableStateOf(0.dp) }
+      var width by remember { mutableStateOf(0f) }
+      var height by remember { mutableStateOf(0f) }
 
       Canvas(
         Modifier
@@ -44,12 +45,15 @@ class Display {
 //          .clipToBounds()
           .onSizeChanged {
             with(density) {
-              width = it.width.toDp()
-              height = it.height.toDp()
+              width = it.width.toFloat()
+              height = it.height.toFloat()
             }
 
           }
       ) {
+        width = size.width
+        height = size.height
+
         if (drawingWalls && x != x20) {
           x10 = x20
           y10 = y20
