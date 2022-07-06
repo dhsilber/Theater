@@ -5,15 +5,14 @@ import XmlElemental
 import org.w3c.dom.Element
 
 class LuminaireDefinition(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
-  var name = getStringAttribute("name")
-  var weight = getPositiveFloatAttribute("weight")
-  var complete = getBooleanAttribute("complete")
-  var width = getOptionalPositiveFloatAttribute("width")
-  var length = getOptionalPositiveFloatAttribute("length")
+  val name = getStringAttribute("name")
+  val weight = getPositiveFloatAttribute("weight")
+  val complete = getBooleanAttribute("complete")
+  val width = getOptionalPositiveFloatAttribute("width")
+  val length = getOptionalPositiveFloatAttribute("length")
+  val svgContent = getSvg()
 
   init {
-    println("New ${this.toString()}")
-    println("Errors: $errors")
   }
 
   override fun toString(): String {
@@ -24,8 +23,19 @@ class LuminaireDefinition(elementPassthrough: Element, parentEntity: XmlElementa
     const val Tag = "luminaire-definition"
     const val Diameter = 2f
 
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): LuminaireDefinition =
+    fun factory(
+      xmlElement: Element,
+      parentEntity: XmlElemental? = null,
+    ): LuminaireDefinition =
       create(xmlElement, parentEntity, ::LuminaireDefinition)
+
+    fun findByName(name: String): LuminaireDefinition? {
+      val candidates = instances.filter { it.name == name }
+      return if (candidates.isEmpty())
+        null
+      else
+        candidates[0]
+    }
   }
 }
 

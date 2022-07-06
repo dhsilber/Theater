@@ -21,8 +21,8 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
 import com.mobiletheatertech.plot.Startup
-import com.mobiletheatertech.plot.Svg
 import entities.Venue
+import sidebar.PipeSideBar
 
 //import org.jetbrains.compose.splitpane.demo.uiTop
 
@@ -35,13 +35,11 @@ fun App() {
   var x by remember { mutableStateOf(0) }
   var y by remember { mutableStateOf(0) }
 
-  fun setter(foo: String) {
-    text = foo
-  }
 
   MaterialTheme {
 
     var drawingWalls by remember { mutableStateOf(false) }
+    var pipeDisplay by remember { mutableStateOf(true) }
 
     Row(
       Modifier
@@ -58,27 +56,22 @@ fun App() {
       )
       {
         WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
-        Button(onClick = { Svg.write() }) {
+        PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = { pipeDisplay = !pipeDisplay })
+        Button(onClick = { Svg.writePlan() }) {
           Text("Write SVG")
         }
       }
       Display.display(
         drawingWalls,
+        share = pipeDisplay,
         x, y, text,
-//        ::setter
       )
+      if (pipeDisplay) {
+        PipeSideBar.pipeLister(PipeManager.list, PipeManager::makeCurrent)
+      }
 
     }
   }
-//
-//    var text by remember { mutableStateOf("Hello, World!") }
-//
-//  MaterialTheme {
-//    Button(onClick = {
-//      text = "Hello, Desktop!"
-//    }) {
-//      Text(text)
-//    }
 }
 
 
@@ -87,10 +80,15 @@ fun main() = application {
   Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
   val title = try {
     Venue.instances[0].building + " - " + Venue.instances[0].room
-  }
-  catch(exception: Exception) {
+  } catch (exception: Exception) {
     "Missing venue"
   }
+
+  PipeManager.Companion
+  Svg.writeAll()
+  Html.writeAll()
+  exitApplication()
+
   val state = rememberWindowState(placement = WindowPlacement.Maximized)
 
   Window(onCloseRequest = ::exitApplication, title = title, state = state) {

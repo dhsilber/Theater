@@ -4,7 +4,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
+//    kotlin("jvm") version "1.6.20"
+    // 1.6.20
+    // 1.6.21
+    // 1.7.0
     id("org.jetbrains.compose") version "1.1.0"
+//    id("org.jetbrains.compose") version "1.1.1"
+    // 1.1.1 Causes button tests to fail.
 }
 
 group = "name.davidsilber"
@@ -16,10 +22,30 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
+//// This is to address a problem encountered when upgrading to kotlin 1.7.0:
+////                     A problem occurred configuring root project 'Theater'.
+////                     > Failed to notify project evaluation listener.
+////                     > 'void org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions.setUseIR(boolean)'
+//// See https://github.com/JetBrains/compose-jb/issues/2108
+// ... project builds with this fix, but then I couldn't execute tests
+// I rolled back to kotlin 1.6.21
+//allprojects {
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(module("org.jetbrains.compose.compiler:compiler")).apply {
+//                using(module("androidx.compose.compiler:compiler:1.2.0-dev-k1.7.0-53370d83bb1"))
+//            }
+//        }
+//    }
+//}
+
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.apache.xmlgraphics:batik-dom:1.14")
     implementation("org.apache.xmlgraphics:batik-svggen:1.14")
+    implementation("com.j2html:j2html:1.5.0")
+//    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5")
+//    implementation("org.jetbrains.kotlinx:kotlinx-html:0.7.5")
 
 //    implementation( "org.jetbrains.compose.components:components-splitpane-desktop:1.0.1")
 //    implementation(project(":SplitPane:library"))
@@ -27,7 +53,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.2")
     testImplementation("org.jetbrains.compose.ui:ui-test-junit4:1.0.1")
-    testImplementation("org.assertj:assertj-core:3.12.0")
+    testImplementation("org.assertj:assertj-core:3.23.1")
 
 //    testImplementation("androidx.compose.ui:ui-test-manifest:1.0.1")
 
@@ -44,6 +70,8 @@ tasks.withType<KotlinCompile> {
 
 // Todo: see this for packaging info:
 // https://github.com/JetBrains/compose-jb/blob/master/tutorials/Native_distributions_and_local_execution/README.md
+//
+// gradle task is 'package'
 compose.desktop {
     application {
         mainClass = "MainKt"

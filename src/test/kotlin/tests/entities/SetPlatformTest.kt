@@ -5,6 +5,7 @@ import coordinates.PointOffset
 import Xml
 import XmlElemental
 import coordinates.Point
+import coordinates.StagePoint
 import entities.SetPiece
 import entities.SetPlatform
 import entities.Shape
@@ -31,6 +32,7 @@ class SetPlatformTest {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("x", x.toString())
     xmlElement.setAttribute("y", y.toString())
+    xmlElement.setAttribute("z", z.toString())
 //    xmlElement.setAttribute("z", z.toString())
     return xmlElement
   }
@@ -77,7 +79,7 @@ class SetPlatformTest {
 
     SoftAssertions().apply {
 //      assertThat(instance.origin).isEqualTo(PointOffset(x, y, 0f))
-      assertThat(instance.origin).isEqualTo(Point(x, y, 0f))
+      assertThat(instance.origin).isEqualTo(StagePoint(x, y, z))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
@@ -91,7 +93,7 @@ class SetPlatformTest {
 
     SoftAssertions().apply {
 //      assertThat(instance.origin).isEqualTo(PointOffset(x, y, z))
-      assertThat(instance.origin).isEqualTo(Point(x, y, z))
+      assertThat(instance.origin).isEqualTo(StagePoint(x, y, z))
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
@@ -107,6 +109,7 @@ class SetPlatformTest {
       assertThat(instance.errors).containsExactly(
         "Missing required x attribute",
         "Missing required y attribute",
+        "Missing required z attribute",
       )
     }.assertAll()
   }
@@ -125,7 +128,7 @@ class SetPlatformTest {
       assertThat(instance.errors).containsExactly(
         "Unable to read floating-point number from x attribute",
         "Unable to read floating-point number from y attribute",
-        "Unable to read optional floating-point number from z attribute",
+        "Unable to read floating-point number from z attribute",
       )
     }.assertAll()
   }

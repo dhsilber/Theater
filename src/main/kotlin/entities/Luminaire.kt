@@ -36,23 +36,19 @@ class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) : 
         errors.add("Unable to find pipe \"$on\" to hang this on")
       } else {
         pipe.hang(this)
-        println("... but found that $pipe will be holding it.")
       }
     }
     return pipe
   }
 
   init {
-    println("New Luminaire of type $type, with location $location, address $address.")
-    println("Parent of $type is $parentEntity")
-    println("Errors: $errors")
-
     queryParentPipe()
   }
 
   companion object : CreateWithXmlElement<Luminaire>() {
     const val Tag = "luminaire"
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Luminaire =
+
+    fun factory(xmlElement: Element, parentEntity: XmlElemental?=null): Luminaire =
       create(xmlElement, parentEntity, ::Luminaire)
   }
 

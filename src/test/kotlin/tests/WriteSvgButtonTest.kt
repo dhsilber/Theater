@@ -4,7 +4,7 @@ import App
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.mobiletheatertech.plot.Svg
+import Svg
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
@@ -35,9 +35,9 @@ class WriteSvgButtonTest {
     button.assertExists()
 
     mockkObject(Svg)
-    every { Svg.write() } returns Unit
+    every { Svg.writePlan() } returns Unit
     button.performClick()
-    verify { Svg.write() }
+    verify { Svg.writePlan() }
   }
 
 }

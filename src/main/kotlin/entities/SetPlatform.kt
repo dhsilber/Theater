@@ -23,7 +23,6 @@ class SetPlatform(elementPassthrough: Element, val parentEntity: XmlElemental?) 
 
   init {
     connectWithParent()
-    println("SetPlatform: $this, parent: $parentEntity")
   }
 
   companion object : CreateWithXmlElement<SetPlatform>() {

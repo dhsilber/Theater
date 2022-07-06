@@ -111,8 +111,6 @@ class Xml {
         val tag = xmlElement.tagName
         val entity = TagRegistry.registerProvider(tag, xmlElement, parentEntity)
 
-        println("After reading $entity, VenuePoint extremes are: ${VenuePoint}")
-
         var child = xmlElement.firstChild
         while (child != null) {
           parse(child, entity)
