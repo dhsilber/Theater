@@ -18,7 +18,6 @@ class Shape(elementPassthrough: Element, val parentEntity: XmlElemental?) : XmlE
 
   init {
     connectWithParent()
-    println("Shape: $this - ${rectangle.width}, ${rectangle.depth}, parent: $parentEntity")
   }
 
   companion object : CreateWithXmlElement<Shape>() {

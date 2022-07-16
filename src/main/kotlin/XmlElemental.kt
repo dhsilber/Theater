@@ -1,8 +1,9 @@
+import com.mobiletheatertech.plot.exception.InvalidXMLException
 import coordinates.Point
-import coordinates.PointOffset
 import coordinates.StagePoint
 import coordinates.VenuePoint
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 
 abstract class XmlElemental(val xmlElement: Element) {
   val errors = mutableListOf<String>()
@@ -199,15 +200,24 @@ abstract class XmlElemental(val xmlElement: Element) {
       if (2 == parameters.size) {
         val width = parameters[0]
         val depth = parameters[1]
-        return Rectangle( width, depth)
+        return Rectangle(width, depth)
       } else {
         errors.add("Unable to read rectangle specification from $name attribute containing '$valueString'")
         return Rectangle.Empty
       }
-    }
-    catch (exception: Exception) {
+    } catch (exception: Exception) {
       errors.add("Unable to read rectangle specification from $name attribute containing '$valueString'")
       return Rectangle.Empty
+    }
+  }
+
+  fun getSvg(): Node {
+    val svgList = xmlElement.getElementsByTagName("svg")
+
+    if (svgList.length > 0) {
+      return svgList.item(0)
+    } else {
+      throw InvalidXMLException("luminaire-definition", "svg", "Expected luminaire-definition to have an svg child")
     }
   }
 

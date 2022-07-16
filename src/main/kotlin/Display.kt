@@ -18,7 +18,7 @@ class Display {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
-      drawingWalls: Boolean, x: Int, y: Int, text: String
+      drawingWalls: Boolean, share: Boolean, x: Int, y: Int, text: String
 //      resetter: (text: String) -> Unit
     ) {
       var x10 by remember { mutableStateOf(0) }
@@ -29,9 +29,11 @@ class Display {
       var width by remember { mutableStateOf(0f) }
       var height by remember { mutableStateOf(0f) }
 
+      var fraction = if (share) 0.5f else 1f
+
       Canvas(
         Modifier
-          .fillMaxWidth(1.0f)
+          .fillMaxWidth(fraction)
           .fillMaxHeight(1.0f)
 //          .onPointerEvent(PointerEventType.Press) {
 //            x10 = x20
@@ -66,8 +68,8 @@ class Display {
         drawContent(this)
 
       }
-      Text("Width: $width - height: $height")
-      println("Width: $width - height: $height")
+//      Text("Width: $width - height: $height")
+//      println("Width: $width - height: $height")
 
 //      for (instance in Wall.Instances) {
 //        Text(instance.toString())

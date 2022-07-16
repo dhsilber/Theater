@@ -17,9 +17,7 @@ import entities.Wall
 fun drawContent(drawScope: DrawScope) {
   Grid.instance.draw(drawScope)
 
-  println("Prosceniums: ${Proscenium.instances.size}")
   for (instance in Proscenium.instances) {
-    println(instance.toString())
     instance.draw(drawScope)
 //          drawLine(Color.Black, PagePoint.offset(x1, y1), PagePoint.offset(x2, y2))
   }
@@ -36,14 +34,16 @@ fun drawContent(drawScope: DrawScope) {
 
   }
 
-  println("Compose Pipes:")
-  for (instance in Pipe.instances) {
-    println(instance)
-    instance.draw(drawScope)
+  for (item in PipeManager.list) {
+    val instance = item.pipe
+    instance.draw(drawScope, item.current)
   }
+//  for (instance in Pipe.instances) {
+//    println(instance)
+//    instance.draw(drawScope)
+//  }
 
   for (instance in SetPiece.instances) {
-    println(instance)
     instance.draw(drawScope)
   }
 }
@@ -73,13 +73,12 @@ fun Proscenium.draw(drawScope: DrawScope) {
 }
 
 fun Wall.draw(drawScope: DrawScope) {
-  println("When drawing wall, start: $start: ${start.toOffset()}, end: $end: ${end.toOffset()}")
   drawScope.drawLine(Color.Black, start.toOffset(), end.toOffset())
 }
 
-fun Pipe.draw(drawScope: DrawScope) {
-  println("When drawing $this, VenuePoint extremes are: ${VenuePoint}")
-  drawScope.drawRect(Color.Black,
+fun Pipe.draw(drawScope: DrawScope, highlight: Boolean) {
+  val color = if (highlight) Color.Magenta else Color.Black
+  drawScope.drawRect(color,
     PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
     PagePoint.size(length, Pipe.Diameter))
   val offsetToCenter = length / 2
@@ -92,14 +91,12 @@ fun Pipe.draw(drawScope: DrawScope) {
 }
 
 fun SetPiece.draw(drawScope: DrawScope) {
-  println("Drawing SetPiece at $origin ")
   for (platform in parts) {
     platform.draw(drawScope, origin.venue)
   }
 }
 
 fun SetPlatform.draw(drawScope: DrawScope, placement: VenuePoint) {
-  println("Drawing SetPlatform at $placement + $origin ")
   for (shape in shapes) {
     shape.draw(drawScope, placement + origin)
   }
@@ -113,7 +110,6 @@ fun Shape.draw(drawScope: DrawScope, placement: VenuePoint) {
     size = PagePoint.size(rectangle.width, rectangle.depth),
     style = Stroke(width = 2f),
   )
-  println("Drawing shape at $placement with ${rectangle.width}, ${rectangle.depth}")
 //  for(platform in parts) {
 //    platform.draw(origin)
 //  }

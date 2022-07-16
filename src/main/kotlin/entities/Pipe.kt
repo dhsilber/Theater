@@ -6,12 +6,12 @@ import coordinates.StagePoint
 import org.w3c.dom.Element
 
 class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
-  var id = getStringAttribute("id")
-  private var x = getFloatAttribute("x")
-  private var y = getFloatAttribute("y")
-  private var z = getFloatAttribute("z")
-  var length = getPositiveFloatAttribute("length")
-  var origin = StagePoint(x, y, z)
+  val id = getStringAttribute("id")
+  private val x = getFloatAttribute("x")
+  private val y = getFloatAttribute("y")
+  private val z = getFloatAttribute("z")
+  val length = getPositiveFloatAttribute("length")
+  val origin = StagePoint(x, y, z)
 //  var end = StagePoint(x + length, y + Pipe.Diameter, z + Pipe.Diameter)
 
   var dependents = mutableSetOf<Locator>()
@@ -33,7 +33,7 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
     const val Tag = "pipe"
     const val Diameter = 2f
 
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Pipe =
+    fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): Pipe =
       create(xmlElement, parentEntity, ::Pipe)
 
     fun postParsingCleanup() {

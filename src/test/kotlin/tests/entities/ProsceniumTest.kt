@@ -2,8 +2,9 @@ package tests.entities
 
 import CreateWithXmlElement
 import XmlElemental
+import coordinates.VenuePoint
 import entities.Proscenium
-import entities.Venue
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertEquals
@@ -40,7 +41,7 @@ class ProsceniumTest {
 
   @Test
   fun `companion has tag`() {
-    assertEquals("proscenium", Proscenium.Tag )
+    assertEquals("proscenium", Proscenium.Tag)
   }
 
   @Test
@@ -59,7 +60,7 @@ class ProsceniumTest {
 //    venueElement.setAttribute("height", "34")
 //    Venue.factory(venueElement, null)
 
-    assertEquals(false, Proscenium.inUse() )
+    assertEquals(false, Proscenium.inUse())
   }
 
   @Test
@@ -78,20 +79,18 @@ class ProsceniumTest {
     prosceniumElement.setAttribute("height", "4.5")
     prosceniumElement.setAttribute("width", "5.6")
     prosceniumElement.setAttribute("depth", "6.7")
-    assertEquals(false, Proscenium.inUse() )
+    assertEquals(false, Proscenium.inUse())
 
     Proscenium.factory(prosceniumElement, null)
 
-    assertEquals(true, Proscenium.inUse() )
+    assertEquals(true, Proscenium.inUse())
   }
 
   @Test
   fun `has required attributes`() {
     val instance = Proscenium.factory(minimalXml(), null)
 
-    assertEquals(1.2f, instance.x)
-    assertEquals(2.3f, instance.y)
-    assertEquals(3.4f, instance.z)
+    assertThat(instance.origin).isEqualTo(VenuePoint(1.2f, 2.3f, 3.4f))
     assertEquals(4.5f, instance.height)
     assertEquals(5.6f, instance.width)
     assertEquals(6.7f, instance.depth)
@@ -135,5 +134,88 @@ class ProsceniumTest {
     assertEquals("Unable to read positive floating-point number from depth attribute", instance.errors[5])
     assertEquals(6, instance.errors.size)
   }
+
+//  @Test
+//  fun `for svg drawing, no proscenium is drawn when none are defined`() {
+//    Proscenium.instances.clear()
+//
+//    every { Proscenium.drawSvg(any(),any(),any())} returns Unit
+//
+//    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
+//    val namespace = "http://www.w3.org/2000/svg"
+//    val document = domImpl.createDocument(namespace, "svg", null)
+//    val svgGenerator = SVGGraphics2D(document)
+//    val root = svgGenerator.root
+//    root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
+//
+//    drawSvgContent(document, namespace, root)
+//
+//
+//    verify(exactly = 0) { Proscenium.drawSvg(pathName = "foo") }
+//  }
+
+//  @Test
+//  fun `for svg drawing, proscenium is drawn`() {
+//    val prosceniumElement = IIOMetadataNode()
+//    prosceniumElement.setAttribute("x", "1.2")
+//    prosceniumElement.setAttribute("y", "2.3")
+//    prosceniumElement.setAttribute("z", "3.4")
+//    prosceniumElement.setAttribute("height", "4.5")
+//    prosceniumElement.setAttribute("width", "5.6")
+//    prosceniumElement.setAttribute("depth", "6.7")
+//
+//    val instance = Proscenium.factory(prosceniumElement, null)
+//    val spy = spyk(instance)
+//    Proscenium.instances.clear()
+//    Proscenium.instances.add(spy)
+//
+//    every { spy.drawSvg(any(), any(), any()) } returns Unit
+//
+//    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
+//    val namespace = "http://www.w3.org/2000/svg"
+//    val document = domImpl.createDocument(namespace, "svg", null)
+//    val svgGenerator = SVGGraphics2D(document)
+//    val root = svgGenerator.root
+//    root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
+//
+//    println("Root before $root")
+//    drawSvgContent(document, namespace, root)
+//    println("Root after $root")
+//
+//    verify(exactly = 0) { spy.drawSvg(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
+//  }
+//
+//  @Test
+//  fun `for svg drawing, proscenium is drawn 2`() {
+//    Proscenium.instances.clear()
+//    val prosceniumElement = IIOMetadataNode()
+//    prosceniumElement.setAttribute("x", "1.2")
+//    prosceniumElement.setAttribute("y", "2.3")
+//    prosceniumElement.setAttribute("z", "3.4")
+//    prosceniumElement.setAttribute("height", "4.5")
+//    prosceniumElement.setAttribute("width", "5.6")
+//    prosceniumElement.setAttribute("depth", "6.7")
+//
+//    val instance = Proscenium.factory(prosceniumElement, null)
+//    mockkObject(instance)
+////    val spy = spyk(instance)
+////    Proscenium.instances.clear()
+////    Proscenium.instances.add(spy)
+//
+//    every { instance.drawSvg(any(), any(), any()) } returns Unit
+//
+//    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
+//    val namespace = "http://www.w3.org/2000/svg"
+//    val document = domImpl.createDocument(namespace, "svg", null)
+//    val svgGenerator = SVGGraphics2D(document)
+//    val root = svgGenerator.root
+//    root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
+//
+//    println("Root before $root")
+//    drawSvgContent(document, namespace, root)
+//    println("Root after $root")
+//
+//    verify(exactly = 0) { instance.drawSvg(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
+//  }
 
 }

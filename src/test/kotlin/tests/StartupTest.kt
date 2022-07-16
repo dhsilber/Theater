@@ -3,6 +3,8 @@ package tests
 import TagRegistry
 import Xml
 import com.mobiletheatertech.plot.Startup
+import entities.Drawing
+import entities.Event
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -47,6 +49,8 @@ class StartupTest {
       SetPiece.Tag,
       SetPlatform.Tag,
       Shape.Tag,
+      Drawing.Tag,
+      Event.Tag,
     )
   }
 
@@ -62,7 +66,7 @@ class StartupTest {
   }
 
   @Test
-  fun `reorders pipe coordinates when we have a proscenium`() {
+  fun `pipes are given an opportunity to perform post-parsing work`() {
     Proscenium.instances.clear()
     val prosceniumElement = IIOMetadataNode()
     prosceniumElement.setAttribute("x", "1.2")
@@ -78,23 +82,11 @@ class StartupTest {
     every { Xml.read(any()) } answers {
       Proscenium.factory(prosceniumElement, null)
     }
-    every { Pipe.reorientForProsceniumOrigin()} returns Unit
+    every { Pipe.postParsingCleanup()} returns Unit
 
     Startup().startup("foo")
 
-    verify(exactly = 1) { Pipe.reorientForProsceniumOrigin() }
+    verify(exactly = 1) { Pipe.postParsingCleanup() }
   }
 
-  @Test
-  fun `does not reorder pipe coordinates when we have no proscenium`() {
-    Proscenium.instances.clear()
-    mockkObject(Xml)
-    mockkObject(Pipe)
-    every { Xml.read(any()) } returns Unit
-    every { Pipe.reorientForProsceniumOrigin()} returns Unit
-
-    Startup().startup("foo")
-
-    verify(exactly = 0) { Pipe.reorientForProsceniumOrigin() }
-  }
 }

@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot
 
+import entities.Drawing
+import entities.Event
 import entities.Venue
 import entities.Luminaire
 import entities.LuminaireDefinition
@@ -21,6 +23,8 @@ class Startup {
     TagRegistry.registerTagProcessor(SetPiece.Tag, SetPiece::factory)
     TagRegistry.registerTagProcessor(SetPlatform.Tag, SetPlatform::factory)
     TagRegistry.registerTagProcessor(Shape.Tag, Shape::factory)
+    TagRegistry.registerTagProcessor(Drawing.Tag, Drawing::factory)
+    TagRegistry.registerTagProcessor(Event.Tag, Event::factory)
 
     println("Reading Theater Plot XML file at $pathName")
     Xml.read(pathName)

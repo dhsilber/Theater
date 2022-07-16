@@ -14,7 +14,6 @@ import org.jetbrains.skia.Paint
 fun Grid.draw(drawScope: DrawScope) {
   PagePoint.Setup(drawScope.size)
   Grid.Setup(drawScope.size)
-  println("When drawing grid (${Grid}), VenuePoint extremes are: $VenuePoint")
 
 //  drawScope.drawLine(Color.Green, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(0f, Grid.Depth - 0))
 //  drawScope.drawLine(Color.Red, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(Grid.Width, 0f))

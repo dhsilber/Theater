@@ -3,6 +3,8 @@ package tests.entities
 import CreateWithXmlElement
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
+import coordinates.StagePoint
+import coordinates.VenuePoint
 import entities.Locator
 import entities.Luminaire
 import entities.Pipe
@@ -56,9 +58,7 @@ class PipeTest {
 
     SoftAssertions().apply {
       assertThat(instance.id).isEqualTo("name")
-      assertThat(instance.x).isEqualTo(1.2f)
-      assertThat(instance.y).isEqualTo(2.3f)
-      assertThat(instance.z).isEqualTo(3.4f)
+      assertThat(instance.origin).isEqualTo(StagePoint(1.2f,2.3f,3.4f))
       assertThat(instance.length).isEqualTo(4.5f)
       assertThat(instance.hasError).isFalse
     }.assertAll()
@@ -104,6 +104,7 @@ class PipeTest {
     }.assertAll()
   }
 
+  // TODO Does this test really belong with Pipe?
   @Test
   fun `reorient using proscenium coordinates`() {
     Proscenium.instances.clear()
@@ -125,12 +126,9 @@ class PipeTest {
     xmlElement.setAttribute("length", "4.5")
     val instance = Pipe.factory(xmlElement, null)
 
-    Pipe.reorientForProsceniumOrigin()
-
     SoftAssertions().apply {
-      assertThat(instance.x).isEqualTo(130f)
-      assertThat(instance.y).isEqualTo(210f)
-      assertThat(instance.z).isEqualTo(334f)
+      assertThat(instance.origin).isNotEqualTo(StagePoint(130f,210f,334f))
+      assertThat(instance.origin.venue).isEqualTo(VenuePoint(130f,210f,334f))
     }.assertAll()
   }
 
