@@ -6,6 +6,7 @@ import XmlElemental
 import entities.Drawing
 import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
@@ -18,7 +19,6 @@ class DrawingTest {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "Name of drawing")
     xmlElement.setAttribute("filename", "file-name")
-    xmlElement.setAttribute("pipe", "pipe-name")
     return xmlElement
   }
 
@@ -58,9 +58,18 @@ class DrawingTest {
     SoftAssertions().apply {
       assertThat(instance.id).isEqualTo("Name of drawing")
       assertThat(instance.filename).isEqualTo("file-name")
-      assertThat(instance.pipe).isEqualTo("pipe-name")
       assertThat(instance.hasError).isFalse
     }.assertAll()
+  }
+
+  @Test
+  fun `registers optional attributes`() {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("pipe", "pipe-name")
+
+    val instance = Drawing.factory(xmlElement, null)
+
+    assertThat(instance.pipe).isEqualTo("pipe-name")
   }
 
   @Test
@@ -74,9 +83,25 @@ class DrawingTest {
       assertThat(instance.errors).containsExactly(
         "Missing required id attribute",
         "Missing required filename attribute",
-        "Missing required pipe attribute",
       )
     }.assertAll()
+  }
+
+  @Test
+  fun `hasPipe is false when there is no pipe`() {
+    val instance = Drawing.factory(minimalXml(), null)
+
+    assertThat(instance.hasPipe).isFalse
+  }
+
+  @Test
+  fun `hasPipe is true when there is a pipe`() {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("pipe", "pipe-name")
+
+    val instance = Drawing.factory(xmlElement, null)
+
+    assertThat(instance.hasPipe).isTrue
   }
 
 }

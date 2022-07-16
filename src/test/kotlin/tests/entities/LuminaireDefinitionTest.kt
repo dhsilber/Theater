@@ -5,13 +5,10 @@ import XmlElemental
 import display.drawSvgPlanContent
 import entities.Luminaire
 import entities.LuminaireDefinition
-import org.apache.batik.dom.GenericDOMImplementation
-import org.apache.batik.svggen.SVGGraphics2D
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
-import org.w3c.dom.DOMImplementation
 import startSvg
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertIs
@@ -136,43 +133,27 @@ class LuminaireDefinitionTest {
   @Test
   fun `generates SVG when this luminaire type is in use`() {
     LuminaireDefinition.Companion.instances.clear()
-     LuminaireDefinition.factory(minimalXml(), null)
-     Luminaire.factory(minimalLuminaireXml(), null)
-
-//    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
-//    val namespace = "http://www.w3.org/2000/svg"
-//    val document = domImpl.createDocument(namespace, "svg", null)
-//    val svgGenerator = SVGGraphics2D(document)
-//    val root = svgGenerator.root
-//    root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
-
+    LuminaireDefinition.factory(minimalXml(), null)
+    Luminaire.factory(minimalLuminaireXml(), null)
     val svgDocument = startSvg()
-    drawSvgPlanContent(      svgDocument    )
+    val initialSymbolElementCount = svgDocument.root.getElementsByTagName("symbol").length
 
-//    drawSvgPlanContent(document, namespace, root)
+    drawSvgPlanContent(svgDocument)
 
-    val defsList = svgDocument.root.getElementsByTagName("defs")
-    assertThat(defsList.length).isEqualTo(2)
+    val symbolElements = svgDocument.root.getElementsByTagName("symbol")
+    assertThat(symbolElements.length).isEqualTo(initialSymbolElementCount + 1)
   }
 
   @Test
-  fun `generates no SVG when this luminaire type is in not use`(){
+  fun `generates no SVG when this luminaire type is in not use`() {
     LuminaireDefinition.Companion.instances.clear()
-     LuminaireDefinition.factory(minimalXml(), null)
-
-//    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
-//    val namespace = "http://www.w3.org/2000/svg"
-//    val document = domImpl.createDocument(namespace, "svg", null)
-//    val svgGenerator = SVGGraphics2D(document)
-//    val root = svgGenerator.root
-//    root.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot")
-
-
+    LuminaireDefinition.factory(minimalXml(), null)
     val svgDocument = startSvg()
-    drawSvgPlanContent(      svgDocument    )
 
-    val defsList = svgDocument.root.getElementsByTagName("defs")
-    assertThat(defsList.length).isEqualTo(1)
+    drawSvgPlanContent(svgDocument)
+
+    val symbolElements = svgDocument.root.getElementsByTagName("symbol")
+    assertThat(symbolElements.length).isEqualTo(1)
   }
 
 }

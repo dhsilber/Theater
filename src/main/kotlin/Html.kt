@@ -1,11 +1,14 @@
 import com.mobiletheatertech.plot.Configuration
 import com.mobiletheatertech.plot.exception.InvalidXMLException
+import display.addAttribute
+import display.drawRectangle
 import display.drawSvg
 import display.generateSvgSymbols
 import entities.Drawing
 import entities.Event
 import entities.Locator
 import entities.Pipe
+import entities.Venue
 //import kotlinx.html.body
 //import kotlinx.html.div
 //import kotlinx.html.dom.createHTMLTree
@@ -19,18 +22,22 @@ import j2html.TagCreator.body
 import j2html.TagCreator.div
 import j2html.TagCreator.each
 import j2html.TagCreator.h1
+import j2html.TagCreator.h2
 import j2html.TagCreator.head
 import j2html.TagCreator.html
 import j2html.TagCreator.rawHtml
+import j2html.TagCreator.span
+import j2html.TagCreator.style
 import j2html.TagCreator.table
 import j2html.TagCreator.td
 import j2html.TagCreator.tr
+import j2html.TagCreator.video
 import j2html.tags.DomContent
 import j2html.tags.specialized.DivTag
 import j2html.tags.specialized.H1Tag
+import j2html.tags.specialized.H2Tag
+import j2html.tags.specialized.SpanTag
 import java.io.File
-
-//import javax.management.Query.div
 
 class Html {
   companion object {
@@ -40,43 +47,33 @@ class Html {
 
     fun writePipeDrawings() {
       for (drawing in Drawing.instances) {
-        val pipe = Pipe.queryById(drawing.pipe)
-          ?: throw InvalidXMLException("Pipe ${drawing.pipe} mentioned in drawing element ${drawing.id} not found")
-        writeSinglePipeDrawing(drawing, pipe)
+        if (drawing.hasPipe) {
+          drawing.writeSinglePipeDrawing()
+        }
       }
     }
 
-    fun writeSinglePipeDrawing(drawing: Drawing, pipe: Pipe) {
-      println("Writing drawing for ${drawing.id} to ${drawing.filename}, showing ${drawing.pipe}")
-      startHtmlFile(drawing)
-//      drawSvgPipeDrawing(document, namespace, root, pipe)
-    }
-
-    fun writeHeading() {
-
-    }
   }
 }
 
 
-fun startHtmlFile(drawing: Drawing) {
-  val pipe = Pipe.queryById(drawing.pipe)
+fun Drawing.writeSinglePipeDrawing() {
+  println("Writing drawing for $id to $filename, showing $pipe")
+  val pipe = Pipe.queryById(pipe) ?: return
 
   val svgDocument = startSvg()
   generateSvgSymbols(svgDocument)
-  val pipeDrawingBoundary = pipe?.drawSvg(svgDocument)
-  println("For ${drawing.id}, pipe boundary is $pipeDrawingBoundary.")
-  val root = svgDocument.root
-  root.setAttribute("width", "600")
-  root.setAttribute("height", "100")
-  root.setAttribute("viewBox", "320 1000 100 100")
-  val generatedSvgText = finishSvgString(svgDocument)
+  pipe.svgHighlightBox(svgDocument)
+  val generatedSvgText = pipe.drawPipeSvg(svgDocument)
 
   val text = html(
     head(
+      style(
+        rawHtml(".information { border: 0.25rem double  black; text-align: center;}")
+      )
     ),
     body(
-      drawingHeading(),
+      informationHeaderBlock(),
       rawHtml(generatedSvgText)
     ),
     table(
@@ -89,26 +86,52 @@ fun startHtmlFile(drawing: Drawing) {
         td("Owner"),
         td("Notes"),
       ),
-      pipe?.drawHtmlDecendents()
+      pipe.drawHtmlDecendents()
     )
   ).renderFormatted()
 
-  File("${Configuration.plotDirectory}/out/${drawing.filename}.html").writeText(text)
+  File("${Configuration.plotDirectory}/out/$filename.html").writeText(text)
 }
 
-fun drawingHeading(): DivTag {
-  return div(
-    // TODO: Event should manage this...
-    if (Event.instances.size > 0) {
-      Event.instances[0]?.htmlDrawingHeading()
-    } else {
-      h1("No event specified")
-    }
+fun Pipe.svgHighlightBox(svgDocument: SvgDocument) {
+  val place = origin.venue
+  val drawingResults = drawRectangle(svgDocument, place.x - 50, place.y - 50, length + 100, 100f, "teal")
+  drawingResults.element.addAttribute("opacity", "0.3")
+}
+
+private fun Pipe.drawPipeSvg(svgDocument: SvgDocument): String {
+  val pipeDrawingBoundary = this.drawSvg(svgDocument)
+  val viewBox = "${pipeDrawingBoundary.xMin + 300} ${pipeDrawingBoundary.yMin - 50} 100 100"
+  val root = svgDocument.root
+  root.setAttribute("width", "1200")
+  root.setAttribute("height", "150")
+  root.setAttribute("viewBox", viewBox)
+  return finishSvgString(svgDocument)
+}
+
+fun Drawing.informationHeaderBlock(): SpanTag {
+  return span(
+    div(
+      h1("$id"),
+      // TODO: Event should manage this...
+      if (Event.instances.size > 0) {
+        Event.instances[0].htmlDrawingHeading()
+      } else {
+        h1("No event specified")
+      },
+      if (Venue.instances.size > 0) {
+        Venue.instances[0].htmlDrawingHeading()
+      } else {
+        h1("No venue specified")
+      }
+    ).attr("class", "information")
   )
 }
 
 
-fun Event.htmlDrawingHeading(): H1Tag = h1(id)
+fun Event.htmlDrawingHeading(): H2Tag = h2(id)
+
+fun Venue.htmlDrawingHeading(): H2Tag = h2("$building - $room")
 
 
 fun Pipe.drawHtmlDecendents(): DomContent {

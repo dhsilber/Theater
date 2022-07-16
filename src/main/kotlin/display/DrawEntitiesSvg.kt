@@ -92,13 +92,13 @@ fun Pipe.drawSvg(svgDocument: SvgDocument): SvgBoundary {
   return drawingResults.boundary
 }
 
-fun Luminaire.drawSvg(svgDocument: SvgDocument, point: VenuePoint, location: Float): SvgBoundary {
-  drawUse(svgDocument, type, location, point.y)
+fun Luminaire.drawSvg(svgDocument: SvgDocument, point: VenuePoint, declaredLocation: Float): SvgBoundary {
+  drawUse(svgDocument, type, declaredLocation, point.y)
 
   val luminaireDefinition = LuminaireDefinition.findByName(type)
   val size = luminaireDefinition?.length?.coerceAtLeast(luminaireDefinition.width) ?: 0f
 
-  return SvgBoundary(location - size, point.y - size, location + size, point.y + size)
+  return SvgBoundary(declaredLocation - size, point.y - size, declaredLocation + size, point.y + size)
 }
 
 fun SetPiece.drawSvg(svgDocument: SvgDocument) {

@@ -17,7 +17,7 @@ class Svg {
   companion object {
     fun writeAll() {
       writePlan()
-      writePipeDrawings()
+//      writePipeDrawings()
     }
 
     fun writePlan() {
@@ -27,20 +27,20 @@ class Svg {
       finishSvgFile(svgDetails, "plan")
     }
 
-    fun writePipeDrawings() {
-      for (drawing in Drawing.instances) {
-        val pipe = Pipe.queryById(drawing.pipe)
-          ?: throw InvalidXMLException("Pipe ${drawing.pipe} mentioned in drawing element ${drawing.id} not found")
-        writeSinglePipeDrawing(drawing, pipe)
-      }
-    }
+//    fun writePipeDrawings() {
+//      for (drawing in Drawing.instances) {
+//        val pipe = Pipe.queryById(drawing.pipe)
+//          ?: throw InvalidXMLException("Pipe ${drawing.pipe} mentioned in drawing element ${drawing.id} not found")
+//        writeSinglePipeDrawing(drawing, pipe)
+//      }
+//    }
 
-    fun writeSinglePipeDrawing(drawing: Drawing, pipe: Pipe) {
-      println("Writing drawing for ${drawing.id} to ${drawing.filename}, showing ${drawing.pipe}")
-      val svgDetails = startSvg()
-      drawSvgPipeDrawing(svgDetails, pipe)
-      finishSvgFile(svgDetails, drawing.filename)
-    }
+//    fun writeSinglePipeDrawing(drawing: Drawing, pipe: Pipe) {
+//      println("Writing drawing for ${drawing.id} to ${drawing.filename}, showing ${drawing.pipe}")
+//      val svgDetails = startSvg()
+//      drawSvgPipeDrawing(svgDetails, pipe)
+//      finishSvgFile(svgDetails, drawing.filename)
+//    }
 
   }
 }

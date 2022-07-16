@@ -3,6 +3,8 @@ package tests
 import TagRegistry
 import Xml
 import com.mobiletheatertech.plot.Startup
+import entities.Drawing
+import entities.Event
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -47,6 +49,8 @@ class StartupTest {
       SetPiece.Tag,
       SetPlatform.Tag,
       Shape.Tag,
+      Drawing.Tag,
+      Event.Tag,
     )
   }
 

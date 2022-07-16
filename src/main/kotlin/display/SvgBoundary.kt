@@ -1,5 +1,7 @@
 package display
 
+import kotlin.math.abs
+
 class SvgBoundary(
   var xMin: Float = Float.MAX_VALUE,
   var yMin: Float = Float.MAX_VALUE,
@@ -26,11 +28,17 @@ class SvgBoundary(
     return "($xMin, $yMin, $xMax, $yMax) ($width, $height)"
   }
 
+  private val delta = 0.00000001
+
   override fun equals(other: Any?): Boolean {
     val boundary = other as SvgBoundary
     return ((xMin == boundary.xMin)
         && (xMax == boundary.xMax)
         && (yMin == boundary.yMin)
         && (yMax == boundary.yMax))
+//    return ((abs(xMin - boundary.xMin) < delta)
+//        && (abs(xMax - boundary.xMax) < delta)
+//        && (abs(yMin - boundary.yMin) < delta)
+//        && (abs(yMax - boundary.yMax) < delta))
   }
 }

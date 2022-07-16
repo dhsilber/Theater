@@ -28,6 +28,13 @@ class DrawEntitiesSvgTest {
     return xmlElement
   }
 
+  fun minimalLuminaireXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode("luminaire")
+    xmlElement.setAttribute("type", "name")
+    xmlElement.setAttribute("location", "1.6")
+    return xmlElement
+  }
+
   @Test
   fun `Luminaire drawSvg uses symbol provided by LuminaireDefinition`() {
     val luminaire = Luminaire.factory(LuminaireTest().minimalXml())
@@ -44,15 +51,17 @@ class DrawEntitiesSvgTest {
 
   @Test
   fun `Luminaire drawSvg provides boundary from LuminaireDefinition`() {
-    val luminaireDefinition = LuminaireDefinition.factory(minimalLuminaireDefinitionXml())
-    val luminaire = Luminaire.factory(LuminaireDefinitionTest().minimalLuminaireXml())
+    LuminaireDefinition.factory(minimalLuminaireDefinitionXml())
+    val luminaire = Luminaire.factory(minimalLuminaireXml())
     val svgDocument = startSvg()
+    val expectedMinX = luminaire.location - 4.8f
+    val expectedMaxX = luminaire.location + 4.8f
+    val expectedMinY = 15.2f
+    val expectedMaxY = 24.8f
 
-    val boundary =     luminaire.drawSvg(svgDocument, VenuePoint(10f, 20f, 0f), 17.6f)
+    val boundary = luminaire.drawSvg(svgDocument, VenuePoint(10f, 20f, 0f), luminaire.location)
 
-    assertThat(boundary).isEqualTo(SvgBoundary(12.8f, 15.2f, 22.4f, 24.8f))
-
-    fail()
+    assertThat(boundary).isEqualTo(SvgBoundary(expectedMinX, expectedMinY, expectedMaxX, expectedMaxY))
   }
 
   @Test
@@ -95,12 +104,18 @@ class DrawEntitiesSvgTest {
   @Test
   fun `Pipe drawSvg provides boundary that includes Luminaires`() {
     val pipe = Pipe.factory(PipeTest().minimalXml())
+    LuminaireDefinition.factory(minimalLuminaireDefinitionXml())
+    val luminaire = Luminaire.factory(LuminaireDefinitionTest().minimalLuminaireXml())
+    pipe.hang(luminaire)
     val svgDocument = startSvg()
+    val expectedMinX = pipe.origin.venue.x
+    val expectedMaxX = pipe.origin.venue.x + pipe.length
+    val expectedMinY = pipe.origin.venue.y
+    val expectedMaxY = pipe.origin.venue.y + Pipe.Diameter
 
     val result = pipe.drawSvg(svgDocument)
 
-    // See values in PipeTest().minimalXml() for justification of these numbers
-    assertThat(result).isEqualTo(SvgBoundary(1.2f, 2.3f, 5.7f, 4.3f))
+    assertThat(result).isEqualTo(SvgBoundary(expectedMinX, expectedMinY, expectedMaxX, expectedMaxY))
 
     fail("Add Luminaires to this test.")
   }
