@@ -1,12 +1,10 @@
 package tests.entities
 
 import CreateWithXmlElement
-import coordinates.PointOffset
 import Xml
 import XmlElemental
-import coordinates.Point
 import coordinates.StagePoint
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
 import io.mockk.every
@@ -37,11 +35,11 @@ class SetPlatformTest {
     return xmlElement
   }
 
-  private fun minimalSetPiece(): SetPiece {
+  private fun minimalSetPiece(): Setpiece {
     val setPieceElement = IIOMetadataNode()
     setPieceElement.setAttribute("x", "0.1")
     setPieceElement.setAttribute("y", "0.2")
-    return SetPiece.factory(setPieceElement, null)
+    return Setpiece.factory(setPieceElement, null)
   }
 
   @AfterTest
@@ -137,7 +135,7 @@ class SetPlatformTest {
   fun `registers self with parent setPiece`() {
     val setPieceElement = minimalXml()
     setPieceElement.setAttribute("id", "setPiece-name")
-    val setPiece = SetPiece.factory(setPieceElement, null)
+    val setPiece = Setpiece.factory(setPieceElement, null)
 
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("type", "Type value")

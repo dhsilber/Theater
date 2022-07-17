@@ -7,7 +7,7 @@ import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
 import entities.Proscenium
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
 import entities.Wall
@@ -20,7 +20,7 @@ class Startup {
     TagRegistry.registerTagProcessor(Wall.Tag, Wall::factory)
     TagRegistry.registerTagProcessor(Pipe.Tag, Pipe::factory)
     TagRegistry.registerTagProcessor(Luminaire.Tag, Luminaire::factory)
-    TagRegistry.registerTagProcessor(SetPiece.Tag, SetPiece::factory)
+    TagRegistry.registerTagProcessor(Setpiece.Tag, Setpiece::factory)
     TagRegistry.registerTagProcessor(SetPlatform.Tag, SetPlatform::factory)
     TagRegistry.registerTagProcessor(Shape.Tag, Shape::factory)
     TagRegistry.registerTagProcessor(Drawing.Tag, Drawing::factory)

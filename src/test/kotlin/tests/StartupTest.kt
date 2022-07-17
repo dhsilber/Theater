@@ -9,7 +9,7 @@ import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
 import entities.Proscenium
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
 import entities.Venue
@@ -46,7 +46,7 @@ class StartupTest {
       Wall.Tag,
       Pipe.Tag,
       Luminaire.Tag,
-      SetPiece.Tag,
+      Setpiece.Tag,
       SetPlatform.Tag,
       Shape.Tag,
       Drawing.Tag,

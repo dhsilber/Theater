@@ -4,7 +4,7 @@ import CreateWithXmlElement
 import XmlElemental
 import org.w3c.dom.Element
 
-class SetPiece(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
+class Setpiece(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   val origin = getStagePointAttribute("x", "y")
   val parts = mutableSetOf<SetPlatform>()
 
@@ -16,9 +16,9 @@ class SetPiece(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEl
     println("SetPiece: $this")
   }
 
-  companion object : CreateWithXmlElement<SetPiece>() {
+  companion object : CreateWithXmlElement<Setpiece>() {
     const val Tag = "setpiece"
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): SetPiece =
-      create(xmlElement, parentEntity, ::SetPiece)
+    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Setpiece =
+      create(xmlElement, parentEntity, ::Setpiece)
   }
 }

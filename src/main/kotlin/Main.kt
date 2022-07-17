@@ -87,7 +87,7 @@ fun main() = application {
   PipeManager.Companion
   Svg.writeAll()
   Html.writeAll()
-  exitApplication()
+//  exitApplication()
 
   val state = rememberWindowState(placement = WindowPlacement.Maximized)
 

@@ -7,7 +7,7 @@ import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
 import entities.Proscenium
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
 import entities.Wall
@@ -41,7 +41,7 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   for (instance in Wall.instances) {
     instance.drawSvg(document, svgNamespace, parentElement)
   }
-  for (instance in SetPiece.instances) {
+  for (instance in Setpiece.instances) {
     instance.drawSvg(svgDocument)
   }
   for (instance in Pipe.instances) {
@@ -101,7 +101,7 @@ fun Luminaire.drawSvg(svgDocument: SvgDocument, point: VenuePoint, declaredLocat
   return SvgBoundary(declaredLocation - size, point.y - size, declaredLocation + size, point.y + size)
 }
 
-fun SetPiece.drawSvg(svgDocument: SvgDocument) {
+fun Setpiece.drawSvg(svgDocument: SvgDocument) {
   for (platform in parts) {
     platform.drawSvg(svgDocument, origin.venue)
   }

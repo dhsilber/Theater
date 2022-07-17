@@ -1,10 +1,9 @@
 package tests.entities
 
 import CreateWithXmlElement
-import coordinates.VenuePoint
 import XmlElemental
 import coordinates.StagePoint
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
@@ -12,7 +11,7 @@ import org.junit.Test
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.assertIs
 
-class SetPieceTest {
+class SetpieceTest {
 
   fun minimalXml(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
@@ -25,29 +24,29 @@ class SetPieceTest {
   fun `is elemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val setPiece = SetPiece.factory(xmlElement, null)
+    val setPiece = Setpiece.factory(xmlElement, null)
 
     assertIs<XmlElemental>(setPiece)
   }
 
   @Test
   fun `companion has factory`() {
-    assertIs<CreateWithXmlElement<SetPiece>>(SetPiece)
+    assertIs<CreateWithXmlElement<Setpiece>>(Setpiece)
   }
 
   @Test
   fun `companion has tag`() {
-    assertThat(SetPiece.Tag).isEqualTo("setpiece")
+    assertThat(Setpiece.Tag).isEqualTo("setpiece")
   }
 
   @Test
   fun `companion factory builds correct type`() {
-    assertIs<SetPiece>(SetPiece.factory(minimalXml(), null))
+    assertIs<Setpiece>(Setpiece.factory(minimalXml(), null))
   }
 
   @Test
   fun `has required attributes`() {
-    val instance = SetPiece.factory(minimalXml(), null)
+    val instance = Setpiece.factory(minimalXml(), null)
 
     SoftAssertions().apply {
       assertThat(instance.origin).isEqualTo(StagePoint(0.1F, 0.2f, 0f))
@@ -59,7 +58,7 @@ class SetPieceTest {
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = SetPiece.factory(xmlElement, null)
+    val instance = Setpiece.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
@@ -76,7 +75,7 @@ class SetPieceTest {
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
 
-    val instance = SetPiece.factory(xmlElement, null)
+    val instance = Setpiece.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
@@ -89,7 +88,7 @@ class SetPieceTest {
 
   @Test
   fun `adopt keeps a reference to child shape`() {
-    val instance = SetPiece.factory(minimalXml(), null)
+    val instance = Setpiece.factory(minimalXml(), null)
 
     val setPlatformElement = IIOMetadataNode()
     setPlatformElement.setAttribute("x", "17.6")

@@ -13,7 +13,7 @@ class SetPlatform(elementPassthrough: Element, val parentEntity: XmlElemental?) 
   }
 
   private fun connectWithParent() {
-    if( null !== parentEntity && parentEntity is SetPiece) {
+    if( null !== parentEntity && parentEntity is Setpiece) {
       parentEntity.adopt(this)
     }
     else {

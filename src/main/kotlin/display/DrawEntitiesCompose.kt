@@ -9,7 +9,7 @@ import coordinates.Point
 import coordinates.VenuePoint
 import entities.Pipe
 import entities.Proscenium
-import entities.SetPiece
+import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
 import entities.Wall
@@ -43,7 +43,7 @@ fun drawContent(drawScope: DrawScope) {
 //    instance.draw(drawScope)
 //  }
 
-  for (instance in SetPiece.instances) {
+  for (instance in Setpiece.instances) {
     instance.draw(drawScope)
   }
 }
@@ -90,7 +90,7 @@ fun Pipe.draw(drawScope: DrawScope, highlight: Boolean) {
   }
 }
 
-fun SetPiece.draw(drawScope: DrawScope) {
+fun Setpiece.draw(drawScope: DrawScope) {
   for (platform in parts) {
     platform.draw(drawScope, origin.venue)
   }
