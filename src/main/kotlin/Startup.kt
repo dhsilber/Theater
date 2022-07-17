@@ -6,6 +6,7 @@ import entities.Venue
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import entities.Setpiece
 import entities.SetPlatform
@@ -25,6 +26,7 @@ class Startup {
     TagRegistry.registerTagProcessor(Shape.Tag, Shape::factory)
     TagRegistry.registerTagProcessor(Drawing.Tag, Drawing::factory)
     TagRegistry.registerTagProcessor(Event.Tag, Event::factory)
+    TagRegistry.registerTagProcessor(PipeBase.Tag, PipeBase::factory)
 
     println("Reading Theater Plot XML file at $pathName")
     Xml.read(pathName)

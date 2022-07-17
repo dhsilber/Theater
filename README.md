@@ -68,14 +68,30 @@ Attributes:
 
 Typical lighting pipe.
 Things get hung from it. 
+By default, a fixed lighting position.
 
 Attributes:
 - `id` - name of pipe
 - `x`,`y`,`z` - coordinates of the leftmost end of the pipe
 - `length` - length of pipe
 
+Children can be luminaire elements and these luminaires do not need to specify their pipe.
+
 ```dtd
 <pipe id="1st electric" y="33" x="-288" z="184" length="576" />
+```
+
+### PipeBase
+
+Weighted base with threaded receiver for 2" pipe.
+
+Attributes:
+- `x`,`y`,`z` - coordinates of the pipebase
+- `id` - optional name of pipebase
+- `owner` - optional owner of pipebase
+
+```dtd
+<pipebase  y="33" x="-288" z="0"  />
 ```
 
 ### Event
@@ -127,7 +143,7 @@ One instance of the referenced type of lighting instrument.
 Attributes:
 - `type` - type of luminaire being used
 - `location` - position on pipe of this instrument
-- `on` - optional name of pipe, if luminaire element is not a child of the pipe element it is hung on 
+- `on` - name of pipe, required only if luminaire element is not a child of the pipe element it is hung on 
 - `circuit`,`dimmer`,`address`,`channel`,`color` - descriptive information regarding this instrument
 - `info`,`owner`,`label` - descriptive information regarding this instrument
 

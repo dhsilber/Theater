@@ -1,10 +1,18 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
+import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import entities.Venue
-import org.junit.Test
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
+import org.assertj.core.api.Assertions.assertThat
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
@@ -20,6 +28,11 @@ class VenueTest {
     xmlElement.setAttribute("depth", "23")
     xmlElement.setAttribute("height", "34")
     return xmlElement
+  }
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
   }
 
   @Test
@@ -39,6 +52,17 @@ class VenueTest {
   @Test
   fun `companion has tag`() {
     assertEquals("venue", Venue.Tag )
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Venue.Tag)
   }
 
   @Test

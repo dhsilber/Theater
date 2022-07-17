@@ -1,12 +1,12 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
 import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
 import coordinates.StagePoint
-import entities.Setpiece
-import entities.SetPlatform
+import entities.PipeBase
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
@@ -17,12 +17,13 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 
-class SetpieceTest {
+internal class PipeBaseTest {
 
   fun minimalXml(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
+    xmlElement.setAttribute("z", "0")
     return xmlElement
   }
 
@@ -35,19 +36,19 @@ class SetpieceTest {
   fun `is elemental`() {
     val xmlElement = IIOMetadataNode()
 
-    val setPiece = Setpiece.factory(xmlElement, null)
+    val instance = PipeBase.factory(xmlElement, null)
 
-    assertIs<XmlElemental>(setPiece)
+    assertIs<XmlElemental>(instance)
   }
 
   @Test
   fun `companion has factory`() {
-    assertIs<CreateWithXmlElement<Setpiece>>(Setpiece)
+    assertIs<CreateWithXmlElement<PipeBase>>(PipeBase)
   }
 
   @Test
   fun `companion has tag`() {
-    assertThat(Setpiece.Tag).isEqualTo("setpiece")
+    assertThat(PipeBase.Tag).isEqualTo("pipebase")
   }
 
   @Test
@@ -58,17 +59,17 @@ class SetpieceTest {
 
     Startup().startup("foo")
 
-    assertThat(TagRegistry.tagToCallback).containsKey(Setpiece.Tag)
+    assertThat(TagRegistry.tagToCallback).containsKey(PipeBase.Tag)
   }
 
   @Test
   fun `companion factory builds correct type`() {
-    assertIs<Setpiece>(Setpiece.factory(minimalXml(), null))
+    assertIs<PipeBase>(PipeBase.factory(minimalXml(), null))
   }
 
   @Test
   fun `has required attributes`() {
-    val instance = Setpiece.factory(minimalXml(), null)
+    val instance = PipeBase.factory(minimalXml(), null)
 
     SoftAssertions().apply {
       assertThat(instance.origin).isEqualTo(StagePoint(0.1F, 0.2f, 0f))
@@ -77,16 +78,32 @@ class SetpieceTest {
   }
 
   @Test
+  fun `registers optional attributes`() {
+    val xmlElement = minimalXml()
+    xmlElement.setAttribute("id", "id name")
+    xmlElement.setAttribute("owner", "owner name")
+
+    val instance = PipeBase.factory(xmlElement, null)
+
+    SoftAssertions().apply {
+      assertThat(instance.id).isEqualTo("id name")
+      assertThat(instance.owner).isEqualTo("owner name")
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
   fun `notes error for missing required attributes`() {
     val xmlElement = IIOMetadataNode()
 
-    val instance = Setpiece.factory(xmlElement, null)
+    val instance = PipeBase.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
         "Missing required x attribute",
         "Missing required y attribute",
+        "Missing required z attribute",
       )
     }.assertAll()
   }
@@ -96,29 +113,18 @@ class SetpieceTest {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
+    xmlElement.setAttribute("z", "zee")
 
-    val instance = Setpiece.factory(xmlElement, null)
+    val instance = PipeBase.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
         "Unable to read floating-point number from x attribute",
         "Unable to read floating-point number from y attribute",
+        "Unable to read floating-point number from z attribute",
       )
     }.assertAll()
-  }
-
-  @Test
-  fun `adopt keeps a reference to child shape`() {
-    val instance = Setpiece.factory(minimalXml(), null)
-
-    val setPlatformElement = IIOMetadataNode()
-    setPlatformElement.setAttribute("x", "17.6")
-    setPlatformElement.setAttribute("y", "124")
-//    setPlatformElement.setAttribute("rectangle", "17.6  124")
-    val setPlatform = SetPlatform.factory(setPlatformElement, instance)
-
-    assertThat(instance.parts).contains(setPlatform)
   }
 
 }

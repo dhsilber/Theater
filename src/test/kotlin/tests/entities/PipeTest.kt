@@ -1,6 +1,8 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
+import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
 import coordinates.StagePoint
@@ -9,11 +11,15 @@ import entities.Locator
 import entities.Luminaire
 import entities.Pipe
 import entities.Proscenium
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import kotlin.test.assertIs
 
 class PipeTest {
@@ -26,6 +32,11 @@ class PipeTest {
     xmlElement.setAttribute("z", "3.4")
     xmlElement.setAttribute("length", "4.5")
     return xmlElement
+  }
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
   }
 
   @Test
@@ -45,6 +56,17 @@ class PipeTest {
   @Test
   fun `companion has tag`() {
     assertThat(Pipe.Tag).isEqualTo("pipe")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Pipe.Tag)
   }
 
   @Test
