@@ -8,6 +8,7 @@ import coordinates.PagePoint
 import coordinates.Point
 import coordinates.VenuePoint
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import entities.Setpiece
 import entities.SetPlatform
@@ -19,7 +20,6 @@ fun drawContent(drawScope: DrawScope) {
 
   for (instance in Proscenium.instances) {
     instance.draw(drawScope)
-//          drawLine(Color.Black, PagePoint.offset(x1, y1), PagePoint.offset(x2, y2))
   }
 
   for (instance in Wall.instances) {
@@ -34,14 +34,14 @@ fun drawContent(drawScope: DrawScope) {
 
   }
 
+  for (instance in PipeBase.instances) {
+    instance.draw(drawScope)
+  }
+
   for (item in PipeManager.list) {
     val instance = item.pipe
     instance.draw(drawScope, item.current)
   }
-//  for (instance in Pipe.instances) {
-//    println(instance)
-//    instance.draw(drawScope)
-//  }
 
   for (instance in Setpiece.instances) {
     instance.draw(drawScope)
@@ -74,6 +74,15 @@ fun Proscenium.draw(drawScope: DrawScope) {
 
 fun Wall.draw(drawScope: DrawScope) {
   drawScope.drawLine(Color.Black, start.toOffset(), end.toOffset())
+}
+
+fun PipeBase.draw(drawScope: DrawScope) {
+  drawScope.drawCircle(
+    color = Color.Black,
+    center = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
+    radius = 18f,
+    style = Stroke(width = 2f)
+  )
 }
 
 fun Pipe.draw(drawScope: DrawScope, highlight: Boolean) {

@@ -8,7 +8,7 @@ class PipeManager(
 
   companion object {
     var list: List<PipeManager> = listOf()
-    var currentLuminaires : List<Luminaire> = listOf()
+    var currentLuminaires: List<Luminaire> = listOf()
 
     init {
       buildList(0)

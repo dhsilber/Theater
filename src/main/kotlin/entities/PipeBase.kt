@@ -11,7 +11,7 @@ class PipeBase(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEl
 
   companion object : CreateWithXmlElement<PipeBase>() {
     const val Tag = "pipebase"
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): PipeBase =
+    fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): PipeBase =
       PipeBase.create(xmlElement, parentEntity, ::PipeBase)
   }
 

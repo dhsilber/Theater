@@ -20,21 +20,19 @@ fun Element.addAttribute(name: String, value: String): Element {
 }
 
 fun drawCircle(
-  svgDocument: Document,
-  svgNamespace: String,
-  parentElement: Element,
+  svgDocument: SvgDocument,
   x: Float,
   y: Float,
   r: Float,
 ): Element {
-  val svgElement = svgDocument.createElementNS(svgNamespace, "circle")
+  val svgElement = svgDocument.document.createElementNS(svgDocument.namespace, "circle")
   svgElement.setAttribute("cx", x.toString())
   svgElement.setAttribute("cy", y.toString())
   svgElement.setAttribute("r", r.toString())
   svgElement.setAttribute("stroke", "black")
   svgElement.setAttribute("stroke-width", "2")
   svgElement.setAttribute("fill", "none")
-  parentElement.appendChild(svgElement)
+  svgDocument.root.appendChild(svgElement)
 
   return svgElement
 }

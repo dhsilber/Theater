@@ -6,6 +6,7 @@ import coordinates.VenuePoint
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import entities.Setpiece
 import entities.SetPlatform
@@ -36,12 +37,15 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   val (document, svgNamespace, generator, parentElement) = svgDocument
 
   for (instance in Proscenium.instances) {
-    instance.drawSvg(document, svgNamespace, parentElement)
+    instance.drawSvg(svgDocument)
   }
   for (instance in Wall.instances) {
     instance.drawSvg(document, svgNamespace, parentElement)
   }
   for (instance in Setpiece.instances) {
+    instance.drawSvg(svgDocument)
+  }
+  for (instance in PipeBase.instances) {
     instance.drawSvg(svgDocument)
   }
   for (instance in Pipe.instances) {
@@ -53,12 +57,14 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
 fun LuminaireDefinition.drawSvg(svgDocument: SvgDocument) =
   drawSymbol(svgDocument, name, svgContent)
 
-fun Proscenium.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
-  drawLine(svgDocument, svgNamespace, parentElement, origin.x - 17f, origin.y - 17f, origin.x + 17f, origin.y + 17f)
+fun Proscenium.drawSvg(svgDocument: SvgDocument) {
+  val (document, svgNamespace, generator, parentElement) = svgDocument
+
+  drawLine(document, svgNamespace, parentElement, origin.x - 17f, origin.y - 17f, origin.x + 17f, origin.y + 17f)
     .addAttribute("stroke", "cyan")
-  drawLine(svgDocument, svgNamespace, parentElement, origin.x + 17f, origin.y - 17f, origin.x - 17f, origin.y + 17f)
+  drawLine(document, svgNamespace, parentElement, origin.x + 17f, origin.y - 17f, origin.x - 17f, origin.y + 17f)
     .addAttribute("stroke", "cyan")
-  drawCircle(svgDocument, svgNamespace, parentElement, origin.x, origin.y, 17f)
+  drawCircle(svgDocument, origin.x, origin.y, 17f)
     .addAttribute("stroke", "cyan")
 
   val startX = origin.x - width / 2
@@ -66,19 +72,24 @@ fun Proscenium.drawSvg(svgDocument: Document, svgNamespace: String, parentElemen
   val endX = origin.x + width / 2
   val endY = origin.y + depth
   // SR end of proscenium arch
-  drawLine(svgDocument, svgNamespace, parentElement, startX, startY, startX, endY)
+  drawLine(document, svgNamespace, parentElement, startX, startY, startX, endY)
   // SL end of proscenium arch
-  drawLine(svgDocument, svgNamespace, parentElement, endX, startY, endX, endY)
+  drawLine(document, svgNamespace, parentElement, endX, startY, endX, endY)
   // US side of proscenium arch
-  drawLine(svgDocument, svgNamespace, parentElement, startX, startY, endX, startY)
+  drawLine(document, svgNamespace, parentElement, startX, startY, endX, startY)
     .addAttribute("stroke-opacity", "0.3")
   // DS side of proscenium arch
-  drawLine(svgDocument, svgNamespace, parentElement, startX, endY, endX, endY)
+  drawLine(document, svgNamespace, parentElement, startX, endY, endX, endY)
     .addAttribute("stroke-opacity", "0.1")
 }
 
 fun Wall.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
   drawLine(svgDocument, svgNamespace, parentElement, start, end)
+}
+
+fun PipeBase.drawSvg(svgDocument: SvgDocument) {
+  val place = origin.venue
+  drawCircle(svgDocument, place.x, place.y, 18f)
 }
 
 fun Pipe.drawSvg(svgDocument: SvgDocument): SvgBoundary {
