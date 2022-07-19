@@ -10,6 +10,7 @@ import coordinates.VenuePoint
 import entities.Locator
 import entities.Luminaire
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import io.mockk.every
 import io.mockk.mockkObject
@@ -24,13 +25,19 @@ import kotlin.test.assertIs
 
 class PipeTest {
 
-  fun minimalXml(): IIOMetadataNode {
+  fun minimalXmlWithNoParent(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "1.2")
     xmlElement.setAttribute("y", "2.3")
     xmlElement.setAttribute("z", "3.4")
     xmlElement.setAttribute("length", "4.5")
+    return xmlElement
+  }
+
+  fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("length", "47.5")
     return xmlElement
   }
 
@@ -71,23 +78,37 @@ class PipeTest {
 
   @Test
   fun `companion factory builds correct type`() {
-    assertIs<Pipe>(Pipe.factory(minimalXml(), null))
+    assertIs<Pipe>(Pipe.factory(minimalXmlWithNoParent(), null))
   }
 
   @Test
-  fun `has required attributes`() {
-    val instance = Pipe.factory(minimalXml(), null)
+  fun `has required attributes when there is no parent`() {
+    val instance = Pipe.factory(minimalXmlWithNoParent(), null)
 
     SoftAssertions().apply {
       assertThat(instance.id).isEqualTo("name")
-      assertThat(instance.origin).isEqualTo(StagePoint(1.2f,2.3f,3.4f))
+      assertThat(instance.origin).isEqualTo(StagePoint(1.2f, 2.3f, 3.4f))
       assertThat(instance.length).isEqualTo(4.5f)
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
 
   @Test
-  fun `notes error for missing required attributes`() {
+  fun `has required attributes when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val baseOrigin = pipeBase.origin
+    val expectedOrigin = StagePoint(baseOrigin.x, baseOrigin.y, baseOrigin.z + 2f)
+
+    SoftAssertions().apply {
+      assertThat(instance.origin).isEqualTo(expectedOrigin)
+      assertThat(instance.length).isEqualTo(47.5f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for missing required attributes when there is no parent`() {
     val xmlElement = IIOMetadataNode()
 
     val instance = Pipe.factory(xmlElement, null)
@@ -99,6 +120,21 @@ class PipeTest {
         "Missing required x attribute",
         "Missing required y attribute",
         "Missing required z attribute",
+        "Missing required length attribute",
+      )
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for missing required attributes when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val xmlElement = IIOMetadataNode()
+
+    val instance = Pipe.factory(xmlElement, pipeBase)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
         "Missing required length attribute",
       )
     }.assertAll()
@@ -149,8 +185,8 @@ class PipeTest {
     val instance = Pipe.factory(xmlElement, null)
 
     SoftAssertions().apply {
-      assertThat(instance.origin).isNotEqualTo(StagePoint(130f,210f,334f))
-      assertThat(instance.origin.venue).isEqualTo(VenuePoint(130f,210f,334f))
+      assertThat(instance.origin).isNotEqualTo(StagePoint(130f, 210f, 334f))
+      assertThat(instance.origin.venue).isEqualTo(VenuePoint(130f, 210f, 334f))
     }.assertAll()
   }
 

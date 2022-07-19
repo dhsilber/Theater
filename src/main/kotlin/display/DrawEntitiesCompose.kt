@@ -79,17 +79,43 @@ fun Wall.draw(drawScope: DrawScope) {
 fun PipeBase.draw(drawScope: DrawScope) {
   drawScope.drawCircle(
     color = Color.Black,
-    center = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
     radius = 18f,
+    center = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
     style = Stroke(width = 2f)
   )
 }
 
 fun Pipe.draw(drawScope: DrawScope, highlight: Boolean) {
+  when (vertical) {
+    true-> drawVertical(drawScope)
+    else -> drawHorizontal(drawScope, highlight)
+  }
+}
+
+fun Pipe.drawVertical(drawScope: DrawScope) {
+//  val color = if (highlight) Color.Magenta else Color.Black
+  drawScope.drawCircle(
+    color = Color.Black,
+    radius = 2f,
+    center = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
+    style = Stroke(width = 2f)
+  )
+//  val offsetToCenter = length / 2
+//  dependents.forEach {
+//    val location = origin.venue.x + it.location + offsetToCenter
+//    drawScope.drawLine(Color.Black,
+//      PagePoint.drawingOffset(location, origin.venue.y - 4),
+//      PagePoint.drawingOffset(location, origin.venue.y + 4))
+//  }
+}
+
+fun Pipe.drawHorizontal(drawScope: DrawScope, highlight: Boolean) {
   val color = if (highlight) Color.Magenta else Color.Black
-  drawScope.drawRect(color,
-    PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
-    PagePoint.size(length, Pipe.Diameter))
+  drawScope.drawRect(
+    color = color,
+    topLeft = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
+    size = PagePoint.size(length, Pipe.Diameter)
+  )
   val offsetToCenter = length / 2
   dependents.forEach {
     val location = origin.venue.x + it.location + offsetToCenter

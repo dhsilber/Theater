@@ -24,7 +24,7 @@ fun drawCircle(
   x: Float,
   y: Float,
   r: Float,
-): Element {
+): DrawingResults {
   val svgElement = svgDocument.document.createElementNS(svgDocument.namespace, "circle")
   svgElement.setAttribute("cx", x.toString())
   svgElement.setAttribute("cy", y.toString())
@@ -34,7 +34,7 @@ fun drawCircle(
   svgElement.setAttribute("fill", "none")
   svgDocument.root.appendChild(svgElement)
 
-  return svgElement
+  return DrawingResults(svgElement, SvgBoundary(x - r, y - r, x + r, y + r))
 }
 
 fun drawLine(
@@ -110,7 +110,7 @@ fun drawUse(
   x: Float,
   y: Float,
 ) {
-  val svgElement = makeElementInDocument(svgDocument,  "use")
+  val svgElement = makeElementInDocument(svgDocument, "use")
   svgElement.setAttribute("xlink:href", "#$type")
   svgElement.setAttribute("x", x.toString())
   svgElement.setAttribute("y", y.toString())

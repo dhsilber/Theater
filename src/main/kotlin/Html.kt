@@ -74,20 +74,12 @@ fun Drawing.writeSinglePipeDrawing() {
     ),
     body(
       informationHeaderBlock(),
-      rawHtml(generatedSvgText)
+      rawHtml(generatedSvgText),
+      table(
+        drawPipeDescendentsHtmlTableHeadings(),
+        pipe.drawHtmlDecendents()
+      )
     ),
-    table(
-      tr(
-        td("Luminaire Type"),
-        td("Address"),
-        td("Circuit"),
-        td("Channel"),
-        td("Target"),
-        td("Owner"),
-        td("Notes"),
-      ),
-      pipe.drawHtmlDecendents()
-    )
   ).renderFormatted()
 
   File("${Configuration.plotDirectory}/out/$filename.html").writeText(text)
@@ -133,6 +125,17 @@ fun Event.htmlDrawingHeading(): H2Tag = h2(id)
 
 fun Venue.htmlDrawingHeading(): H2Tag = h2("$building - $room")
 
+fun drawPipeDescendentsHtmlTableHeadings(): DomContent {
+  return tr(
+    td("Luminaire Type"),
+    td("Address"),
+    td("Circuit"),
+    td("Channel"),
+    td("Target"),
+    td("Owner"),
+    td("Notes"),
+  )
+}
 
 fun Pipe.drawHtmlDecendents(): DomContent {
   return each(dependents) { hanger: Locator ->

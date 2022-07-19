@@ -64,7 +64,7 @@ fun Proscenium.drawSvg(svgDocument: SvgDocument) {
     .addAttribute("stroke", "cyan")
   drawLine(document, svgNamespace, parentElement, origin.x + 17f, origin.y - 17f, origin.x - 17f, origin.y + 17f)
     .addAttribute("stroke", "cyan")
-  drawCircle(svgDocument, origin.x, origin.y, 17f)
+  drawCircle(svgDocument, origin.x, origin.y, 17f).element
     .addAttribute("stroke", "cyan")
 
   val startX = origin.x - width / 2
@@ -93,6 +93,24 @@ fun PipeBase.drawSvg(svgDocument: SvgDocument) {
 }
 
 fun Pipe.drawSvg(svgDocument: SvgDocument): SvgBoundary {
+  return when (vertical) {
+    true-> drawVerticalSvg(svgDocument)
+    else -> drawHorizontalSvg(svgDocument)
+  }
+}
+
+fun Pipe.drawVerticalSvg(svgDocument: SvgDocument): SvgBoundary {
+  val place = origin.venue
+  val drawingResults = drawCircle(svgDocument, place.x, place.y, Pipe.Diameter)
+//  val offsetToCenter = length / 2
+//  dependents.forEach {
+//    val location = place.x + it.location + offsetToCenter
+//    it.luminaire.drawSvg(svgDocument, place, location)
+//  }
+  return drawingResults.boundary
+}
+
+fun Pipe.drawHorizontalSvg(svgDocument: SvgDocument): SvgBoundary {
   val place = origin.venue
   val drawingResults = drawRectangle(svgDocument, place.x, place.y, length, Pipe.Diameter, fillColor = "black")
   val offsetToCenter = length / 2
