@@ -79,6 +79,7 @@ Attributes:
 - `id` - name of pipe. Only needed when something will be referring to this pipe
 - `x`,`y`,`z` - coordinates of the leftmost end of the pipe
 - `length` - length of pipe
+- `location` - when attached to another pipe, the place along that pipe to mount this one
 
 Children can be luminaire elements and these luminaires do not need to specify their pipe.
 

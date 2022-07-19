@@ -7,18 +7,27 @@ import org.w3c.dom.Element
 
 class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   val id = when (parentEntity) {
-//    is Pipe -> ""
+    is Pipe -> ""
     is PipeBase -> ""
     else -> getStringAttribute("id")
   }
 
-  val origin = when (parentEntity) {
-//    is Pipe -> ""
+  val length = getPositiveFloatAttribute("length")
+
+  val location = when (parentEntity) {
+    is Pipe -> getPositiveFloatAttribute("location")
+    else -> -1f
+  }
+
+  val origin : StagePoint = when (parentEntity) {
+    is Pipe -> StagePoint(
+      parentEntity.origin.x - length / 2f,
+      parentEntity.origin.y,
+      parentEntity.origin.z + location
+    )
     is PipeBase -> StagePoint(parentEntity.origin.x, parentEntity.origin.y, parentEntity.origin.z + 2f)
     else -> getStagePointAttribute("x", "y", "z")
   }
-
-  val length = getPositiveFloatAttribute("length")
 
 //  var end = StagePoint(x + length, y + Pipe.Diameter, z + Pipe.Diameter)
 

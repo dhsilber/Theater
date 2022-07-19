@@ -35,9 +35,16 @@ class PipeTest {
     return xmlElement
   }
 
-  fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
+  private fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("length", "47.5")
+    return xmlElement
+  }
+
+  private fun minimalXmlWithVerticalPipeParent(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("length", "22.5")
+    xmlElement.setAttribute("location", "38")
     return xmlElement
   }
 
@@ -96,13 +103,30 @@ class PipeTest {
   @Test
   fun `has required attributes when pipe base is parent`() {
     val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
-    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
     val baseOrigin = pipeBase.origin
     val expectedOrigin = StagePoint(baseOrigin.x, baseOrigin.y, baseOrigin.z + 2f)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
 
     SoftAssertions().apply {
       assertThat(instance.origin).isEqualTo(expectedOrigin)
       assertThat(instance.length).isEqualTo(47.5f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `has required attributes when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val baseOrigin = pipeBase.origin
+    val expectedOrigin = StagePoint(baseOrigin.x - 11.25f, baseOrigin.y, baseOrigin.z + 40f)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.origin).isEqualTo(expectedOrigin)
+      assertThat(instance.length).isEqualTo(22.5f)
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
@@ -115,7 +139,7 @@ class PipeTest {
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
-      assertThat(instance.errors).containsExactly(
+      assertThat(instance.errors).containsOnly(
         "Missing required id attribute",
         "Missing required x attribute",
         "Missing required y attribute",
@@ -141,6 +165,23 @@ class PipeTest {
   }
 
   @Test
+  fun `notes error for missing required attributes when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val xmlElement = IIOMetadataNode()
+
+    val instance = Pipe.factory(xmlElement, verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "Missing required length attribute",
+        "Missing required location attribute",
+      )
+    }.assertAll()
+  }
+
+  @Test
   fun `notes error for badly specified attributes`() {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
@@ -153,7 +194,7 @@ class PipeTest {
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
-      assertThat(instance.errors).containsExactly(
+      assertThat(instance.errors).containsOnly(
         "Unable to read floating-point number from x attribute",
         "Unable to read floating-point number from y attribute",
         "Unable to read floating-point number from z attribute",
