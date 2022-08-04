@@ -1,16 +1,22 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
+import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import display.drawSvgPlanContent
 import entities.Luminaire
 import entities.LuminaireDefinition
-import org.assertj.core.api.Assertions
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.Test
 import startSvg
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import kotlin.test.assertIs
 
 class LuminaireDefinitionTest {
@@ -31,6 +37,11 @@ class LuminaireDefinitionTest {
     return xmlElement
   }
 
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
+  }
+
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode("luminaire-definition")
@@ -49,7 +60,18 @@ class LuminaireDefinitionTest {
 
   @Test
   fun `companion has tag`() {
-    Assertions.assertThat(LuminaireDefinition.Tag).isEqualTo("luminaire-definition")
+    assertThat(LuminaireDefinition.Tag).isEqualTo("luminaire-definition")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(LuminaireDefinition.Tag)
   }
 
   @Test

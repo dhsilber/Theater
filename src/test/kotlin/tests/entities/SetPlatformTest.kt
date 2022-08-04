@@ -1,11 +1,13 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
 import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import coordinates.StagePoint
-import entities.Setpiece
 import entities.SetPlatform
+import entities.Setpiece
 import entities.Shape
 import io.mockk.every
 import io.mockk.mockkObject
@@ -18,7 +20,6 @@ import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
-
 
 class SetPlatformTest {
 
@@ -69,6 +70,17 @@ class SetPlatformTest {
   @Test
   fun `companion has tag`() {
     assertThat(SetPlatform.Tag).isEqualTo("set-platform")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(SetPlatform.Tag)
   }
 
   @Test

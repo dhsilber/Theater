@@ -8,6 +8,8 @@ Venue elements can include walls, stage, proscenium arch, fixed lighting positio
 
 Show-specific elements can include temporary lighting positions, sets, etc
 
+Pipes and Luminaires can be specified as permanent installations in a venue or as transient setups for a show.
+
 **`TheaterDesign`** is in the process of being reworked to include an interactive element so that XML
 files do not have to be crafted by hand.
 It is not yet there - right now, one would still need to write one's own XML.
@@ -68,14 +70,36 @@ Attributes:
 
 Typical lighting pipe.
 Things get hung from it. 
+By default, a fixed lighting position.
 
+When a pipe is the child of a pipebase element, it is vertical and gets its coordinates from
+its parent.
+ 
 Attributes:
-- `id` - name of pipe
+- `id` - name of pipe. Only needed when something will be referring to this pipe
 - `x`,`y`,`z` - coordinates of the leftmost end of the pipe
 - `length` - length of pipe
+- `location` - when attached to another pipe, the place along that pipe to mount this one
+
+Children can be luminaire elements and these luminaires do not need to specify their pipe.
 
 ```dtd
 <pipe id="1st electric" y="33" x="-288" z="184" length="576" />
+```
+
+### PipeBase
+
+Weighted base with threaded receiver for 2" pipe.
+
+Attributes:
+- `x`,`y`,`z` - coordinates of the pipebase
+- `id` - optional name of pipebase
+- `owner` - optional owner of pipebase
+
+Child should be a pipe element.
+
+```dtd
+<pipebase  y="33" x="-288" z="0"  />
 ```
 
 ### Event
@@ -127,7 +151,7 @@ One instance of the referenced type of lighting instrument.
 Attributes:
 - `type` - type of luminaire being used
 - `location` - position on pipe of this instrument
-- `on` - optional name of pipe, if luminaire element is not a child of the pipe element it is hung on 
+- `on` - name of pipe, required only if luminaire element is not a child of the pipe element it is hung on 
 - `circuit`,`dimmer`,`address`,`channel`,`color` - descriptive information regarding this instrument
 - `info`,`owner`,`label` - descriptive information regarding this instrument
 
@@ -215,4 +239,20 @@ Attributes:
     </event>
   </venue>
 </plot>
-```  
+```
+
+## UI
+
+The UI shows a plan view, but Luminaire icons are not yet displayed.
+I will need to figure out how to render SVG elements in Compose.
+
+Currently, the app opens up the file named `$HOME/Theater/plotfile.xml`.
+That is less than optimal, but enough for me to get by while I bring this codebase up to matching what the old code did.
+Eventually this will need a file picker and perhaps a command-line argument to choose a file.
+
+Buttons will turn on additional features.
+The only one yet implemented displays the lighting instruments hung on each of the pipes.
+Selecting a section highlights the appropriate pipe in the drawing.
+I expect to build on this to allow the data to be edited.
+
+

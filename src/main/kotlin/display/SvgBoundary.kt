@@ -1,5 +1,7 @@
 package display
 
+import java.lang.Float.max
+import java.lang.Float.min
 import kotlin.math.abs
 
 class SvgBoundary(
@@ -14,19 +16,25 @@ class SvgBoundary(
   val height: Float
     get() = yMax - yMin
 
-  fun x(x: Float) {
-    xMin = if (x < xMin) x else xMin
-    xMax = if (x > xMax) x else xMax
-  }
+//  fun x(x: Float) {
+//    xMin = if (x < xMin) x else xMin
+//    xMax = if (x > xMax) x else xMax
+//  }
 
-  fun y(y: Float) {
-    yMin = if (y < yMin) y else yMin
-    yMax = if (y > yMax) y else yMax
-  }
+//  fun y(y: Float) {
+//    yMin = if (y < yMin) y else yMin
+//    yMax = if (y > yMax) y else yMax
+//  }
 
-  override fun toString(): String {
-    return "($xMin, $yMin, $xMax, $yMax) ($width, $height)"
-  }
+  operator fun plus(svgBoundary: SvgBoundary) =
+    SvgBoundary(
+      min(xMin, svgBoundary.xMin),
+      min(yMin, svgBoundary.yMin),
+      max(xMax, svgBoundary.xMax),
+      max(yMax, svgBoundary.yMax),
+    )
+
+  override fun toString() = "($xMin, $yMin, $xMax, $yMax) ($width, $height)"
 
   private val delta = 0.00000001
 

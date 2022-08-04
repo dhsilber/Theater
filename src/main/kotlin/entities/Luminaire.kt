@@ -1,13 +1,16 @@
 package entities
 
 import CreateWithXmlElement
+import Hangable
 import XmlElemental
 import org.w3c.dom.Element
 
-class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
+class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) :
+  XmlElemental(elementPassthrough), Hangable {
+
   var on = getOptionalStringAttribute("on")
   var type = getStringAttribute("type")
-  var location = getFloatAttribute("location")
+  override var location = getFloatAttribute("location")
   var owner = getOptionalStringAttribute("owner")
   var circuit = getOptionalStringAttribute("circuit")
   var dimmer = getOptionalPositiveIntegerAttribute("dimmer")
@@ -48,7 +51,7 @@ class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) : 
   companion object : CreateWithXmlElement<Luminaire>() {
     const val Tag = "luminaire"
 
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?=null): Luminaire =
+    fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): Luminaire =
       create(xmlElement, parentEntity, ::Luminaire)
   }
 

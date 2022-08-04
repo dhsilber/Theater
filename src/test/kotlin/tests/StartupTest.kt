@@ -8,6 +8,7 @@ import entities.Event
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import entities.Setpiece
 import entities.SetPlatform
@@ -40,17 +41,18 @@ class StartupTest {
     Startup().startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsOnlyKeys(
-      LuminaireDefinition.Tag,
-      Venue.Tag,
-      Proscenium.Tag,
-      Wall.Tag,
-      Pipe.Tag,
+      Drawing.Tag,
+      Event.Tag,
       Luminaire.Tag,
+      LuminaireDefinition.Tag,
+      Pipe.Tag,
+      PipeBase.Tag,
+      Proscenium.Tag,
       Setpiece.Tag,
       SetPlatform.Tag,
       Shape.Tag,
-      Drawing.Tag,
-      Event.Tag,
+      Venue.Tag,
+      Wall.Tag,
     )
   }
 

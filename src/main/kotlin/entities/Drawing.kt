@@ -4,7 +4,7 @@ import CreateWithXmlElement
 import XmlElemental
 import org.w3c.dom.Element
 
-class Drawing(elementPassthrough: Element, val parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
+class Drawing(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   val id = getStringAttribute("id")
   val filename = getStringAttribute("filename")
   val pipe = getOptionalStringAttribute("pipe")

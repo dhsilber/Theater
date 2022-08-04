@@ -49,7 +49,10 @@ class PipeSideBar {
             ) {
               val pipe = pipeOrdering.pipe
               Text("${pipeOrdering.current} -- Name: ${pipe.id} at ${pipe.origin}")
-                luminaireLister(pipe.dependents.map { it.luminaire}.toList())
+              luminaireLister(pipe.dependents
+                .filter { it.hangable is Luminaire }
+                .map { it.hangable as Luminaire }
+                .toList())
             }
           }
         }

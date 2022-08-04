@@ -1,11 +1,14 @@
 package tests.entities
 
 import CreateWithXmlElement
-import Svg
+import TagRegistry
+import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import entities.Drawing
+import io.mockk.every
+import io.mockk.mockkObject
 import io.mockk.unmockkObject
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
@@ -22,10 +25,10 @@ class DrawingTest {
     return xmlElement
   }
 
-//  @AfterTest
-//  fun cleanup() {
-//    unmockkObject(Svg)
-//  }
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
+  }
 
   @Test
   fun `is xmlElemental`() {
@@ -43,7 +46,18 @@ class DrawingTest {
 
   @Test
   fun `companion has tag`() {
-    Assertions.assertThat(Drawing.Tag).isEqualTo("drawing")
+    assertThat(Drawing.Tag).isEqualTo("drawing")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Drawing.Tag)
   }
 
   @Test

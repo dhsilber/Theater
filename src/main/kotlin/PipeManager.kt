@@ -8,7 +8,7 @@ class PipeManager(
 
   companion object {
     var list: List<PipeManager> = listOf()
-    var currentLuminaires : List<Luminaire> = listOf()
+    var currentLuminaires: List<Hangable> = listOf()
 
     init {
       buildList(0)
@@ -26,7 +26,7 @@ class PipeManager(
       println("Making ${entry.pipe.id} be current")
       val index = list.indexOf(entry)
       buildList(index)
-      currentLuminaires = entry.pipe.dependents.map { it.luminaire }.toList()
+      currentLuminaires = entry.pipe.dependents.map { it.hangable }.toList()
     }
 
   }

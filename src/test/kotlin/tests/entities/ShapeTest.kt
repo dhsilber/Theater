@@ -2,8 +2,10 @@ package tests.entities
 
 import CreateWithXmlElement
 import Rectangle
+import TagRegistry
 import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import entities.SetPlatform
 import entities.Shape
 import io.mockk.every
@@ -11,14 +13,12 @@ import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.unmockkObject
 import io.mockk.verify
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
-
 
 class ShapeTest {
   private val width = 2.3f
@@ -64,6 +64,17 @@ class ShapeTest {
   @Test
   fun `companion has tag`() {
     assertThat(Shape.Tag).isEqualTo("shape")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Shape.Tag)
   }
 
   @Test
@@ -161,7 +172,7 @@ class ShapeTest {
     val shape = Shape.factory(shapeElement, null)
 
     SoftAssertions().apply {
-      Assertions.assertThat(shape.hasError).isTrue
+      assertThat(shape.hasError).isTrue
       assertThat(shape.errors).containsExactly(
         "Shape is not associated with a parent set-platform",
       )

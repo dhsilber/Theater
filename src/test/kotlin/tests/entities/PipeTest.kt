@@ -1,6 +1,9 @@
 package tests.entities
 
 import CreateWithXmlElement
+import Hangable
+import TagRegistry
+import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
 import coordinates.StagePoint
@@ -8,17 +11,22 @@ import coordinates.VenuePoint
 import entities.Locator
 import entities.Luminaire
 import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
-import org.junit.Test
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import kotlin.test.assertIs
 
 class PipeTest {
 
-  fun minimalXml(): IIOMetadataNode {
+  fun minimalXmlWithNoParent(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "1.2")
@@ -28,6 +36,24 @@ class PipeTest {
     return xmlElement
   }
 
+  fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("length", "47.5")
+    return xmlElement
+  }
+
+  private fun minimalXmlWithVerticalPipeParent(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("length", "22.5")
+    xmlElement.setAttribute("location", "38")
+    return xmlElement
+  }
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
+  }
+
   @Test
   fun `is xmlElemental`() {
     val xmlElement = IIOMetadataNode()
@@ -35,6 +61,15 @@ class PipeTest {
     val pipe = Pipe.factory(xmlElement, null)
 
     assertIs<XmlElemental>(pipe)
+  }
+
+  @Test
+  fun `is hangable`() {
+    val xmlElement = IIOMetadataNode()
+
+    val pipe = Pipe.factory(xmlElement, null)
+
+    assertIs<Hangable>(pipe)
   }
 
   @Test
@@ -48,36 +83,110 @@ class PipeTest {
   }
 
   @Test
-  fun `companion factory builds correct type`() {
-    assertIs<Pipe>(Pipe.factory(minimalXml(), null))
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Pipe.Tag)
   }
 
   @Test
-  fun `has required attributes`() {
-    val instance = Pipe.factory(minimalXml(), null)
+  fun `companion factory builds correct type`() {
+    assertIs<Pipe>(Pipe.factory(minimalXmlWithNoParent(), null))
+  }
+
+  @Test
+  fun `has required attributes when there is no parent`() {
+    val instance = Pipe.factory(minimalXmlWithNoParent(), null)
 
     SoftAssertions().apply {
       assertThat(instance.id).isEqualTo("name")
-      assertThat(instance.origin).isEqualTo(StagePoint(1.2f,2.3f,3.4f))
+      assertThat(instance.origin).isEqualTo(StagePoint(1.2f, 2.3f, 3.4f))
       assertThat(instance.length).isEqualTo(4.5f)
       assertThat(instance.hasError).isFalse
     }.assertAll()
   }
 
   @Test
-  fun `notes error for missing required attributes`() {
+  fun `has required attributes when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val baseOrigin = pipeBase.origin
+    val expectedOrigin = StagePoint(baseOrigin.x, baseOrigin.y, baseOrigin.z + 2f)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    SoftAssertions().apply {
+      assertThat(instance.origin).isEqualTo(expectedOrigin)
+      assertThat(instance.length).isEqualTo(47.5f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `has required attributes when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val baseOrigin = pipeBase.origin
+    val expectedOrigin = StagePoint(baseOrigin.x - 11.25f, baseOrigin.y, baseOrigin.z + 40f)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.origin).isEqualTo(expectedOrigin)
+      assertThat(instance.length).isEqualTo(22.5f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for missing required attributes when there is no parent`() {
     val xmlElement = IIOMetadataNode()
 
     val instance = Pipe.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
-      assertThat(instance.errors).containsExactly(
+      assertThat(instance.errors).containsOnly(
         "Missing required id attribute",
         "Missing required x attribute",
         "Missing required y attribute",
         "Missing required z attribute",
         "Missing required length attribute",
+      )
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for missing required attributes when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val xmlElement = IIOMetadataNode()
+
+    val instance = Pipe.factory(xmlElement, pipeBase)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "Missing required length attribute",
+      )
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for missing required attributes when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val xmlElement = IIOMetadataNode()
+
+    val instance = Pipe.factory(xmlElement, verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "Missing required length attribute",
+        "Missing required location attribute",
       )
     }.assertAll()
   }
@@ -95,13 +204,60 @@ class PipeTest {
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
-      assertThat(instance.errors).containsExactly(
+      assertThat(instance.errors).containsOnly(
         "Unable to read floating-point number from x attribute",
         "Unable to read floating-point number from y attribute",
         "Unable to read floating-point number from z attribute",
         "Unable to read positive floating-point number from length attribute",
       )
     }.assertAll()
+  }
+
+  @Test
+  fun `tracks vertical status when there is no parent`() {
+    val instance = Pipe.factory(minimalXmlWithNoParent(), null)
+
+    assertThat(instance.vertical).isFalse
+  }
+
+  @Test
+  fun `tracks vertical status when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    assertThat(instance.vertical).isTrue
+  }
+
+  @Test
+  fun `tracks vertical status when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    assertThat(instance.vertical).isFalse
+  }
+
+  @Test
+  fun `vertical pipe registers self with pipe base parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    assertThat(pipeBase.upright).isSameAs(instance)
+  }
+
+  @Test
+  fun `vertical pipe keeps references to dependent pipes`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    assertThat(verticalPipe.dependents).contains(
+      Locator( 38f, instance)
+    )
   }
 
   // TODO Does this test really belong with Pipe?
@@ -127,8 +283,8 @@ class PipeTest {
     val instance = Pipe.factory(xmlElement, null)
 
     SoftAssertions().apply {
-      assertThat(instance.origin).isNotEqualTo(StagePoint(130f,210f,334f))
-      assertThat(instance.origin.venue).isEqualTo(VenuePoint(130f,210f,334f))
+      assertThat(instance.origin).isNotEqualTo(StagePoint(130f, 210f, 334f))
+      assertThat(instance.origin.venue).isEqualTo(VenuePoint(130f, 210f, 334f))
     }.assertAll()
   }
 

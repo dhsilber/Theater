@@ -1,11 +1,18 @@
 package tests.entities
 
 import CreateWithXmlElement
+import TagRegistry
+import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import entities.Event
-import org.assertj.core.api.Assertions
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 
@@ -15,6 +22,11 @@ class EventTest {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "Name of event")
     return xmlElement
+  }
+
+  @AfterTest
+  fun cleanup() {
+    unmockkObject(Xml)
   }
 
   @Test
@@ -33,7 +45,18 @@ class EventTest {
 
   @Test
   fun `companion has tag`() {
-    Assertions.assertThat(Event.Tag).isEqualTo("event")
+    assertThat(Event.Tag).isEqualTo("event")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Event.Tag)
   }
 
   @Test

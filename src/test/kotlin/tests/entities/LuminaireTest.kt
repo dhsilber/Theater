@@ -1,10 +1,13 @@
 package tests.entities
 
 import CreateWithXmlElement
+import Hangable
 import Xml
 import XmlElemental
+import com.mobiletheatertech.plot.Startup
 import entities.Luminaire
 import entities.Pipe
+import entities.PipeBase
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.slot
@@ -41,6 +44,15 @@ class LuminaireTest {
   }
 
   @Test
+  fun `is hangable`() {
+    val xmlElement = IIOMetadataNode()
+
+    val luminaire = Luminaire.factory(xmlElement, null)
+
+    assertIs<Hangable>(luminaire)
+  }
+
+  @Test
   fun `companion has factory`() {
     assertIs<CreateWithXmlElement<Luminaire>>(Luminaire)
   }
@@ -48,6 +60,17 @@ class LuminaireTest {
   @Test
   fun `companion has tag`() {
     assertThat(Luminaire.Tag).isEqualTo("luminaire")
+  }
+
+  @Test
+  fun `registered upon startup`() {
+    TagRegistry.tagToCallback.clear()
+    mockkObject(Xml)
+    every { Xml.read(any()) } returns Unit
+
+    Startup().startup("foo")
+
+    assertThat(TagRegistry.tagToCallback).containsKey(Luminaire.Tag)
   }
 
   @Test
