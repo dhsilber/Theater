@@ -1,6 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
+import Hangable
 import TagRegistry
 import Xml
 import XmlElemental
@@ -35,7 +36,7 @@ class PipeTest {
     return xmlElement
   }
 
-  private fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
+  fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("length", "47.5")
     return xmlElement
@@ -60,6 +61,15 @@ class PipeTest {
     val pipe = Pipe.factory(xmlElement, null)
 
     assertIs<XmlElemental>(pipe)
+  }
+
+  @Test
+  fun `is hangable`() {
+    val xmlElement = IIOMetadataNode()
+
+    val pipe = Pipe.factory(xmlElement, null)
+
+    assertIs<Hangable>(pipe)
   }
 
   @Test
@@ -201,6 +211,53 @@ class PipeTest {
         "Unable to read positive floating-point number from length attribute",
       )
     }.assertAll()
+  }
+
+  @Test
+  fun `tracks vertical status when there is no parent`() {
+    val instance = Pipe.factory(minimalXmlWithNoParent(), null)
+
+    assertThat(instance.vertical).isFalse
+  }
+
+  @Test
+  fun `tracks vertical status when pipe base is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    assertThat(instance.vertical).isTrue
+  }
+
+  @Test
+  fun `tracks vertical status when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    assertThat(instance.vertical).isFalse
+  }
+
+  @Test
+  fun `vertical pipe registers self with pipe base parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+
+    val instance = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    assertThat(pipeBase.upright).isSameAs(instance)
+  }
+
+  @Test
+  fun `vertical pipe keeps references to dependent pipes`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val instance = Pipe.factory(minimalXmlWithVerticalPipeParent(), verticalPipe)
+
+    assertThat(verticalPipe.dependents).contains(
+      Locator( 38f, instance)
+    )
   }
 
   // TODO Does this test really belong with Pipe?

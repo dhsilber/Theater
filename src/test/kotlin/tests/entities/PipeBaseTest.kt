@@ -6,6 +6,7 @@ import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
 import coordinates.StagePoint
+import entities.Pipe
 import entities.PipeBase
 import io.mockk.every
 import io.mockk.mockkObject
@@ -127,4 +128,34 @@ internal class PipeBaseTest {
     }.assertAll()
   }
 
+  @Test
+  fun `find pipe base by id`() {
+    PipeBase.instances.clear()
+    val xmlElement = minimalXml()
+    xmlElement.setAttribute("id", "name")
+    val instance = PipeBase.factory(xmlElement, null)
+
+    val foundPipeBase = PipeBase.queryById("name")
+
+    assertThat(foundPipeBase).isSameAs(instance)
+  }
+
+  @Test
+  fun `do not find pipe base by id`() {
+    PipeBase.instances.clear()
+
+    val foundPipeBase = PipeBase.queryById("name")
+
+    assertThat(foundPipeBase).isNull()
+  }
+
+  @Test
+  fun `keep a reference to its child`(){
+    val instance = PipeBase.factory(minimalXml(), null)
+    val pipeInstance = Pipe.factory(PipeTest().minimalXmlWithPipeBaseParent(), instance)
+
+    instance.mount(pipeInstance)
+
+    assertThat(instance.upright).isSameAs(pipeInstance)
+  }
 }

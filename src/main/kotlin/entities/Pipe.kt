@@ -1,11 +1,14 @@
 package entities
 
 import CreateWithXmlElement
+import Hangable
 import XmlElemental
 import coordinates.StagePoint
 import org.w3c.dom.Element
 
-class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
+class Pipe(elementPassthrough: Element, val parentEntity: XmlElemental?) :
+  XmlElemental(elementPassthrough), Hangable {
+
   val id = when (parentEntity) {
     is Pipe -> ""
     is PipeBase -> ""
@@ -14,12 +17,12 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
 
   val length = getPositiveFloatAttribute("length")
 
-  val location = when (parentEntity) {
+  override var location = when (parentEntity) {
     is Pipe -> getPositiveFloatAttribute("location")
     else -> -1f
   }
 
-  val origin : StagePoint = when (parentEntity) {
+  val origin: StagePoint = when (parentEntity) {
     is Pipe -> StagePoint(
       parentEntity.origin.x - length / 2f,
       parentEntity.origin.y,
@@ -38,9 +41,13 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
   init {
     println("New $this")
     println("Errors: $errors")
+    when (parentEntity) {
+      is PipeBase -> parentEntity.mount(this)
+      is Pipe -> parentEntity.hang(this)
+    }
   }
 
-  fun hang(dependant: Luminaire) {
+  fun hang(dependant: Hangable) {
     dependents.add(Locator(dependant.location, dependant))
   }
 
@@ -101,4 +108,4 @@ class Pipe(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
   }
 }
 
-data class Locator(val location: Float, val luminaire: Luminaire)
+data class Locator(val location: Float, val hangable: Hangable)

@@ -1,5 +1,6 @@
 import com.mobiletheatertech.plot.Configuration
-import com.mobiletheatertech.plot.exception.InvalidXMLException
+import display.DrawingResults
+import display.SvgBoundary
 import display.addAttribute
 import display.drawRectangle
 import display.drawSvg
@@ -7,7 +8,9 @@ import display.generateSvgSymbols
 import entities.Drawing
 import entities.Event
 import entities.Locator
+import entities.Luminaire
 import entities.Pipe
+import entities.PipeBase
 import entities.Venue
 //import kotlinx.html.body
 //import kotlinx.html.div
@@ -31,10 +34,7 @@ import j2html.TagCreator.style
 import j2html.TagCreator.table
 import j2html.TagCreator.td
 import j2html.TagCreator.tr
-import j2html.TagCreator.video
 import j2html.tags.DomContent
-import j2html.tags.specialized.DivTag
-import j2html.tags.specialized.H1Tag
 import j2html.tags.specialized.H2Tag
 import j2html.tags.specialized.SpanTag
 import java.io.File
@@ -48,7 +48,7 @@ class Html {
     fun writePipeDrawings() {
       for (drawing in Drawing.instances) {
         if (drawing.hasPipe) {
-          drawing.writeSinglePipeDrawing()
+          drawing.writePipeDetailDrawing()
         }
       }
     }
@@ -56,13 +56,21 @@ class Html {
   }
 }
 
-
-fun Drawing.writeSinglePipeDrawing() {
-  println("Writing drawing for $id to $filename, showing $pipe")
-  val pipe = Pipe.queryById(pipe) ?: return
-
+fun Drawing.writePipeDetailDrawing() {
   val svgDocument = startSvg()
   generateSvgSymbols(svgDocument)
+  val base = PipeBase.queryById(pipe)
+  if (null !== base) {
+    writeSingleBoomDrawing(base, svgDocument)
+    return
+  }
+  val pipe = Pipe.queryById(pipe)
+  if (null !== pipe) writeSinglePipeDrawing(pipe, svgDocument)
+}
+
+fun Drawing.writeSinglePipeDrawing(pipe: Pipe, svgDocument: SvgDocument) {
+  println("Writing drawing for $id to $filename, showing $pipe")
+
   pipe.svgHighlightBox(svgDocument)
   val generatedSvgText = pipe.drawPipeSvg(svgDocument)
 
@@ -85,20 +93,91 @@ fun Drawing.writeSinglePipeDrawing() {
   File("${Configuration.plotDirectory}/out/$filename.html").writeText(text)
 }
 
+fun Drawing.writeSingleBoomDrawing(base: PipeBase, svgDocument: SvgDocument) {
+  println("Writing drawing for $id to $filename, showing $base")
+
+  val generatedSvgText = base.drawBoomDetailSvg(svgDocument)
+
+  val text = html(
+    head(
+      style(
+        rawHtml(".information { border: 0.25rem double  black; text-align: center;}")
+      )
+    ),
+    body(
+      informationHeaderBlock(),
+      rawHtml(generatedSvgText),
+//      table(
+//        drawPipeDescendentsHtmlTableHeadings(),
+//        pipe.drawHtmlDecendents()
+//      )
+    ),
+  ).renderFormatted()
+
+  File("${Configuration.plotDirectory}/out/$filename.html").writeText(text)
+}
+
 fun Pipe.svgHighlightBox(svgDocument: SvgDocument) {
   val place = origin.venue
   val drawingResults = drawRectangle(svgDocument, place.x - 50, place.y - 50, length + 100, 100f, "teal")
   drawingResults.element.addAttribute("opacity", "0.3")
 }
 
+fun unfinishedSvgHighlightBox(svgDocument: SvgDocument): DrawingResults {
+  val drawingResults = drawRectangle(svgDocument, 0f, 0f, 0f, 0f, "teal")
+  drawingResults.element.addAttribute("opacity", "0.3")
+  return drawingResults
+}
+
+private fun PipeBase.drawBoomDetailSvg(svgDocument: SvgDocument): String {
+  val highlight = unfinishedSvgHighlightBox(svgDocument).element
+  val baseDrawingBoundary = this.drawFrontViewSvg(svgDocument)
+  val viewBox = "${baseDrawingBoundary.xMin * 2f} ${baseDrawingBoundary.yMin - 15} 100 100"
+  val root = svgDocument.root
+  root.setAttribute("width", "1200")
+  root.setAttribute("height", (170).toString())
+  root.setAttribute("viewBox", viewBox)
+  highlight.setAttribute("x", (baseDrawingBoundary.xMin - 50).toString())
+  highlight.setAttribute("y", (baseDrawingBoundary.yMin - 50).toString())
+  highlight.setAttribute("width", (baseDrawingBoundary.width + 100f).toString())
+  highlight.setAttribute("height", (baseDrawingBoundary.height + 100).toString())
+  return finishSvgString(svgDocument)
+}
+
 private fun Pipe.drawPipeSvg(svgDocument: SvgDocument): String {
-  val pipeDrawingBoundary = this.drawSvg(svgDocument)
+  val pipeDrawingBoundary = drawSvg(svgDocument)
   val viewBox = "${pipeDrawingBoundary.xMin + 300} ${pipeDrawingBoundary.yMin - 50} 100 100"
   val root = svgDocument.root
   root.setAttribute("width", "1200")
   root.setAttribute("height", "150")
   root.setAttribute("viewBox", viewBox)
   return finishSvgString(svgDocument)
+}
+
+fun PipeBase.drawFrontViewSvg(svgDocument: SvgDocument): SvgBoundary {
+  val place = origin.venue
+  val drawingResults = drawRectangle(svgDocument, place.x - PipeBase.Radius, 0f, PipeBase.Radius * 2, 3f)
+  var boundary = drawingResults.boundary
+  println("Boundary: $boundary")
+  if (null !== upright) {
+    val pipeDrawingResults = (upright as Pipe).drawFrontViewSvg(svgDocument)
+    boundary += pipeDrawingResults.boundary
+  }
+  println("Boundary: $boundary")
+  return boundary
+}
+
+fun Pipe.drawFrontViewSvg(svgDocument: SvgDocument): DrawingResults {
+  val place = origin.venue
+  val parentPlace = (parentEntity as PipeBase).origin.venue
+  return drawRectangle(
+    svgDocument,
+    place.x - Pipe.Diameter / 2,
+    place.z - parentPlace.z,
+    Pipe.Diameter,
+    length,
+    fillColor = "black"
+  )
 }
 
 fun Drawing.informationHeaderBlock(): SpanTag {
@@ -139,7 +218,7 @@ fun drawPipeDescendentsHtmlTableHeadings(): DomContent {
 
 fun Pipe.drawHtmlDecendents(): DomContent {
   return each(dependents) { hanger: Locator ->
-    val thing = hanger.luminaire
+    val thing = hanger.hangable as Luminaire
     tr(
       td(thing.type),
       td(thing.address.toString()),

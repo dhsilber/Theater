@@ -32,13 +32,11 @@ data class VenuePoint(
 //    return VenuePoint(x + pointOffset.x, y + pointOffset.y, z + pointOffset.z)
 //  }
 
-  operator fun plus(point: Point): VenuePoint {
-    return VenuePoint(x + point.x, y + point.y, z + point.z)
-  }
+  operator fun plus(point: Point) =
+    VenuePoint(x + point.x, y + point.y, z + point.z)
 
-  operator fun plus(point: StagePoint): VenuePoint {
-    return VenuePoint(x + point.x, y - point.y, z + point.z)
-  }
+  operator fun plus(point: StagePoint) =
+    VenuePoint(x + point.x, y - point.y, z + point.z)
 
   companion object {
     var SmallX = Float.MAX_VALUE
@@ -56,8 +54,7 @@ data class VenuePoint(
       get() = LargeY - SmallY
 
 
-    override fun toString(): String {
-      return "Small: ($SmallX, $SmallY, $SmallZ)  Large: ($LargeX, $LargeY, $LargeZ)"
-    }
+    override fun toString() =
+      "Small: ($SmallX, $SmallY, $SmallZ)  Large: ($LargeX, $LargeY, $LargeZ)"
   }
 }

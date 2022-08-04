@@ -9,10 +9,28 @@ class PipeBase(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEl
   val id = getOptionalStringAttribute("id")
   val owner = getOptionalStringAttribute("owner")
 
+  var upright: Pipe? = null
+
+  fun mount(pipe: Pipe) {
+    upright = pipe
+  }
+
   companion object : CreateWithXmlElement<PipeBase>() {
     const val Tag = "pipebase"
+    const val Radius = 18f
+
     fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): PipeBase =
       PipeBase.create(xmlElement, parentEntity, ::PipeBase)
+
+    fun queryById(id: String): PipeBase? {
+      PipeBase.instances.forEach {
+        if (id == it.id) {
+          return it
+        }
+      }
+      return null
+    }
+
   }
 
 }

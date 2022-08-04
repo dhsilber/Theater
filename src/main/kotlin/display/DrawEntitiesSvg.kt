@@ -94,7 +94,7 @@ fun PipeBase.drawSvg(svgDocument: SvgDocument) {
 
 fun Pipe.drawSvg(svgDocument: SvgDocument): SvgBoundary {
   return when (vertical) {
-    true-> drawVerticalSvg(svgDocument)
+    true -> drawVerticalSvg(svgDocument)
     else -> drawHorizontalSvg(svgDocument)
   }
 }
@@ -116,7 +116,7 @@ fun Pipe.drawHorizontalSvg(svgDocument: SvgDocument): SvgBoundary {
   val offsetToCenter = length / 2
   dependents.forEach {
     val location = place.x + it.location + offsetToCenter
-    it.luminaire.drawSvg(svgDocument, place, location)
+    (it.hangable as Luminaire).drawSvg(svgDocument, place, location)
   }
   return drawingResults.boundary
 }

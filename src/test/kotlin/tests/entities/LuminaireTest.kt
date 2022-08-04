@@ -1,6 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
+import Hangable
 import Xml
 import XmlElemental
 import com.mobiletheatertech.plot.Startup
@@ -40,6 +41,15 @@ class LuminaireTest {
     val luminaire = Luminaire.factory(xmlElement, null)
 
     assertIs<XmlElemental>(luminaire)
+  }
+
+  @Test
+  fun `is hangable`() {
+    val xmlElement = IIOMetadataNode()
+
+    val luminaire = Luminaire.factory(xmlElement, null)
+
+    assertIs<Hangable>(luminaire)
   }
 
   @Test
