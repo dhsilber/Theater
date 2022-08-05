@@ -50,6 +50,19 @@ Attributes:
 <wall x1="13" y1="27" x2="13" y2="743" />
 ```  
 
+
+### Floor
+
+There is a default floor at z=0.
+When that does not cover your situation (e.g. for a built-in stage, landing, etc)
+floors at other levels can be specified.
+Currently, only a level rectangle is supported.
+
+```dtd
+<floor z="36" x="0" y="0" width="336" depth="136" />
+```
+
+
 ### Proscenium
 
 Describes the location of a proscenium arch.

@@ -20,7 +20,6 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
-import com.mobiletheatertech.plot.Startup
 import entities.Venue
 import sidebar.PipeSideBar
 

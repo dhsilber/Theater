@@ -3,6 +3,7 @@ package display
 import SvgDocument
 import coordinates.Point
 import coordinates.VenuePoint
+import entities.Floor
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -41,6 +42,9 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   }
   for (instance in Wall.instances) {
     instance.drawSvg(document, svgNamespace, parentElement)
+  }
+  for (instance in Floor.instances) {
+    instance.drawSvg(svgDocument)
   }
   for (instance in Setpiece.instances) {
     instance.drawSvg(svgDocument)
@@ -85,6 +89,10 @@ fun Proscenium.drawSvg(svgDocument: SvgDocument) {
 
 fun Wall.drawSvg(svgDocument: Document, svgNamespace: String, parentElement: Element) {
   drawLine(svgDocument, svgNamespace, parentElement, start, end)
+}
+
+fun Floor.drawSvg(svgDocument: SvgDocument) {
+  drawRectangle(svgDocument, surface.x, surface.y, surface.width, surface.depth, "grey", "0.1")
 }
 
 fun PipeBase.drawSvg(svgDocument: SvgDocument) {

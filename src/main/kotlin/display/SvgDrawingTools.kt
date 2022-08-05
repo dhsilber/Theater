@@ -84,6 +84,7 @@ fun drawRectangle(
   width: Float,
   height: Float,
   fillColor: String = "white",
+  opacity: String = "1"
 ): DrawingResults {
   val rect = makeElementInDocument(svgDocument, "rect")
   rect.setAttribute("x", x.toString())
@@ -91,6 +92,7 @@ fun drawRectangle(
   rect.setAttribute("width", width.toString())
   rect.setAttribute("height", height.toString())
   rect.setAttribute("fill", fillColor)
+  rect.setAttribute("opacity", opacity)
 
   return DrawingResults(rect, SvgBoundary(x, y, x + width, y + height))
 }

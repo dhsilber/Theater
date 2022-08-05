@@ -3,7 +3,7 @@ package tests
 import com.mobiletheatertech.plot.Backup
 import com.mobiletheatertech.plot.Configuration
 import entities.Luminaire
-import com.mobiletheatertech.plot.Startup
+import Startup
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

@@ -84,6 +84,20 @@ class SvgDrawingToolsTest {
   }
 
   @Test
+  fun `drawRectangle draws svg rect with specified fill opacity`() {
+    val svgDocument = startSvg()
+    val initialNodeCount = svgDocument.root.childNodes.length
+
+    drawRectangle(svgDocument, 1f, 2f, 3f, 4f, "cyan", "27")
+
+    val rectangles = svgDocument.root.getElementsByTagName("rect")
+    assertThat(rectangles.length).isEqualTo(1)
+    assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
+    val attributes = rectangles.item(0).attributes
+    assertThat(attributes.getNamedItem("opacity").textContent).isEqualTo("27")
+  }
+
+  @Test
   fun `drawRectangle provides created element and space occupied`() {
     val svgDocument = startSvg()
 

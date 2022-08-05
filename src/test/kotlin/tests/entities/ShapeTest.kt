@@ -5,7 +5,7 @@ import Rectangle
 import TagRegistry
 import Xml
 import XmlElemental
-import com.mobiletheatertech.plot.Startup
+import Startup
 import entities.SetPlatform
 import entities.Shape
 import io.mockk.every
