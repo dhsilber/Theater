@@ -19,6 +19,11 @@ The units of the numbers should not matter, so long as you are consistent. The d
 I use inches, because I live in a backwards country that is out of step with the rest of the world.
 The origin of the room is in the top left corner, but see `Proscenium`, below.
 
+## Generated Drawings
+
+`TheaterDesign` generates plan and section views of the space.
+Detail drawings of lighting pipes (including their Luminaires) can be requested.
+
 ## Entities
 
 Currently supported entities are:

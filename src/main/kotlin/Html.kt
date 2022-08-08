@@ -3,7 +3,7 @@ import display.DrawingResults
 import display.SvgBoundary
 import display.addAttribute
 import display.drawRectangle
-import display.drawSvg
+import display.drawSvgPlan
 import display.generateSvgSymbols
 import entities.Drawing
 import entities.Event
@@ -145,7 +145,7 @@ private fun PipeBase.drawBoomDetailSvg(svgDocument: SvgDocument): String {
 }
 
 private fun Pipe.drawPipeSvg(svgDocument: SvgDocument): String {
-  val pipeDrawingBoundary = drawSvg(svgDocument)
+  val pipeDrawingBoundary = drawSvgPlan(svgDocument)
   val viewBox = "${pipeDrawingBoundary.xMin + 300} ${pipeDrawingBoundary.yMin - 50} 100 100"
   val root = svgDocument.root
   root.setAttribute("width", "1200")

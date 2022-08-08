@@ -56,7 +56,7 @@ fun App() {
       {
         WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
         PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = { pipeDisplay = !pipeDisplay })
-        Button(onClick = { Svg.writePlan() }) {
+        Button(onClick = { Svg.writePlanView() }) {
           Text("Write SVG")
         }
       }

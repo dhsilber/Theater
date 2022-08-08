@@ -1,9 +1,6 @@
 import com.mobiletheatertech.plot.Configuration
-import com.mobiletheatertech.plot.exception.InvalidXMLException
-import display.drawSvgPipeDrawing
 import display.drawSvgPlanContent
-import entities.Drawing
-import entities.Pipe
+import display.drawSvgSectionContent
 import org.apache.batik.dom.GenericDOMImplementation
 import org.apache.batik.svggen.SVGGraphics2D
 import org.w3c.dom.DOMImplementation
@@ -16,15 +13,23 @@ import java.io.Writer
 class Svg {
   companion object {
     fun writeAll() {
-      writePlan()
+      writePlanView()
+      writeSectionView()
 //      writePipeDrawings()
     }
 
-    fun writePlan() {
+    fun writePlanView() {
       val svgDetails = startSvg()
 //      val (document, namespace, generator, root) = svgDetails
       drawSvgPlanContent(svgDetails)
       finishSvgFile(svgDetails, "plan")
+    }
+
+    fun writeSectionView() {
+      val svgDetails = startSvg()
+//      val (document, namespace, generator, root) = svgDetails
+      drawSvgSectionContent(svgDetails)
+      finishSvgFile(svgDetails, "section")
     }
 
 //    fun writePipeDrawings() {
