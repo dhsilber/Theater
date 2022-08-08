@@ -125,11 +125,9 @@ fun Floor.drawSvgPlan(svgDocument: SvgDocument) {
 }
 
 fun Floor.drawSvgSection(svgDocument: SvgDocument) {
-  val height = Venue.instances.first().height - surface.z
-  println("Venue: ${Venue}")
-  println("VenuePoint: ${VenuePoint}")
-  println("surface: ${surface}")
-  val originY = VenuePoint.LargeY - surface.y - surface.depth
+  val venue = Venue.instances.first()
+  val height = venue.height - surface.z
+  val originY = venue.depth - surface.y - surface.depth
 
   drawLine(svgDocument.document, svgDocument.namespace, svgDocument.root,
     originY,

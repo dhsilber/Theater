@@ -16,6 +16,8 @@ class Venue(elementPassthrough: Element, parentEntity: XmlElemental? ) : XmlElem
     println("New Venue: $building - $room.")
   }
 
+  override fun toString() = "$building: $room: ($width, $depth, $height)"
+
   companion object : CreateWithXmlElement<Venue>() {
     const val Tag = "venue"
     fun factory(xmlElement: Element, parentEntity: XmlElemental?): Venue =
