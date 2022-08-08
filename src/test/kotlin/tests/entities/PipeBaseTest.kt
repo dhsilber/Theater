@@ -4,7 +4,7 @@ import CreateWithXmlElement
 import TagRegistry
 import Xml
 import XmlElemental
-import com.mobiletheatertech.plot.Startup
+import Startup
 import coordinates.StagePoint
 import entities.Pipe
 import entities.PipeBase

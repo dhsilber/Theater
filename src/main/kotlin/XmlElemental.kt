@@ -95,6 +95,16 @@ abstract class XmlElemental(val xmlElement: Element) {
     return value
   }
 
+  fun getHorizontalPlane(): HorizontalPlane {
+    return HorizontalPlane(
+      getFloatAttribute("z"),
+      getFloatAttribute("x"),
+      getFloatAttribute("y"),
+      getFloatAttribute("width"),
+      getFloatAttribute("depth")
+    )
+  }
+
   protected open fun getVenuePointAttribute(xName: String, yName: String): VenuePoint {
     val x = getFloatAttribute(xName)
     val y = getFloatAttribute(yName)

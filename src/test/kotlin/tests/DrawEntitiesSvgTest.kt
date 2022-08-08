@@ -3,6 +3,7 @@ package tests
 import coordinates.VenuePoint
 import display.SvgBoundary
 import display.drawSvg
+import entities.Floor
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -10,6 +11,7 @@ import entities.PipeBase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import startSvg
+import tests.entities.FloorTest
 import tests.entities.LuminaireDefinitionTest
 import tests.entities.LuminaireTest
 import tests.entities.PipeBaseTest
@@ -35,6 +37,22 @@ class DrawEntitiesSvgTest {
     xmlElement.setAttribute("type", "name")
     xmlElement.setAttribute("location", "1.6")
     return xmlElement
+  }
+
+  @Test
+  fun `Floor drawSvg shows semi-opaque rectangle`() {
+    val floor = Floor.factory(FloorTest().minimalXml())
+    val svgDocument = startSvg()
+    val initialNodeCount = svgDocument.root.childNodes.length
+    assertThat(svgDocument.root.getElementsByTagName("rect").length).isEqualTo(0)
+
+    floor.drawSvg(svgDocument)
+
+    assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
+    val circleElements = svgDocument.root.getElementsByTagName("rect")
+    assertThat(circleElements.length).isEqualTo(1)
+    val opacityAttribute = circleElements.item(0).attributes.getNamedItem("opacity")
+    assertThat(opacityAttribute.textContent.toFloat()).isEqualTo(0.1f)
   }
 
   @Test
@@ -83,7 +101,6 @@ class DrawEntitiesSvgTest {
     assertThat(circleElements.length).isEqualTo(1)
     val radiusAttribute = circleElements.item(0).attributes.getNamedItem("r")
     assertThat(radiusAttribute.textContent.toFloat()).isEqualTo(18f)
-
   }
 
   @Test

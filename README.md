@@ -19,6 +19,11 @@ The units of the numbers should not matter, so long as you are consistent. The d
 I use inches, because I live in a backwards country that is out of step with the rest of the world.
 The origin of the room is in the top left corner, but see `Proscenium`, below.
 
+## Generated Drawings
+
+`TheaterDesign` generates plan and section views of the space.
+Detail drawings of lighting pipes (including their Luminaires) can be requested.
+
 ## Entities
 
 Currently supported entities are:
@@ -49,6 +54,19 @@ Attributes:
 ```dtd
 <wall x1="13" y1="27" x2="13" y2="743" />
 ```  
+
+
+### Floor
+
+There is a default floor at z=0.
+When that does not cover your situation (e.g. for a built-in stage, landing, etc)
+floors at other levels can be specified.
+Currently, only a level rectangle is supported.
+
+```dtd
+<floor z="36" x="0" y="0" width="336" depth="136" />
+```
+
 
 ### Proscenium
 

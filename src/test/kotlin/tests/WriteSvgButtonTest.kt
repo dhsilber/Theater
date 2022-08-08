@@ -35,9 +35,9 @@ class WriteSvgButtonTest {
     button.assertExists()
 
     mockkObject(Svg)
-    every { Svg.writePlan() } returns Unit
+    every { Svg.writePlanView() } returns Unit
     button.performClick()
-    verify { Svg.writePlan() }
+    verify { Svg.writePlanView() }
   }
 
 }

@@ -20,7 +20,6 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
-import com.mobiletheatertech.plot.Startup
 import entities.Venue
 import sidebar.PipeSideBar
 
@@ -57,7 +56,7 @@ fun App() {
       {
         WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
         PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = { pipeDisplay = !pipeDisplay })
-        Button(onClick = { Svg.writePlan() }) {
+        Button(onClick = { Svg.writePlanView() }) {
           Text("Write SVG")
         }
       }

@@ -4,10 +4,9 @@ import CreateWithXmlElement
 import Hangable
 import Xml
 import XmlElemental
-import com.mobiletheatertech.plot.Startup
+import Startup
 import entities.Luminaire
 import entities.Pipe
-import entities.PipeBase
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.slot

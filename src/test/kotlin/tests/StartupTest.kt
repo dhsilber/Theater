@@ -2,7 +2,7 @@ package tests
 
 import TagRegistry
 import Xml
-import com.mobiletheatertech.plot.Startup
+import Startup
 import entities.Drawing
 import entities.Event
 import entities.Luminaire

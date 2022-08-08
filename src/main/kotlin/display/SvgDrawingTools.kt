@@ -5,9 +5,13 @@ import coordinates.VenuePoint
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
+import java.lang.Float.max
+import java.lang.Float.min
 
 fun makeElementInDocument(svgDocument: SvgDocument, tagName: String): Element {
-  val element = svgDocument.document.createElementNS(svgDocument.namespace, tagName)
+  val element = svgDocument
+    .document
+    .createElementNS(svgDocument.namespace, tagName)
 
   svgDocument.root.appendChild(element)
 
@@ -59,22 +63,24 @@ fun drawLine(
 }
 
 fun drawLine(
-  svgDocument: Document,
-  svgNamespace: String,
-  parentElement: Element,
+  svgDocument: SvgDocument,
   start: VenuePoint,
   end: VenuePoint,
-): Element {
-  val svgElement = svgDocument.createElementNS(svgNamespace, "line")
+): SvgBoundary {
+  val svgElement = makeElementInDocument(svgDocument, "line")
   svgElement.setAttribute("x1", start.x.toString())
   svgElement.setAttribute("y1", start.y.toString())
   svgElement.setAttribute("x2", end.x.toString())
   svgElement.setAttribute("y2", end.y.toString())
   svgElement.setAttribute("stroke", "black")
   svgElement.setAttribute("stroke-width", "2")
-  parentElement.appendChild(svgElement)
 
-  return svgElement
+  return SvgBoundary(
+    min(start.x,end.x),
+    min(start.y,end.y),
+    max(start.x,end.x),
+    max(start.y,end.y),
+  )
 }
 
 fun drawRectangle(
@@ -84,6 +90,7 @@ fun drawRectangle(
   width: Float,
   height: Float,
   fillColor: String = "white",
+  opacity: String = "1"
 ): DrawingResults {
   val rect = makeElementInDocument(svgDocument, "rect")
   rect.setAttribute("x", x.toString())
@@ -91,6 +98,7 @@ fun drawRectangle(
   rect.setAttribute("width", width.toString())
   rect.setAttribute("height", height.toString())
   rect.setAttribute("fill", fillColor)
+  rect.setAttribute("opacity", opacity)
 
   return DrawingResults(rect, SvgBoundary(x, y, x + width, y + height))
 }
