@@ -1,4 +1,3 @@
-import entities.Luminaire
 import entities.Pipe
 
 class PipeManager(
@@ -10,11 +9,7 @@ class PipeManager(
     var list: List<PipeManager> = listOf()
     var currentLuminaires: List<Hangable> = listOf()
 
-    init {
-      buildList(0)
-    }
-
-    private fun buildList(current: Int) {
+    fun buildList(current: Int) {
       var mutableList: MutableList<PipeManager> = mutableListOf()
       for ((index, pipe) in Pipe.instances.sortedBy { it.origin.y * -1 }.withIndex()) {
         mutableList.add(PipeManager(pipe, current == index))
@@ -27,6 +22,11 @@ class PipeManager(
       val index = list.indexOf(entry)
       buildList(index)
       currentLuminaires = entry.pipe.dependents.map { it.hangable }.toList()
+    }
+
+    fun clear() {
+      list = listOf()
+      currentLuminaires = listOf()
     }
 
   }

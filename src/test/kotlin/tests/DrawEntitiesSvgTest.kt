@@ -2,7 +2,7 @@ package tests
 
 import coordinates.VenuePoint
 import display.SvgBoundary
-import display.drawSvg
+import display.drawSvgPlan
 import entities.Floor
 import entities.Luminaire
 import entities.LuminaireDefinition
@@ -40,13 +40,13 @@ class DrawEntitiesSvgTest {
   }
 
   @Test
-  fun `Floor drawSvg shows semi-opaque rectangle`() {
+  fun `Floor drawSvgPlan shows semi-opaque rectangle`() {
     val floor = Floor.factory(FloorTest().minimalXml())
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
     assertThat(svgDocument.root.getElementsByTagName("rect").length).isEqualTo(0)
 
-    floor.drawSvg(svgDocument)
+    floor.drawSvgPlan(svgDocument)
 
     assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
     val circleElements = svgDocument.root.getElementsByTagName("rect")
@@ -56,13 +56,13 @@ class DrawEntitiesSvgTest {
   }
 
   @Test
-  fun `Luminaire drawSvg uses symbol provided by LuminaireDefinition`() {
+  fun `Luminaire drawSvgPlan uses symbol provided by LuminaireDefinition`() {
     val luminaire = Luminaire.factory(LuminaireTest().minimalXml())
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
     assertThat(svgDocument.root.getElementsByTagName("use").length).isEqualTo(0)
 
-    luminaire.drawSvg(svgDocument, VenuePoint(0f, 0f, 0f), 0f)
+    luminaire.drawSvgPlan(svgDocument, VenuePoint(0f, 0f, 0f), 0f)
 
     assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
     val useElements = svgDocument.root.getElementsByTagName("use")
@@ -73,7 +73,7 @@ class DrawEntitiesSvgTest {
   }
 
   @Test
-  fun `Luminaire drawSvg provides boundary from LuminaireDefinition`() {
+  fun `Luminaire drawSvgPlan provides boundary from LuminaireDefinition`() {
     LuminaireDefinition.factory(minimalLuminaireDefinitionXml())
     val luminaire = Luminaire.factory(minimalLuminaireXml())
     val svgDocument = startSvg()
@@ -82,19 +82,19 @@ class DrawEntitiesSvgTest {
     val expectedMinY = 15.2f
     val expectedMaxY = 24.8f
 
-    val boundary = luminaire.drawSvg(svgDocument, VenuePoint(10f, 20f, 0f), luminaire.location)
+    val boundary = luminaire.drawSvgPlan(svgDocument, VenuePoint(10f, 20f, 0f), luminaire.location)
 
     assertThat(boundary).isEqualTo(SvgBoundary(expectedMinX, expectedMinY, expectedMaxX, expectedMaxY))
   }
 
   @Test
-  fun `PipeBase drawSvg draws pipe base`() {
+  fun `PipeBase drawSvgPlan draws pipe base`() {
     val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml())
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
     assertThat(svgDocument.root.getElementsByTagName("circle").length).isEqualTo(0)
 
-    pipeBase.drawSvg(svgDocument)
+    pipeBase.drawSvgPlan(svgDocument)
 
     assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
     val circleElements = svgDocument.root.getElementsByTagName("circle")
@@ -104,18 +104,18 @@ class DrawEntitiesSvgTest {
   }
 
   @Test
-  fun `Pipe drawSvg draws empty pipe`() {
+  fun `Pipe drawSvgPlan draws empty pipe`() {
     val pipe = Pipe.factory(PipeTest().minimalXmlWithNoParent())
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
 
-    pipe.drawSvg(svgDocument)
+    pipe.drawSvgPlan(svgDocument)
 
     assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
   }
 
   @Test
-  fun `Pipe drawSvg draws all of the dependents`() {
+  fun `Pipe drawSvgPlan draws all of the dependents`() {
     val pipe = Pipe.factory(PipeTest().minimalXmlWithNoParent())
     val luminaire1 = Luminaire.factory(LuminaireTest().minimalXml())
     val luminaire2 = Luminaire.factory(LuminaireTest().minimalXml())
@@ -124,24 +124,24 @@ class DrawEntitiesSvgTest {
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
 
-    pipe.drawSvg(svgDocument)
+    pipe.drawSvgPlan(svgDocument)
 
     assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 3)
   }
 
   @Test
-  fun `Pipe drawSvg provides boundary`() {
+  fun `Pipe drawSvgPlan provides boundary`() {
     val pipe = Pipe.factory(PipeTest().minimalXmlWithNoParent())
     val svgDocument = startSvg()
 
-    val result = pipe.drawSvg(svgDocument)
+    val result = pipe.drawSvgPlan(svgDocument)
 
     // See values in PipeTest().minimalXml() for justification of these numbers
     assertThat(result).isEqualTo(SvgBoundary(1.2f, 2.3f, 5.7f, 4.3f))
   }
 
   @Test
-  fun `Pipe drawSvg provides boundary that includes Luminaires`() {
+  fun `Pipe drawSvgPlan provides boundary that includes Luminaires`() {
     val pipe = Pipe.factory(PipeTest().minimalXmlWithNoParent())
     LuminaireDefinition.factory(minimalLuminaireDefinitionXml())
     val luminaire = Luminaire.factory(LuminaireDefinitionTest().minimalLuminaireXml())
@@ -152,7 +152,7 @@ class DrawEntitiesSvgTest {
     val expectedMinY = pipe.origin.venue.y
     val expectedMaxY = pipe.origin.venue.y + Pipe.Diameter
 
-    val result = pipe.drawSvg(svgDocument)
+    val result = pipe.drawSvgPlan(svgDocument)
 
     assertThat(result).isEqualTo(SvgBoundary(expectedMinX, expectedMinY, expectedMaxX, expectedMaxY))
 

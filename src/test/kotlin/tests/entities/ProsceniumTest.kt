@@ -62,7 +62,7 @@ class ProsceniumTest {
     mockkObject(Xml)
     every { Xml.read(any()) } returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsKey(Proscenium.Tag)
   }
@@ -162,7 +162,7 @@ class ProsceniumTest {
 //  fun `for svg drawing, no proscenium is drawn when none are defined`() {
 //    Proscenium.instances.clear()
 //
-//    every { Proscenium.drawSvg(any(),any(),any())} returns Unit
+//    every { Proscenium.drawSvgPlan(any(),any(),any())} returns Unit
 //
 //    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
 //    val namespace = "http://www.w3.org/2000/svg"
@@ -174,7 +174,7 @@ class ProsceniumTest {
 //    drawSvgContent(document, namespace, root)
 //
 //
-//    verify(exactly = 0) { Proscenium.drawSvg(pathName = "foo") }
+//    verify(exactly = 0) { Proscenium.drawSvgPlan(pathName = "foo") }
 //  }
 
 //  @Test
@@ -192,7 +192,7 @@ class ProsceniumTest {
 //    Proscenium.instances.clear()
 //    Proscenium.instances.add(spy)
 //
-//    every { spy.drawSvg(any(), any(), any()) } returns Unit
+//    every { spy.drawSvgPlan(any(), any(), any()) } returns Unit
 //
 //    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
 //    val namespace = "http://www.w3.org/2000/svg"
@@ -205,7 +205,7 @@ class ProsceniumTest {
 //    drawSvgContent(document, namespace, root)
 //    println("Root after $root")
 //
-//    verify(exactly = 0) { spy.drawSvg(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
+//    verify(exactly = 0) { spy.drawSvgPlan(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
 //  }
 //
 //  @Test
@@ -225,7 +225,7 @@ class ProsceniumTest {
 ////    Proscenium.instances.clear()
 ////    Proscenium.instances.add(spy)
 //
-//    every { instance.drawSvg(any(), any(), any()) } returns Unit
+//    every { instance.drawSvgPlan(any(), any(), any()) } returns Unit
 //
 //    val domImpl: DOMImplementation = GenericDOMImplementation.getDOMImplementation()
 //    val namespace = "http://www.w3.org/2000/svg"
@@ -238,7 +238,7 @@ class ProsceniumTest {
 //    drawSvgContent(document, namespace, root)
 //    println("Root after $root")
 //
-//    verify(exactly = 0) { instance.drawSvg(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
+//    verify(exactly = 0) { instance.drawSvgPlan(svgDocument = any(), svgNamespace = any(), parentElement = any()) }
 //  }
 
 }

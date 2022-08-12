@@ -1,6 +1,6 @@
 package tests
 
-import WallButton
+import ui.WallButton
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot

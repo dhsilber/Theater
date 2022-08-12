@@ -9,13 +9,11 @@ import entities.LuminaireDefinition
 import entities.Pipe
 import entities.PipeBase
 import entities.Proscenium
-import entities.Setpiece
 import entities.SetPlatform
+import entities.Setpiece
 import entities.Shape
 import entities.Venue
 import entities.Wall
-import org.w3c.dom.Document
-import org.w3c.dom.Element
 
 fun drawSvgPipeDrawing(svgDocument: SvgDocument, pipe: Pipe) {
   for (instance in LuminaireDefinition.instances) {

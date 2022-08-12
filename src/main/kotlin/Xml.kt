@@ -26,6 +26,9 @@ class Xml {
 
     lateinit var dom: Document
 
+    val builderFactory = DocumentBuilderFactory.newInstance()
+    var builder: DocumentBuilder? = null
+
     fun getThis(): Xml.Companion {
       return this
     }
@@ -35,8 +38,6 @@ class Xml {
 
       val incoming: java.io.File = java.io.File(pathName)
 
-      val builderFactory = DocumentBuilderFactory.newInstance()
-      var builder: DocumentBuilder? = null
       try {
         builder = builderFactory.newDocumentBuilder()
       } catch (e: ParserConfigurationException) {
@@ -75,21 +76,21 @@ class Xml {
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4")
       transformer.transform(source, result)
 
-      //writing to file
       var fop: FileOutputStream? = null
       val file: File
       try {
         file = File(PathName)
-        fop = FileOutputStream(file)
+//        if (file.exists()) {
+//          file.delete()
+//        }
+        file.createNewFile()
 
-        // if file doesnt exists, then create it
-        if (!file.exists()) {
-          file.createNewFile()
-        }
+        fop = FileOutputStream(file)
 
         // get the content in bytes
         val xmlString = result.writer.toString()
         val contentInBytes = xmlString.toByteArray()
+
         fop.write(contentInBytes)
         fop.flush()
         fop.close()
@@ -102,7 +103,6 @@ class Xml {
           e.printStackTrace()
         }
       }
-
     }
 
     fun parse(node: Node, parentEntity: XmlElemental?) {

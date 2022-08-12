@@ -20,6 +20,7 @@ class Wall(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
 
   companion object : CreateWithXmlElement<Wall>() {
     const val Tag = "wall"
+
     fun factory(xmlElement: Element, parentEntity: XmlElemental?): Wall =
       create(xmlElement, parentEntity, ::Wall)
 

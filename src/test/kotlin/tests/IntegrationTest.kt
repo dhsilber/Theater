@@ -27,7 +27,7 @@ class IntegrationTest {
     runBlocking {
       delay(3000)
     }
-    Startup().startup(pathName)
+    Startup.startup(pathName)
 
     assertEquals(3 + existingCount, Luminaire.instances.size)
     val zero = Luminaire.instances[0 + existingCount]
