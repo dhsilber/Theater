@@ -58,7 +58,7 @@ class WallTest {
     mockkObject(Xml)
     every { Xml.read(any()) } returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsKey(Wall.Tag)
   }

@@ -9,13 +9,11 @@ import entities.LuminaireDefinition
 import entities.Pipe
 import entities.PipeBase
 import entities.Proscenium
-import entities.Setpiece
 import entities.SetPlatform
+import entities.Setpiece
 import entities.Shape
 import entities.Venue
 import entities.Wall
-import org.w3c.dom.Document
-import org.w3c.dom.Element
 
 fun drawSvgPipeDrawing(svgDocument: SvgDocument, pipe: Pipe) {
   for (instance in LuminaireDefinition.instances) {
@@ -151,7 +149,7 @@ fun Pipe.drawSvgPlan(svgDocument: SvgDocument): SvgBoundary {
 
 fun Pipe.drawVerticalSvg(svgDocument: SvgDocument): SvgBoundary {
   val place = origin.venue
-  val drawingResults = drawCircle(svgDocument, place.x, place.y, Pipe.Diameter)
+  val drawingResults = drawCircle(svgDocument, place.x, place.y, Pipe.Diameter / 2)
 //  val offsetToCenter = length / 2
 //  dependents.forEach {
 //    val location = place.x + it.location + offsetToCenter

@@ -20,8 +20,23 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
+import entities.Drawing
+import entities.Event
+import entities.Floor
+import entities.Luminaire
+import entities.LuminaireDefinition
+import entities.Pipe
+import entities.PipeBase
+import entities.Proscenium
+import entities.SetPlatform
+import entities.Setpiece
+import entities.Shape
 import entities.Venue
+import entities.Wall
 import sidebar.PipeSideBar
+import ui.PipeButton
+import ui.ReloadButton
+import ui.WallButton
 
 //import org.jetbrains.compose.splitpane.demo.uiTop
 
@@ -59,6 +74,7 @@ fun App() {
         Button(onClick = { Svg.writePlanView() }) {
           Text("Write SVG")
         }
+        ReloadButton()
       }
       Display.display(
         drawingWalls,
@@ -73,19 +89,47 @@ fun App() {
   }
 }
 
+var title = ""
 
-fun main() = application {
-  Configuration
-  Startup().startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
-  val title = try {
+fun load() {
+  Startup.startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
+  title = try {
     Venue.instances[0].building + " - " + Venue.instances[0].room
   } catch (exception: Exception) {
     "Missing venue"
   }
 
-  PipeManager.Companion
+  PipeManager.buildList(0)
   Svg.writeAll()
   Html.writeAll()
+}
+
+fun reload() {
+  Startup.clear()
+
+  Venue.clear()
+  Wall.clear()
+  Floor.clear()
+  Proscenium.clear()
+  Pipe.clear()
+  LuminaireDefinition.clear()
+  Luminaire.clear()
+  Event.clear()
+  PipeBase.clear()
+  Setpiece.clear()
+  SetPlatform.clear()
+  Shape.clear()
+  Drawing.clear()
+
+  title = ""
+  PipeManager.clear()
+  load()
+}
+
+
+fun main() = application {
+  Configuration
+  load()
 //  exitApplication()
 
   val state = rememberWindowState(placement = WindowPlacement.Maximized)

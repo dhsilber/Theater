@@ -14,4 +14,6 @@ abstract class CreateWithXmlElement<Klass : XmlElemental> {
     return instance
   }
 
+  fun clear() = instances.clear()
+
 }

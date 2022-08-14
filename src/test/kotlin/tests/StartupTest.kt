@@ -5,6 +5,7 @@ import Xml
 import Startup
 import entities.Drawing
 import entities.Event
+import entities.Floor
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -38,21 +39,22 @@ class StartupTest {
     mockkObject(Xml)
     every { Xml.read(any()) } returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsOnlyKeys(
-      Drawing.Tag,
-      Event.Tag,
-      Luminaire.Tag,
-      LuminaireDefinition.Tag,
+      Venue.Tag,
+      Wall.Tag,
+      Floor.Tag,
+      Proscenium.Tag,
       Pipe.Tag,
       PipeBase.Tag,
-      Proscenium.Tag,
+      LuminaireDefinition.Tag,
+      Luminaire.Tag,
+      Event.Tag,
       Setpiece.Tag,
       SetPlatform.Tag,
       Shape.Tag,
-      Venue.Tag,
-      Wall.Tag,
+      Drawing.Tag,
     )
   }
 
@@ -62,7 +64,7 @@ class StartupTest {
     mockkObject(Xml)
     every { Xml.read(pathName = capture(pathnameSlot)) } returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     verify(exactly = 1) { Xml.read(pathName = "foo") }
   }
@@ -86,7 +88,7 @@ class StartupTest {
     }
     every { Pipe.postParsingCleanup()} returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     verify(exactly = 1) { Pipe.postParsingCleanup() }
   }

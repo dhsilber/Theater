@@ -88,7 +88,7 @@ class PipeTest {
     mockkObject(Xml)
     every { Xml.read(any()) } returns Unit
 
-    Startup().startup("foo")
+    Startup.startup("foo")
 
     assertThat(TagRegistry.tagToCallback).containsKey(Pipe.Tag)
   }
@@ -319,7 +319,7 @@ class PipeTest {
     Luminaire.instances.clear()
     val filename = "pipeAndLuminaire.xml"
     val pathName = this.javaClass.classLoader.getResource(filename)!!.file
-    Startup().startup(pathName)
+    Startup.startup(pathName)
     val luminaireXml = Luminaire.instances[0].xmlElement
     val pipeXml = Pipe.instances[0].xmlElement
 
@@ -337,7 +337,7 @@ class PipeTest {
     Luminaire.instances.clear()
     val filename = "luminaire.xml"
     val pathName = this.javaClass.classLoader.getResource(filename)!!.file
-    Startup().startup(pathName)
+    Startup.startup(pathName)
     val luminaireXml = Luminaire.instances[0].xmlElement
 
     val foundPipe = Pipe.queryByXmlElement(luminaireXml)

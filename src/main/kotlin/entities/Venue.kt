@@ -20,6 +20,7 @@ class Venue(elementPassthrough: Element, parentEntity: XmlElemental? ) : XmlElem
 
   companion object : CreateWithXmlElement<Venue>() {
     const val Tag = "venue"
+
     fun factory(xmlElement: Element, parentEntity: XmlElemental?): Venue =
       create(xmlElement,parentEntity, ::Venue)
   }
