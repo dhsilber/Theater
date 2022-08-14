@@ -9,7 +9,6 @@ import entities.LuminaireDefinition
 import entities.Pipe
 import entities.PipeBase
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
 import startSvg
 import tests.entities.FloorTest
 import tests.entities.LuminaireDefinitionTest
@@ -18,6 +17,7 @@ import tests.entities.PipeBaseTest
 import tests.entities.PipeTest
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.fail
+import kotlin.test.Test
 
 class DrawEntitiesSvgTest {
 

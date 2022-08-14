@@ -76,10 +76,34 @@ fun drawLine(
   svgElement.setAttribute("stroke-width", "2")
 
   return SvgBoundary(
-    min(start.x,end.x),
-    min(start.y,end.y),
-    max(start.x,end.x),
-    max(start.y,end.y),
+    min(start.x, end.x),
+    min(start.y, end.y),
+    max(start.x, end.x),
+    max(start.y, end.y),
+  )
+}
+
+fun drawLineWithResults(
+  svgDocument: SvgDocument,
+  start: VenuePoint,
+  end: VenuePoint,
+): DrawingResults {
+  val svgElement = makeElementInDocument(svgDocument, "line")
+  svgElement.setAttribute("x1", start.x.toString())
+  svgElement.setAttribute("y1", start.y.toString())
+  svgElement.setAttribute("x2", end.x.toString())
+  svgElement.setAttribute("y2", end.y.toString())
+  svgElement.setAttribute("stroke", "black")
+  svgElement.setAttribute("stroke-width", "2")
+
+  return DrawingResults(
+    svgElement,
+    SvgBoundary(
+      min(start.x, end.x),
+      min(start.y, end.y),
+      max(start.x, end.x),
+      max(start.y, end.y),
+    )
   )
 }
 
@@ -90,7 +114,7 @@ fun drawRectangle(
   width: Float,
   height: Float,
   fillColor: String = "white",
-  opacity: String = "1"
+  opacity: String = "1",
 ): DrawingResults {
   val rect = makeElementInDocument(svgDocument, "rect")
   rect.setAttribute("x", x.toString())
@@ -128,3 +152,29 @@ data class DrawingResults(
   val element: Element,
   val boundary: SvgBoundary,
 )
+
+fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>) {
+  orders.map {
+    when (it.operation) {
+      DrawingOrderOperation.CIRCLE -> {
+        val result = drawCircle(
+          svgDocument = svgDocument,
+          x = it.data[0],
+          y = it.data[1],
+          r = it.data[2],
+//        color = it.color.compose,
+        )
+        result.element.addAttribute("stroke", it.color.svg)
+      }
+      DrawingOrderOperation.LINE -> {
+        val result = drawLineWithResults(
+          svgDocument = svgDocument,
+//        color = it.color.compose,
+          start = VenuePoint(it.data[0], it.data[1], 0f),
+          end = VenuePoint(it.data[2], it.data[3], 0f),
+        )
+        result.element.addAttribute("stroke", it.color.svg)
+      }
+    }
+  }
+}

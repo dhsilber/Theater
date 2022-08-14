@@ -3,17 +3,7 @@ package display
 import SvgDocument
 import coordinates.Point
 import coordinates.VenuePoint
-import entities.Floor
-import entities.Luminaire
-import entities.LuminaireDefinition
-import entities.Pipe
-import entities.PipeBase
-import entities.Proscenium
-import entities.SetPlatform
-import entities.Setpiece
-import entities.Shape
-import entities.Venue
-import entities.Wall
+import entities.*
 
 fun drawSvgPipeDrawing(svgDocument: SvgDocument, pipe: Pipe) {
   for (instance in LuminaireDefinition.instances) {
@@ -56,7 +46,7 @@ fun drawSvgSectionContent(svgDocument: SvgDocument) {
 
   Venue.instances.first().drawSvgSection(svgDocument)
   Floor.instances.map { it.drawSvgSection(svgDocument) }
-//  Proscenium.drawSvgSection()
+  Proscenium.instances.first().drawSvgSection(svgDocument)
 //  Wall.instances.map { it.drawSvgSection(svgDocument) }
 //  Floor.instances.map { it.drawSvgSection(svgDocument) }
 //
@@ -89,29 +79,13 @@ fun Venue.drawSvgSection(svgDocument: SvgDocument) {
 }
 
 fun Proscenium.drawSvgPlan(svgDocument: SvgDocument) {
-  val (document, svgNamespace, generator, parentElement) = svgDocument
+  val drawingOrder = drawPlan()
+  svgDraw(svgDocument, drawingOrder)
+}
 
-  drawLine(document, svgNamespace, parentElement, origin.x - 17f, origin.y - 17f, origin.x + 17f, origin.y + 17f)
-    .addAttribute("stroke", "cyan")
-  drawLine(document, svgNamespace, parentElement, origin.x + 17f, origin.y - 17f, origin.x - 17f, origin.y + 17f)
-    .addAttribute("stroke", "cyan")
-  drawCircle(svgDocument, origin.x, origin.y, 17f).element
-    .addAttribute("stroke", "cyan")
-
-  val startX = origin.x - width / 2
-  val startY = origin.y
-  val endX = origin.x + width / 2
-  val endY = origin.y + depth
-  // SR end of proscenium arch
-  drawLine(document, svgNamespace, parentElement, startX, startY, startX, endY)
-  // SL end of proscenium arch
-  drawLine(document, svgNamespace, parentElement, endX, startY, endX, endY)
-  // US side of proscenium arch
-  drawLine(document, svgNamespace, parentElement, startX, startY, endX, startY)
-    .addAttribute("stroke-opacity", "0.3")
-  // DS side of proscenium arch
-  drawLine(document, svgNamespace, parentElement, startX, endY, endX, endY)
-    .addAttribute("stroke-opacity", "0.1")
+fun Proscenium.drawSvgSection(svgDocument: SvgDocument) {
+  val drawingOrder = drawSection()
+  svgDraw(svgDocument, drawingOrder)
 }
 
 fun Wall.drawSvgPlan(svgDocument: SvgDocument): SvgBoundary {
