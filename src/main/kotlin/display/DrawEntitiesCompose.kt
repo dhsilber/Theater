@@ -1,19 +1,14 @@
 package display
 
 import Grid
+import PipeManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import coordinates.PagePoint
 import coordinates.Point
 import coordinates.VenuePoint
-import entities.Pipe
-import entities.PipeBase
-import entities.Proscenium
-import entities.Setpiece
-import entities.SetPlatform
-import entities.Shape
-import entities.Wall
+import entities.*
 
 fun drawContent(drawScope: DrawScope) {
   Grid.instance.draw(drawScope)
@@ -49,27 +44,8 @@ fun drawContent(drawScope: DrawScope) {
 }
 
 fun Proscenium.draw(drawScope: DrawScope) {
-//  println(toString())
-  drawScope.drawLine(Color.Cyan,
-    PagePoint.drawingOffset(origin.x - 17, origin.y - 17),
-    PagePoint.drawingOffset(origin.x + 17, origin.y + 17))
-  drawScope.drawLine(Color.Cyan,
-    PagePoint.drawingOffset(origin.x + 17, origin.y - 17),
-    PagePoint.drawingOffset(origin.x - 17, origin.y + 17))
-  drawScope.drawCircle(Color.Cyan, 17f, PagePoint.drawingOffset(origin.x, origin.y), style = Stroke(width = 2f))
-  val startX = origin.x - width / 2
-  val startY = origin.y
-  val endX = origin.x + width / 2
-  val endY = origin.y + depth
-  // SR end of proscenium arch
-  drawScope.drawLine(Color.Black, PagePoint.drawingOffset(startX, startY), PagePoint.drawingOffset(startX, endY))
-  // SL end of proscenium arch
-  drawScope.drawLine(Color.Black, PagePoint.drawingOffset(endX, startY), PagePoint.drawingOffset(endX, endY))
-
-  // US side of proscenium arch
-  drawScope.drawLine(Color.Gray, PagePoint.drawingOffset(startX, startY), PagePoint.drawingOffset(endX, startY))
-  // DS side of proscenium arch
-  drawScope.drawLine(Color.LightGray, PagePoint.drawingOffset(startX, endY), PagePoint.drawingOffset(endX, endY))
+  val drawingOrders = drawPlan()
+  composeDraw(drawScope, drawingOrders)
 }
 
 fun Wall.draw(drawScope: DrawScope) {
@@ -87,7 +63,7 @@ fun PipeBase.draw(drawScope: DrawScope) {
 
 fun Pipe.draw(drawScope: DrawScope, highlight: Boolean) {
   when (vertical) {
-    true-> drawVertical(drawScope)
+    true -> drawVertical(drawScope)
     else -> drawHorizontal(drawScope, highlight)
   }
 }
@@ -149,16 +125,3 @@ fun Shape.draw(drawScope: DrawScope, placement: VenuePoint) {
 //    platform.draw(origin)
 //  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

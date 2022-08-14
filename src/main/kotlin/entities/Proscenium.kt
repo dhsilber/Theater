@@ -14,9 +14,6 @@ class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : Xml
   val depth = getPositiveFloatAttribute("depth")
   val origin = VenuePoint(x, y, z)
 
-  init {
-  }
-
   override fun toString(): String {
     return "Proscenium at ($x, $y, $z) - width: $width, depth: $depth, height: $height."
   }
