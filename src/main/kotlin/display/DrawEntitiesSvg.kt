@@ -149,7 +149,7 @@ fun Pipe.drawSvgPlan(svgDocument: SvgDocument): SvgBoundary {
 
 fun Pipe.drawVerticalSvg(svgDocument: SvgDocument): SvgBoundary {
   val place = origin.venue
-  val drawingResults = drawCircle(svgDocument, place.x, place.y, Pipe.Diameter)
+  val drawingResults = drawCircle(svgDocument, place.x, place.y, Pipe.Diameter / 2)
 //  val offsetToCenter = length / 2
 //  dependents.forEach {
 //    val location = place.x + it.location + offsetToCenter

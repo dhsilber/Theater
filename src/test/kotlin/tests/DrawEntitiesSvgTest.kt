@@ -130,14 +130,25 @@ class DrawEntitiesSvgTest {
   }
 
   @Test
-  fun `Pipe drawSvgPlan provides boundary`() {
+  fun `Pipe (horizontal) drawSvgPlan provides boundary`() {
     val pipe = Pipe.factory(PipeTest().minimalXmlWithNoParent())
     val svgDocument = startSvg()
 
-    val result = pipe.drawSvgPlan(svgDocument)
+    val boundry = pipe.drawSvgPlan(svgDocument)
 
     // See values in PipeTest().minimalXml() for justification of these numbers
-    assertThat(result).isEqualTo(SvgBoundary(1.2f, 2.3f, 5.7f, 4.3f))
+    assertThat(boundry).isEqualTo(SvgBoundary(1.2f, 2.3f, 5.7f, 4.3f))
+  }
+
+  @Test
+  fun `Pipe (vertical) drawSvgPlan provides boundary`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(PipeTest().minimalXmlWithPipeBaseParent(), pipeBase)
+    val svgDocument = startSvg()
+
+    val boundry = verticalPipe.drawSvgPlan(svgDocument)
+
+    assertThat(boundry).isEqualTo(SvgBoundary(-0.9f, -0.8f, 1.1f, 1.2f))
   }
 
   @Test
