@@ -31,7 +31,9 @@ class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : Xml
     fun get(): Proscenium {
       return instances[0]
     }
+
   }
+
 }
 
 //<proscenium x="385" y="337" z="40" height="186" width="456" depth="8">

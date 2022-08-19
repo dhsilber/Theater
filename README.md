@@ -68,6 +68,15 @@ Currently, only a level rectangle is supported.
 ```
 
 
+### Stair
+
+Describes a regular flight of steps.
+Currently, it can only be oriented with the top of stair towards the origin of the venue.
+
+```dtd
+<stair x="1" y="118" z="17.75" width="29" steps="3" run="11" rise="6" />
+```
+
 ### Proscenium
 
 Describes the location of a proscenium arch.

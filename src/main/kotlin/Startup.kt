@@ -1,15 +1,16 @@
 import entities.Drawing
 import entities.Event
 import entities.Floor
-import entities.Venue
 import entities.Luminaire
 import entities.LuminaireDefinition
 import entities.Pipe
 import entities.PipeBase
 import entities.Proscenium
-import entities.Setpiece
 import entities.SetPlatform
+import entities.Setpiece
 import entities.Shape
+import entities.Stair
+import entities.Venue
 import entities.Wall
 
 class Startup {
@@ -22,6 +23,7 @@ class Startup {
       TagRegistry.registerTagProcessor(Floor.Tag, Floor::factory)
       TagRegistry.registerTagProcessor(Proscenium.Tag, Proscenium::factory)
       TagRegistry.registerTagProcessor(Wall.Tag, Wall::factory)
+      TagRegistry.registerTagProcessor(Stair.Tag, Stair::factory)
       TagRegistry.registerTagProcessor(Pipe.Tag, Pipe::factory)
       TagRegistry.registerTagProcessor(Luminaire.Tag, Luminaire::factory)
       TagRegistry.registerTagProcessor(Setpiece.Tag, Setpiece::factory)

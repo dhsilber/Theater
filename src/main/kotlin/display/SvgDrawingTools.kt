@@ -7,6 +7,9 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.lang.Float.max
 import java.lang.Float.min
+import display.DrawingOrderOperation.CIRCLE
+import display.DrawingOrderOperation.LINE
+import display.DrawingOrderOperation.RECTANGLE
 
 fun makeElementInDocument(svgDocument: SvgDocument, tagName: String): Element {
   val element = svgDocument
@@ -156,22 +159,31 @@ data class DrawingResults(
 fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>) {
   orders.map {
     when (it.operation) {
-      DrawingOrderOperation.CIRCLE -> {
+      CIRCLE -> {
         val result = drawCircle(
           svgDocument = svgDocument,
           x = it.data[0],
           y = it.data[1],
           r = it.data[2],
-//        color = it.color.compose,
         )
         result.element.addAttribute("stroke", it.color.svg)
       }
-      DrawingOrderOperation.LINE -> {
+      LINE -> {
         val result = drawLineWithResults(
           svgDocument = svgDocument,
-//        color = it.color.compose,
           start = VenuePoint(it.data[0], it.data[1], 0f),
           end = VenuePoint(it.data[2], it.data[3], 0f),
+        )
+        result.element.addAttribute("stroke", it.color.svg)
+      }
+      RECTANGLE -> {
+        val result = drawRectangle(
+          svgDocument = svgDocument,
+          x = it.data[0],
+          y = it.data[1],
+          width = it.data[2],
+          height = it.data[3],
+//          fillColor = it.color.svg,
         )
         result.element.addAttribute("stroke", it.color.svg)
       }
