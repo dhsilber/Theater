@@ -1,9 +1,10 @@
 package display
 
 import androidx.compose.ui.graphics.Color
-import display.DrawingOrder
 import entities.Proscenium
+import entities.Stair
 import entities.Venue
+import java.lang.Float.min
 
 fun Proscenium.drawPlan(): List<DrawingOrder> {
 
@@ -95,6 +96,49 @@ fun Proscenium.drawSection(): List<DrawingOrder> {
     listOf(originY, floorHeight - height, originY + depth, floorHeight - height),
     IndependentColor(Color.Gray, "grey")
   ))
+
+  return drawingOrders.toList()
+}
+
+fun Stair.drawPlan(): List<DrawingOrder> {
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  repeat(steps) { index ->
+    drawingOrders.add(DrawingOrder(
+      DrawingOrderOperation.RECTANGLE,
+      listOf(origin.x, origin.y + index * run, width, run),
+    ))
+  }
+
+  return drawingOrders.toList()
+}
+
+fun Stair.drawSection(): List<DrawingOrder> {
+  val venue = Venue.instances.first()
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  repeat(steps) { index ->
+    drawingOrders.add(DrawingOrder(
+      DrawingOrderOperation.LINE,
+      listOf(
+        venue.depth - origin.y - run * (index + 1),
+        venue.height - origin.z + rise * index,
+        venue.depth - origin.y - run * index,
+        venue.height - origin.z + rise * index
+      )
+    ))
+    drawingOrders.add(DrawingOrder(
+      DrawingOrderOperation.LINE,
+      listOf(
+        venue.depth - origin.y - run * (index + 1),
+        venue.height - origin.z + rise * index,
+        venue.depth - origin.y - run * (index + 1),
+        min( venue.height.toFloat(), venue.height - origin.z + rise *  (index + 1))
+      )
+    ))
+  }
 
   return drawingOrders.toList()
 }

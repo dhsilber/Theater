@@ -3,6 +3,7 @@ package tests
 import coordinates.VenuePoint
 import display.SvgBoundary
 import display.drawSvgPlan
+//import display.drawSvgPlan
 import entities.Floor
 import entities.Luminaire
 import entities.LuminaireDefinition

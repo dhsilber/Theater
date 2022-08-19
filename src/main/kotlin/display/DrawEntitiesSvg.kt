@@ -26,9 +26,10 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
 
   var boundary = SvgBoundary()
 
-  Proscenium.instances.map { it.drawSvgPlan(svgDocument) }
   Wall.instances.map { boundary += it.drawSvgPlan(svgDocument) }
   Floor.instances.map { it.drawSvgPlan(svgDocument) }
+  Stair.instances.map { svgDraw(svgDocument, it.drawPlan()) }
+  svgDraw(svgDocument, Proscenium.instances.first().drawPlan())
   Setpiece.instances.map { it.drawSvgPlan(svgDocument) }
   PipeBase.instances.map { it.drawSvgPlan(svgDocument) }
   Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
@@ -46,29 +47,9 @@ fun drawSvgSectionContent(svgDocument: SvgDocument) {
 
   Venue.instances.first().drawSvgSection(svgDocument)
   Floor.instances.map { it.drawSvgSection(svgDocument) }
-  Proscenium.instances.first().drawSvgSection(svgDocument)
+  svgDraw(svgDocument, Proscenium.instances.first().drawSection())
+  Stair.instances.map { svgDraw(svgDocument, it.drawSection()) }
 //  Wall.instances.map { it.drawSvgSection(svgDocument) }
-//  Floor.instances.map { it.drawSvgSection(svgDocument) }
-//
-//  for (instance in Proscenium.instances) {
-//    instance.drawSvgPlan(svgDocument)
-//  }
-//  for (instance in Wall.instances) {
-//    instance.drawSvgPlan(document, svgNamespace, parentElement)
-//  }
-//  for (instance in Floor.instances) {
-//    instance.drawSvgPlan(svgDocument)
-//  }
-//  for (instance in Setpiece.instances) {
-//    instance.drawSvgPlan(svgDocument)
-//  }
-//  for (instance in PipeBase.instances) {
-//    instance.drawSvgPlan(svgDocument)
-//  }
-//  for (instance in Pipe.instances) {
-//    instance.drawSvgPlan(svgDocument)
-//  }
-
 }
 
 fun LuminaireDefinition.drawSvgPlan(svgDocument: SvgDocument) =
@@ -76,16 +57,6 @@ fun LuminaireDefinition.drawSvgPlan(svgDocument: SvgDocument) =
 
 fun Venue.drawSvgSection(svgDocument: SvgDocument) {
   drawRectangle(svgDocument, 0f, 0f, depth.toFloat(), height.toFloat())
-}
-
-fun Proscenium.drawSvgPlan(svgDocument: SvgDocument) {
-  val drawingOrder = drawPlan()
-  svgDraw(svgDocument, drawingOrder)
-}
-
-fun Proscenium.drawSvgSection(svgDocument: SvgDocument) {
-  val drawingOrder = drawSection()
-  svgDraw(svgDocument, drawingOrder)
 }
 
 fun Wall.drawSvgPlan(svgDocument: SvgDocument): SvgBoundary {

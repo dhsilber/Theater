@@ -14,6 +14,7 @@ import entities.Proscenium
 import entities.Setpiece
 import entities.SetPlatform
 import entities.Shape
+import entities.Stair
 import entities.Venue
 import entities.Wall
 import io.mockk.clearAllMocks
@@ -45,6 +46,7 @@ class StartupTest {
       Venue.Tag,
       Wall.Tag,
       Floor.Tag,
+      Stair.Tag,
       Proscenium.Tag,
       Pipe.Tag,
       PipeBase.Tag,

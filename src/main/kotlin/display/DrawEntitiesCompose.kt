@@ -13,10 +13,6 @@ import entities.*
 fun drawContent(drawScope: DrawScope) {
   Grid.instance.draw(drawScope)
 
-  for (instance in Proscenium.instances) {
-    instance.draw(drawScope)
-  }
-
   for (instance in Wall.instances) {
 //          Text(instance.toString())
 //          val (x1, y1, x2, y2) =
@@ -28,6 +24,9 @@ fun drawContent(drawScope: DrawScope) {
 //          drawLine(Color.Magenta, PagePoint.offset(x10.toFloat(), y10.toFloat()), PagePoint.offset(x20.toFloat(), y20.toFloat()))
 
   }
+
+  Stair.instances.map { composeDraw(drawScope, it.drawPlan()) }
+  composeDraw(drawScope, Proscenium.instances.first().drawPlan())
 
   for (instance in PipeBase.instances) {
     instance.draw(drawScope)
@@ -41,11 +40,6 @@ fun drawContent(drawScope: DrawScope) {
   for (instance in Setpiece.instances) {
     instance.draw(drawScope)
   }
-}
-
-fun Proscenium.draw(drawScope: DrawScope) {
-  val drawingOrders = drawPlan()
-  composeDraw(drawScope, drawingOrders)
 }
 
 fun Wall.draw(drawScope: DrawScope) {

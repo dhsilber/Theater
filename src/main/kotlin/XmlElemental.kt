@@ -112,6 +112,14 @@ abstract class XmlElemental(val xmlElement: Element) {
     return VenuePoint(x, y, 0f)
   }
 
+  protected open fun getVenuePointAttribute(xName: String, yName: String, zName: String): VenuePoint {
+    val x = getFloatAttribute(xName)
+    val y = getFloatAttribute(yName)
+    val z = getFloatAttribute(zName)
+
+    return VenuePoint(x, y, z)
+  }
+
   protected open fun getStagePointAttribute(xName: String, yName: String): StagePoint {
     val x = getFloatAttribute(xName)
     val y = getFloatAttribute(yName)
