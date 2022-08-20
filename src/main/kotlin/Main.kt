@@ -107,20 +107,6 @@ fun load() {
 fun reload() {
   Startup.clear()
 
-  Venue.clear()
-  Wall.clear()
-  Floor.clear()
-  Proscenium.clear()
-  Pipe.clear()
-  LuminaireDefinition.clear()
-  Luminaire.clear()
-  Event.clear()
-  PipeBase.clear()
-  Setpiece.clear()
-  SetPlatform.clear()
-  Shape.clear()
-  Drawing.clear()
-
   title = ""
   PipeManager.clear()
   load()
