@@ -53,6 +53,15 @@ data class VenuePoint(
     val VenueDepth
       get() = LargeY - SmallY
 
+    fun clear() {
+      SmallX = Float.MAX_VALUE
+      SmallY = Float.MAX_VALUE
+      SmallZ = Float.MAX_VALUE
+
+      LargeX = Float.MIN_VALUE
+      LargeY = Float.MIN_VALUE
+      LargeZ = Float.MIN_VALUE
+    }
 
     override fun toString() =
       "Small: ($SmallX, $SmallY, $SmallZ)  Large: ($LargeX, $LargeY, $LargeZ)"

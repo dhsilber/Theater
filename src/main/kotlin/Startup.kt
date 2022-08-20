@@ -1,3 +1,4 @@
+import coordinates.VenuePoint
 import entities.Drawing
 import entities.Event
 import entities.Floor
@@ -56,6 +57,8 @@ class Startup {
       SetPlatform.clear()
       Shape.clear()
       Drawing.clear()
+
+      VenuePoint.clear()
     }
   }
 }
