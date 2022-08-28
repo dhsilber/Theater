@@ -25,17 +25,11 @@ fun drawContent(drawScope: DrawScope) {
 
   }
 
+  Floor.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Stair.instances.map { composeDraw(drawScope, it.drawPlan()) }
   composeDraw(drawScope, Proscenium.instances.first().drawPlan())
-
-  for (instance in PipeBase.instances) {
-    instance.draw(drawScope)
-  }
-
-  for (item in PipeManager.list) {
-    val instance = item.pipe
-    instance.draw(drawScope, item.current)
-  }
+  PipeBase.instances.map { composeDraw(drawScope, it.drawPlan()) }
+  PipeManager.list.map { composeDraw(drawScope,it.pipe.drawPlan()) }
 
   for (instance in Setpiece.instances) {
     instance.draw(drawScope)

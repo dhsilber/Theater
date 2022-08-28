@@ -2,14 +2,17 @@ package display
 
 import SvgDocument
 import coordinates.VenuePoint
+import display.DrawingOrderOperation.CIRCLE
+import display.DrawingOrderOperation.LINE
+import display.DrawingOrderOperation.RECTANGLE
+import display.DrawingOrderOperation.FILLED_RECTANGLE
+import display.DrawingOrderOperation.USE
+import entities.LuminaireDefinition
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.lang.Float.max
 import java.lang.Float.min
-import display.DrawingOrderOperation.CIRCLE
-import display.DrawingOrderOperation.LINE
-import display.DrawingOrderOperation.RECTANGLE
 
 fun makeElementInDocument(svgDocument: SvgDocument, tagName: String): Element {
   val element = svgDocument
@@ -37,7 +40,7 @@ fun drawCircle(
   svgElement.setAttribute("cy", y.toString())
   svgElement.setAttribute("r", r.toString())
   svgElement.setAttribute("stroke", "black")
-  svgElement.setAttribute("stroke-width", "2")
+  svgElement.setAttribute("stroke-width", "1")
   svgElement.setAttribute("fill", "none")
   svgDocument.root.appendChild(svgElement)
 
@@ -59,7 +62,7 @@ fun drawLine(
   svgElement.setAttribute("x2", x2.toString())
   svgElement.setAttribute("y2", y2.toString())
   svgElement.setAttribute("stroke", "black")
-  svgElement.setAttribute("stroke-width", "2")
+  svgElement.setAttribute("stroke-width", "1")
   parentElement.appendChild(svgElement)
 
   return svgElement
@@ -76,7 +79,7 @@ fun drawLine(
   svgElement.setAttribute("x2", end.x.toString())
   svgElement.setAttribute("y2", end.y.toString())
   svgElement.setAttribute("stroke", "black")
-  svgElement.setAttribute("stroke-width", "2")
+  svgElement.setAttribute("stroke-width", "1")
 
   return SvgBoundary(
     min(start.x, end.x),
@@ -97,7 +100,7 @@ fun drawLineWithResults(
   svgElement.setAttribute("x2", end.x.toString())
   svgElement.setAttribute("y2", end.y.toString())
   svgElement.setAttribute("stroke", "black")
-  svgElement.setAttribute("stroke-width", "2")
+  svgElement.setAttribute("stroke-width", "1")
 
   return DrawingResults(
     svgElement,
@@ -156,7 +159,9 @@ data class DrawingResults(
   val boundary: SvgBoundary,
 )
 
-fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>) {
+fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>): SvgBoundary {
+  var boundary = SvgBoundary()
+
   orders.map {
     when (it.operation) {
       CIRCLE -> {
@@ -183,10 +188,34 @@ fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>) {
           y = it.data[1],
           width = it.data[2],
           height = it.data[3],
-//          fillColor = it.color.svg,
         )
         result.element.addAttribute("stroke", it.color.svg)
+        boundary += result.boundary
+      }
+      FILLED_RECTANGLE -> {
+        val result = drawRectangle(
+          svgDocument = svgDocument,
+          x = it.data[0],
+          y = it.data[1],
+          width = it.data[2],
+          height = it.data[3],
+          fillColor = it.color.svg,
+          opacity = it.opacity.toString(),
+        )
+        result.element.addAttribute("stroke", it.color.svg)
+        boundary += result.boundary
+      }
+      USE -> {
+        val type = it.useType
+        val x = it.data[0]
+        val y = it.data[1]
+        drawUse(svgDocument, type, x, y)
+        val luminaireDefinition = LuminaireDefinition.findByName(type)
+        val size = luminaireDefinition?.length?.coerceAtLeast(luminaireDefinition.width) ?: 0f
+        boundary += SvgBoundary(x - size, y - size, x + size, y + size)
       }
     }
   }
+
+  return boundary
 }

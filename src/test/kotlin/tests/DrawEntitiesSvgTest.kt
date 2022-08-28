@@ -2,6 +2,7 @@ package tests
 
 import coordinates.VenuePoint
 import display.SvgBoundary
+import display.drawPlan
 import display.drawSvgPlan
 //import display.drawSvgPlan
 import entities.Floor
@@ -38,22 +39,6 @@ class DrawEntitiesSvgTest {
     xmlElement.setAttribute("type", "name")
     xmlElement.setAttribute("location", "1.6")
     return xmlElement
-  }
-
-  @Test
-  fun `Floor drawSvgPlan shows semi-opaque rectangle`() {
-    val floor = Floor.factory(FloorTest().minimalXml())
-    val svgDocument = startSvg()
-    val initialNodeCount = svgDocument.root.childNodes.length
-    assertThat(svgDocument.root.getElementsByTagName("rect").length).isEqualTo(0)
-
-    floor.drawSvgPlan(svgDocument)
-
-    assertThat(svgDocument.root.childNodes.length).isEqualTo(initialNodeCount + 1)
-    val circleElements = svgDocument.root.getElementsByTagName("rect")
-    assertThat(circleElements.length).isEqualTo(1)
-    val opacityAttribute = circleElements.item(0).attributes.getNamedItem("opacity")
-    assertThat(opacityAttribute.textContent.toFloat()).isEqualTo(0.1f)
   }
 
   @Test

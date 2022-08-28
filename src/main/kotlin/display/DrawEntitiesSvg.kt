@@ -27,12 +27,13 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   var boundary = SvgBoundary()
 
   Wall.instances.map { boundary += it.drawSvgPlan(svgDocument) }
-  Floor.instances.map { it.drawSvgPlan(svgDocument) }
-  Stair.instances.map { svgDraw(svgDocument, it.drawPlan()) }
-  svgDraw(svgDocument, Proscenium.instances.first().drawPlan())
+  Floor.instances.map { svgDraw(svgDocument, it.drawPlan()) }
+  Stair.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
+  boundary += svgDraw(svgDocument, Proscenium.instances.first().drawPlan())
+  PipeBase.instances.map { svgDraw(svgDocument, it.drawPlan()) }
+//  Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
+  Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
   Setpiece.instances.map { it.drawSvgPlan(svgDocument) }
-  PipeBase.instances.map { it.drawSvgPlan(svgDocument) }
-  Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
 
   svgDocument.root.setAttribute("height", (boundary.yMax + 50).toString())
 }
@@ -42,14 +43,17 @@ fun drawSvgSectionContent(svgDocument: SvgDocument) {
 //      see https://stackoverflow.com/questions/2724415/how-to-resize-an-svg-with-batik-and-display-it
 
   generateSvgSymbols(svgDocument)
+  var boundary = SvgBoundary()
 
 //  val (document, svgNamespace, generator, parentElement) = svgDocument
 
   Venue.instances.first().drawSvgSection(svgDocument)
-  Floor.instances.map { it.drawSvgSection(svgDocument) }
-  svgDraw(svgDocument, Proscenium.instances.first().drawSection())
-  Stair.instances.map { svgDraw(svgDocument, it.drawSection()) }
 //  Wall.instances.map { it.drawSvgSection(svgDocument) }
+  Floor.instances.map { svgDraw(svgDocument, it.drawSection()) }
+  Stair.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
+  boundary += svgDraw(svgDocument, Proscenium.instances.first().drawSection())
+  Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
+  Setpiece.instances.map { svgDraw(svgDocument, it.drawSection()) }
 }
 
 fun LuminaireDefinition.drawSvgPlan(svgDocument: SvgDocument) =
@@ -61,23 +65,6 @@ fun Venue.drawSvgSection(svgDocument: SvgDocument) {
 
 fun Wall.drawSvgPlan(svgDocument: SvgDocument): SvgBoundary {
   return drawLine(svgDocument, start, end)
-}
-
-fun Floor.drawSvgPlan(svgDocument: SvgDocument) {
-  drawRectangle(svgDocument, surface.x, surface.y, surface.width, surface.depth, "grey", "0.1")
-}
-
-fun Floor.drawSvgSection(svgDocument: SvgDocument) {
-  val venue = Venue.instances.first()
-  val height = venue.height - surface.z
-  val originY = venue.depth - surface.y - surface.depth
-
-  drawLine(svgDocument.document, svgDocument.namespace, svgDocument.root,
-    originY,
-    height,
-    originY + surface.depth,
-    height
-  )
 }
 
 fun PipeBase.drawSvgPlan(svgDocument: SvgDocument) {
@@ -139,10 +126,3 @@ fun Shape.drawSvgPlan(svgDocument: SvgDocument, placement: VenuePoint) {
   val originOffset = Point(placement.x - rectangle.width / 2, placement.y - rectangle.depth / 2, 0f)
   drawRectangle(svgDocument, originOffset.x, originOffset.y, rectangle.width, rectangle.depth)
 }
-
-data class Position(
-  val x: Float,
-  val y: Float,
-  val width: Float,
-  val height: Float,
-)

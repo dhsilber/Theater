@@ -21,7 +21,7 @@ class Proscenium(elementPassthrough: Element, parentEntity: XmlElemental?) : Xml
   companion object : CreateWithXmlElement<Proscenium>() {
     const val Tag = "proscenium"
 
-    fun factory(xmlElement: Element, parentEntity: XmlElemental?): Proscenium =
+    fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): Proscenium =
       create(xmlElement, parentEntity, ::Proscenium)
 
     fun inUse(): Boolean {
