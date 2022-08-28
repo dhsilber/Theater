@@ -25,7 +25,8 @@ class PipeSideBar {
   companion object {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun pipeLister(pipes: List<PipeManager>, selectPipe: (PipeManager) -> Unit) {
+    fun pipeLister(pipes: List<PipeManager>) {
+//    fun pipeLister(pipes: List<PipeManager>, selectPipe: (PipeManager) -> Unit) {
 
       Column(
         modifier = Modifier
@@ -40,7 +41,8 @@ class PipeSideBar {
             modifier = Modifier
               .fillMaxWidth(1f)
               .combinedClickable(
-                onClick = { selectPipe(pipeOrdering) },
+                onClick = { PipeManager.makeCurrent(pipeOrdering) },
+//                onClick = { selectPipe(pipeOrdering) },
               ),
 
             ) {

@@ -1,0 +1,71 @@
+package tests.display
+
+import androidx.compose.ui.graphics.Color
+import display.DrawingOrderOperation
+import display.IndependentColor
+import display.drawPlan
+import display.drawSection
+import entities.Floor
+import entities.Proscenium
+import entities.Venue
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.tuple
+import org.assertj.core.api.SoftAssertions
+import kotlin.test.Test
+import tests.entities.FloorTest
+import tests.entities.ProsceniumTest
+import tests.entities.VenueTest
+
+class EntitiesDrawTest {
+
+  @Test
+  fun `Proscenium drawPlan orders`() {
+    val proscenium = Proscenium.factory(ProsceniumTest().minimalXml())
+
+    val orders = proscenium.drawPlan()
+
+    assertThat(orders).hasSize(6)
+    assertThat(orders).extracting("operation", "entity")
+      .containsOnly(
+        tuple(DrawingOrderOperation.LINE, proscenium),
+      )
+    // Colors not tested
+  }
+
+  @Test
+  fun `Floor drawPlan orders filled rectangle`() {
+    val floor = Floor.factory(FloorTest().minimalXml())
+
+    val orders = floor.drawPlan()
+
+    assertThat(orders).hasSize(1)
+    val order = orders.first()
+    SoftAssertions().apply {
+      assertThat(order.operation).isEqualTo(DrawingOrderOperation.FILLED_RECTANGLE)
+      assertThat(order.entity).isInstanceOf(Floor::class.java)
+      assertThat(order.color).isEqualTo(IndependentColor(Color.Gray, "grey"))
+      assertThat(order.opacity).isEqualTo(0.1F)
+    }.assertAll()
+  }
+
+  @Test
+  fun `Floor drawSection orders`() {
+    Venue.factory(VenueTest().minimalXml())
+    val floor = Floor.factory(FloorTest().minimalXml())
+
+    val orders = floor.drawSection()
+
+    assertThat(orders).hasSize(3)
+    assertThat(orders).extracting("operation", "entity")
+      .containsExactlyInAnyOrder(
+        tuple(DrawingOrderOperation.LINE, floor),
+        tuple(DrawingOrderOperation.LINE, floor),
+        tuple(DrawingOrderOperation.FILLED_RECTANGLE, floor)
+      )
+    assertThat(orders).extracting("operation", "entity", "color", "opacity")
+      .contains(
+        tuple(DrawingOrderOperation.FILLED_RECTANGLE, floor, IndependentColor(Color.Gray, "grey"), 0.1f)
+
+      )
+  }
+}

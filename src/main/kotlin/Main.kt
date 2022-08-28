@@ -82,7 +82,8 @@ fun App() {
         x, y, text,
       )
       if (pipeDisplay) {
-        PipeSideBar.pipeLister(PipeManager.list, PipeManager::makeCurrent)
+        PipeSideBar.pipeLister(PipeManager.list)
+//        PipeSideBar.pipeLister(PipeManager.list, PipeManager::makeCurrent)
       }
 
     }

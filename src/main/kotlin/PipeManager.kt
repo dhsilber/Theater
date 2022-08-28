@@ -6,6 +6,7 @@ class PipeManager(
 ) {
 
   companion object {
+    var current = 0
     var list: List<PipeManager> = listOf()
     var currentLuminaires: List<Hangable> = listOf()
 
@@ -17,9 +18,10 @@ class PipeManager(
       list = mutableList.toList()
     }
 
-    fun makeCurrent(entry: PipeManager): Unit {
+    fun makeCurrent(entry: PipeManager) {
       println("Making ${entry.pipe.id} be current")
       val index = list.indexOf(entry)
+      current = index
       buildList(index)
       currentLuminaires = entry.pipe.dependents.map { it.hangable }.toList()
     }

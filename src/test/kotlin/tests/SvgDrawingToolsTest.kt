@@ -28,7 +28,7 @@ class SvgDrawingToolsTest {
       assertThat(attributes.getNamedItem("cy").textContent.toFloat()).isEqualTo(2f)
       assertThat(attributes.getNamedItem("r").textContent.toFloat()).isEqualTo(3f)
       assertThat(attributes.getNamedItem("stroke").textContent).isEqualTo("black")
-      assertThat(attributes.getNamedItem("stroke-width").textContent).isEqualTo("2")
+      assertThat(attributes.getNamedItem("stroke-width").textContent).isEqualTo("1")
       assertThat(attributes.getNamedItem("fill").textContent).isEqualTo("none")
     }.assertAll()
   }
