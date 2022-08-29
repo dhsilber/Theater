@@ -358,6 +358,14 @@ fun Shape.drawSection(placement: VenuePoint, platformPlacement: VenuePoint): Lis
   val height = venue.height - platformPlacement.z
   val frontY = venue.depth - platformPlacement.y - rectangle.depth / 2
   val rearY = venue.depth - platformPlacement.y + rectangle.depth / 2
+  val floorLevelAtplatformFront = Floor.levelAt(
+    platformPlacement.x - rectangle.width / 2,
+    platformPlacement.y - rectangle.depth / 2
+  )
+  val floorLevelAtplatformRear= Floor.levelAt(
+    platformPlacement.x - rectangle.width / 2,
+    platformPlacement.y + rectangle.depth / 2
+  )
   val floor = venue.height - placement.z
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
@@ -370,12 +378,12 @@ fun Shape.drawSection(placement: VenuePoint, platformPlacement: VenuePoint): Lis
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(frontY, height, frontY, floor)
+    data = listOf(frontY, height, frontY, venue.height - floorLevelAtplatformFront)
   ))
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(rearY, height, rearY, floor)
+    data = listOf(rearY, height, rearY, venue.height - floorLevelAtplatformRear)
   ))
 
   return drawingOrders.toList()
