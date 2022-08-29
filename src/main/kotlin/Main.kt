@@ -53,7 +53,7 @@ fun App() {
   MaterialTheme {
 
     var drawingWalls by remember { mutableStateOf(false) }
-    var pipeDisplay by remember { mutableStateOf(true) }
+    var pipeDisplay by remember { mutableStateOf(false) }
 
     Row(
       Modifier

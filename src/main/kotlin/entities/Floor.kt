@@ -14,14 +14,19 @@ class Floor(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEleme
     fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): Floor =
       Floor.create(xmlElement, parentEntity, ::Floor)
 
-//    fun queryById(id: String): Floor? {
-//      Floor.instances.forEach {
-//        if (id == it.id) {
-//          return it
-//        }
-//      }
-//      return null
-//    }
+    fun levelAt(x: Float, y: Float): Float {
+      for (section in instances) {
+        val plane = section.surface
+        if (plane.x < x
+          && x < plane.x + plane.width
+          && plane.y < y
+          && y < plane.y + plane.depth
+        ) {
+          return plane.z
+        }
+      }
+      return 0f
+    }
 
   }
 }
