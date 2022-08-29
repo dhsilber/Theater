@@ -29,6 +29,7 @@ fun composeDraw(drawScope: DrawScope, orders: List<DrawingOrder>) {
 
 private fun highlightIfCurrentPipe(drawingOrder: DrawingOrder) =
   if (drawingOrder.entity is Pipe
+    && PipeManager.display
     && PipeManager.list[PipeManager.current].pipe == drawingOrder.entity
   ) {
     Color.Magenta

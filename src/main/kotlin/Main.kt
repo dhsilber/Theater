@@ -70,7 +70,10 @@ fun App() {
       )
       {
         WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
-        PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = { pipeDisplay = !pipeDisplay })
+        PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = {
+          pipeDisplay = !pipeDisplay
+          PipeManager.display = pipeDisplay
+        })
         Button(onClick = { Svg.writePlanView() }) {
           Text("Write SVG")
         }
@@ -79,7 +82,7 @@ fun App() {
       Display.display(
         drawingWalls,
         share = pipeDisplay,
-        x, y, text,
+        x, y,
       )
       if (pipeDisplay) {
         PipeSideBar.pipeLister(PipeManager.list)
