@@ -18,7 +18,11 @@ class Display {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
-      drawingWalls: Boolean, share: Boolean, x: Int, y: Int, text: String
+      drawingWalls: Boolean,
+      share: Boolean,
+      x: Int,
+      y: Int,
+//      text: String
 //      resetter: (text: String) -> Unit
     ) {
       var x10 by remember { mutableStateOf(0) }

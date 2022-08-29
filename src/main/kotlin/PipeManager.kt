@@ -9,6 +9,7 @@ class PipeManager(
     var current = 0
     var list: List<PipeManager> = listOf()
     var currentLuminaires: List<Hangable> = listOf()
+    var display: Boolean = true
 
     fun buildList(current: Int) {
       var mutableList: MutableList<PipeManager> = mutableListOf()
