@@ -29,7 +29,7 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   Wall.instances.map { boundary += it.drawSvgPlan(svgDocument) }
   Floor.instances.map { svgDraw(svgDocument, it.drawPlan()) }
   Stair.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
-  boundary += svgDraw(svgDocument, Proscenium.instances.first().drawPlan())
+  Proscenium.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
   PipeBase.instances.map { svgDraw(svgDocument, it.drawPlan()) }
 //  Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
@@ -51,7 +51,8 @@ fun drawSvgSectionContent(svgDocument: SvgDocument) {
 //  Wall.instances.map { it.drawSvgSection(svgDocument) }
   Floor.instances.map { svgDraw(svgDocument, it.drawSection()) }
   Stair.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
-  boundary += svgDraw(svgDocument, Proscenium.instances.first().drawSection())
+  Proscenium.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
+  PipeBase.instances.map { svgDraw(svgDocument, it.drawSection()) }
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
   Setpiece.instances.map { svgDraw(svgDocument, it.drawSection()) }
 }

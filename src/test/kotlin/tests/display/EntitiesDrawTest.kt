@@ -6,6 +6,8 @@ import display.IndependentColor
 import display.drawPlan
 import display.drawSection
 import entities.Floor
+import entities.Pipe
+import entities.PipeBase
 import entities.Proscenium
 import entities.Venue
 import org.assertj.core.api.Assertions.assertThat
@@ -13,6 +15,8 @@ import org.assertj.core.api.Assertions.tuple
 import org.assertj.core.api.SoftAssertions
 import kotlin.test.Test
 import tests.entities.FloorTest
+import tests.entities.PipeBaseTest
+import tests.entities.PipeTest
 import tests.entities.ProsceniumTest
 import tests.entities.VenueTest
 
@@ -67,5 +71,65 @@ class EntitiesDrawTest {
         tuple(DrawingOrderOperation.FILLED_RECTANGLE, floor, IndependentColor(Color.Gray, "grey"), 0.1f)
 
       )
+  }
+
+  @Test
+  fun `PipeBase drawPlan orders`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml())
+
+    val orders = pipeBase.drawPlan()
+
+    assertThat(orders).hasSize(1)
+    val order = orders.first()
+    SoftAssertions().apply {
+      assertThat(order.operation).isEqualTo(DrawingOrderOperation.CIRCLE)
+      assertThat(order.entity).isInstanceOf(PipeBase::class.java)
+    }.assertAll()
+  }
+
+  @Test
+  fun `PipeBase drawSection orders`() {
+    Venue.factory(VenueTest().minimalXml())
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml())
+
+    val orders = pipeBase.drawSection()
+
+    assertThat(orders).hasSize(1)
+    val order = orders.first()
+    SoftAssertions().apply {
+      assertThat(order.operation).isEqualTo(DrawingOrderOperation.RECTANGLE)
+      assertThat(order.entity).isInstanceOf(PipeBase::class.java)
+    }.assertAll()
+  }
+
+  @Test
+  fun `Pipe (vertical) drawPlan orders`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val pipe = Pipe.factory(PipeTest().minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val orders = pipe.drawPlan()
+
+    assertThat(orders).hasSize(1)
+    val order = orders.first()
+    SoftAssertions().apply {
+      assertThat(order.operation).isEqualTo(DrawingOrderOperation.CIRCLE)
+      assertThat(order.entity).isInstanceOf(Pipe::class.java)
+    }.assertAll()
+  }
+
+  @Test
+  fun `Pipe (vertical) drawSection orders`() {
+    Venue.factory(VenueTest().minimalXml())
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val pipe = Pipe.factory(PipeTest().minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val orders = pipe.drawSection()
+
+    assertThat(orders).hasSize(1)
+    val order = orders.first()
+    SoftAssertions().apply {
+      assertThat(order.operation).isEqualTo(DrawingOrderOperation.RECTANGLE)
+      assertThat(order.entity).isInstanceOf(Pipe::class.java)
+    }.assertAll()
   }
 }

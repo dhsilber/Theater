@@ -228,6 +228,25 @@ fun PipeBase.drawPlan(): List<DrawingOrder> {
   return drawingOrders.toList()
 }
 
+fun PipeBase.drawSection(): List<DrawingOrder> {
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+  val venue = Venue.instances.first()
+  val place = origin.venue
+
+  drawingOrders.add(DrawingOrder(
+    operation = RECTANGLE,
+    entity = this,
+    data = listOf(
+      venue.depth - place.y - PipeBase.Radius,
+      venue.height - place.z - PipeBase.Height,
+      PipeBase.Radius * 2,
+      PipeBase.Height
+    )
+  ))
+
+  return drawingOrders.toList()
+}
+
 fun Pipe.drawPlan(): List<DrawingOrder> {
   return when (vertical) {
     true -> drawPlanVertical()
@@ -362,7 +381,7 @@ fun Shape.drawSection(placement: VenuePoint, platformPlacement: VenuePoint): Lis
     platformPlacement.x - rectangle.width / 2,
     platformPlacement.y - rectangle.depth / 2
   )
-  val floorLevelAtplatformRear= Floor.levelAt(
+  val floorLevelAtplatformRear = Floor.levelAt(
     platformPlacement.x - rectangle.width / 2,
     platformPlacement.y + rectangle.depth / 2
   )
