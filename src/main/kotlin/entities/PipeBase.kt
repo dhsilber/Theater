@@ -18,6 +18,7 @@ class PipeBase(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEl
   companion object : CreateWithXmlElement<PipeBase>() {
     const val Tag = "pipebase"
     const val Radius = 18f
+    const val Height = 3f
 
     fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): PipeBase =
       PipeBase.create(xmlElement, parentEntity, ::PipeBase)

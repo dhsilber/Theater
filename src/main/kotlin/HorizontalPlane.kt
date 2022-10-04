@@ -4,6 +4,4 @@ data class HorizontalPlane(
   val y: Float,
   val width: Float,
   val depth: Float
-) {
-
-}
+)
