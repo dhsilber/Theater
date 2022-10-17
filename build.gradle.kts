@@ -3,13 +3,16 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.0"
-//    kotlin("jvm") version "1.6.20"
+//    kotlin("jvm") version "1.7.20" // does not work with compose 1.2.0-beta02
+    kotlin("jvm") version "1.7.10" // compose 1.2.0-beta02
+//    kotlin("jvm") version "1.7.0"
+//    kotlin("jvm") version "1.6.20" // compose 1.1.1
     // 1.6.20
     // 1.6.21
     // 1.7.0
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
-//    id("org.jetbrains.compose") version "1.1.1"
+    id("org.jetbrains.compose") version "1.2.0-beta02" // kotlin 1.7.10
+//    id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
+//    id("org.jetbrains.compose") version "1.1.1" // kotlin 1.6.20
     // 1.1.1 Causes button tests to fail.
 }
 

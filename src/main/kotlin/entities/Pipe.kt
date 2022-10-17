@@ -22,13 +22,20 @@ class Pipe(elementPassthrough: Element, val parentEntity: XmlElemental?) :
     else -> -1f
   }
 
+  val offset = getOffsetAttribute(parentEntity)
+  val offsety = getOffsetYAttribute(parentEntity)
+
   val origin: StagePoint = when (parentEntity) {
     is Pipe -> StagePoint(
-      parentEntity.origin.x - length / 2f,
+      parentEntity.origin.x - length / 2f + offset,
       parentEntity.origin.y,
       parentEntity.origin.z + location
     )
-    is PipeBase -> StagePoint(parentEntity.origin.x, parentEntity.origin.y, parentEntity.origin.z + 2f)
+    is PipeBase -> StagePoint(
+      parentEntity.origin.x,
+      parentEntity.origin.y,
+      parentEntity.origin.z + 2f
+    )
     else -> getStagePointAttribute("x", "y", "z")
   }
 

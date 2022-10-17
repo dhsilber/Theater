@@ -74,6 +74,25 @@ class EntitiesDrawTest {
   }
 
   @Test
+  fun `Floor drawSection orders for slope`() {
+    Venue.factory(VenueTest().minimalXml())
+    val floor = Floor.factory(FloorTest().minimalSlopedXml())
+
+    val orders = floor.drawSection()
+
+    assertThat(orders).hasSize(2)
+    assertThat(orders).extracting("operation", "entity")
+      .containsExactlyInAnyOrder(
+        tuple(DrawingOrderOperation.LINE, floor),
+        tuple(DrawingOrderOperation.FILLED_RIGHT_TRIANGLE, floor)
+      )
+    assertThat(orders).extracting("operation", "entity", "color", "opacity")
+      .contains(
+        tuple(DrawingOrderOperation.FILLED_RIGHT_TRIANGLE, floor, IndependentColor(Color.Gray, "grey"), 0.1f)
+      )
+  }
+
+  @Test
   fun `PipeBase drawPlan orders`() {
     val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml())
 

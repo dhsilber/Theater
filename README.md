@@ -10,6 +10,16 @@ Show-specific elements can include temporary lighting positions, sets, etc
 
 Pipes and Luminaires can be specified as permanent installations in a venue or as transient setups for a show.
 
+# Installation
+
+See release at ________________ on github for a MacOS package
+
+For other platforms, you'll have to build your own. I would welcome prebuilt packages to include with the releases.
+
+1. 
+
+# Usage
+
 **`TheaterDesign`** is in the process of being reworked to include an interactive element so that XML
 files do not have to be crafted by hand.
 It is not yet there - right now, one would still need to write one's own XML.

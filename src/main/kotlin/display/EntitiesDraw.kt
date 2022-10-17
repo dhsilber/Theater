@@ -1,5 +1,6 @@
 package display
 
+import androidx.compose.animation.core.exponentialDecay
 import display.DrawingOrderOperation.CIRCLE
 import display.DrawingOrderOperation.LINE
 import display.DrawingOrderOperation.RECTANGLE
@@ -9,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import coordinates.Point
 import coordinates.StagePoint
 import coordinates.VenuePoint
+import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
 import entities.Floor
 import entities.Luminaire
 import entities.Pipe
@@ -142,6 +144,46 @@ fun Floor.drawPlan(): List<DrawingOrder> {
 }
 
 fun Floor.drawSection(): List<DrawingOrder> {
+  return when (surface.isSloped()) {
+    true -> drawSectionSloped()
+    else -> drawSectionLevel()
+  }
+}
+
+fun Floor.drawSectionSloped(): List<DrawingOrder> {
+  val venue = Venue.instances.first()
+  val heightAtFloorOrigin = venue.height - surface.z
+  val heightAtYPlusDepth = venue.height - surface.zDepth
+  val originY = venue.depth - surface.y - surface.depth
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(
+      originY, heightAtYPlusDepth,
+      originY + surface.depth, heightAtFloorOrigin
+    ),
+    explanation = "sloped floor"
+  ))
+  drawingOrders.add(DrawingOrder(
+    FILLED_RIGHT_TRIANGLE,
+    entity = this,
+    data = listOf(
+      originY, heightAtFloorOrigin,
+      originY, heightAtYPlusDepth,
+      originY + surface.depth, heightAtFloorOrigin
+    ),
+    color = IndependentColor(Color.Gray, "grey"),
+    opacity = 0.1F,
+    explanation = "sloped floor"
+  ))
+
+  return drawingOrders.toList()
+}
+
+fun Floor.drawSectionLevel(): List<DrawingOrder> {
   val venue = Venue.instances.first()
   val height = venue.height - surface.z
   val originY = venue.depth - surface.y - surface.depth
@@ -151,12 +193,14 @@ fun Floor.drawSection(): List<DrawingOrder> {
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(originY, height, originY + surface.depth, height)
+    data = listOf(originY, height, originY + surface.depth, height),
+    explanation = "floor",
   ))
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(originY, height, originY, venue.height.toFloat())
+    data = listOf(originY, height, originY, venue.height.toFloat()),
+    explanation = "floor",
   ))
   drawingOrders.add(DrawingOrder(
     FILLED_RECTANGLE,
@@ -164,6 +208,7 @@ fun Floor.drawSection(): List<DrawingOrder> {
     data = listOf(originY, height, surface.depth, surface.z),
     color = IndependentColor(Color.Gray, "grey"),
     opacity = 0.1F,
+    explanation = "floor",
   ))
 
   return drawingOrders.toList()
@@ -269,7 +314,7 @@ fun Pipe.drawPlanVertical(): List<DrawingOrder> {
 
 fun Pipe.drawPlanHorizontal(): List<DrawingOrder> {
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
-  val place = origin.venue
+  val place = origin.venue.copy(y = origin.venue.y + offsety)
 
   drawingOrders.add(DrawingOrder(
     operation = RECTANGLE,
@@ -278,14 +323,23 @@ fun Pipe.drawPlanHorizontal(): List<DrawingOrder> {
   ))
   val offsetToCenter = length / 2
   dependents.forEach {
-    val location = place.x + it.location + offsetToCenter
-    val luminaire = it.hangable as Luminaire
-    drawingOrders.add(DrawingOrder(
-      operation = USE,
-      entity = luminaire,
-      data = listOf(location, place.y),
-      useType = luminaire.type,
-    ))
+    val location = place.x + it.location + offsetToCenter - offset
+    if (it.hangable is Luminaire) {
+      val luminaire = it.hangable
+      drawingOrders.add(DrawingOrder(
+        operation = USE,
+        entity = luminaire,
+        data = listOf(location, place.y),
+        useType = luminaire.type,
+      ))
+    } else {
+      val pipe = it.hangable as Pipe
+      drawingOrders.add(DrawingOrder(
+        operation = CIRCLE,
+        entity = pipe,
+        data = listOf(location, place.y, 2f),
+      ))
+    }
   }
   return drawingOrders.toList()
 }
@@ -315,7 +369,7 @@ fun Pipe.drawSectionVertical(): List<DrawingOrder> {
   dependents.forEach {
     when (it.hangable) {
       is Luminaire -> {
-        val luminaire = it.hangable as Luminaire
+        val luminaire = it.hangable
         drawingOrders.add(DrawingOrder(
           operation = USE,
           entity = luminaire,
@@ -348,16 +402,22 @@ fun Pipe.drawSectionHorizontal(): List<DrawingOrder> {
     )
   ))
   dependents.forEach {
-    val luminaire = it.hangable as Luminaire
-    drawingOrders.add(DrawingOrder(
-      operation = USE,
-      entity = luminaire,
-      data = listOf(
-        venue.depth - place.y,
-        venue.height - place.z,
-      ),
-      useType = luminaire.type,
-    ))
+    when (it.hangable) {
+      is Luminaire -> {
+        val luminaire = it.hangable
+        drawingOrders.add(DrawingOrder(
+          operation = USE,
+          entity = luminaire,
+          data = listOf(
+            venue.depth - place.y,
+            venue.height - place.z,
+          ),
+          useType = luminaire.type,
+          useOrientation = 90F,
+        ))
+      }
+      is Pipe -> {}
+    }
   }
 
   return drawingOrders.toList()

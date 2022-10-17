@@ -9,5 +9,7 @@ data class DrawingOrder(
   val data: List<Float>,
   val useType: String = "",
   val color: IndependentColor = IndependentColor(Color.Black, "black"),
-  val opacity: Float = 0F
+  val opacity: Float = 0F,
+  val explanation: String = "",
+  val useOrientation: Float = 0F,
 )
