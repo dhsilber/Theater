@@ -1,7 +1,7 @@
 package tests.entities
 
 import CreateWithXmlElement
-import HorizontalPlane
+import Surface
 import Xml
 import XmlElemental
 import Startup
@@ -21,11 +21,22 @@ internal class FloorTest {
 
   fun minimalXml(): IIOMetadataNode {
     val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("z", "27")
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
+    xmlElement.setAttribute("z", "27")
     xmlElement.setAttribute("width", "202")
     xmlElement.setAttribute("depth", "101")
+    return xmlElement
+  }
+
+  fun minimalSlopedXml(): IIOMetadataNode {
+    val xmlElement = IIOMetadataNode()
+    xmlElement.setAttribute("x", "0.1")
+    xmlElement.setAttribute("y", "0.2")
+    xmlElement.setAttribute("z", "27")
+    xmlElement.setAttribute("width", "202")
+    xmlElement.setAttribute("depth", "101")
+    xmlElement.setAttribute("z-depth", "2")
     return xmlElement
   }
 
@@ -74,8 +85,32 @@ internal class FloorTest {
     val instance = Floor.factory(minimalXml(), null)
 
     SoftAssertions().apply {
-      assertThat(instance.surface).isEqualTo(HorizontalPlane(27f, 0.1F, 0.2f, 202f, 101f))
+      assertThat(instance.surface).isEqualTo(Surface(
+        x = 0.1F,
+        y = 0.2f,
+        z = 27f,
+        width = 202f,
+        depth = 101f,
+      ))
       assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `has required sloped attributes`() {
+    val instance = Floor.factory(minimalSlopedXml(), null)
+
+    SoftAssertions().apply {
+      assertThat(instance.surface).isEqualTo(Surface(
+        x = 0.1F,
+        y = 0.2f,
+        z = 27f,
+        zDepth = 2f,
+        width = 202f,
+        depth = 101f
+      ))
+      assertThat(instance.hasError).isFalse
+      assertThat(instance.errors).containsExactly()
     }.assertAll()
   }
 
@@ -88,9 +123,9 @@ internal class FloorTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required z attribute",
         "Missing required x attribute",
         "Missing required y attribute",
+        "Missing required z attribute",
         "Missing required width attribute",
         "Missing required depth attribute",
       )
@@ -100,9 +135,9 @@ internal class FloorTest {
   @Test
   fun `notes error for badly specified attributes`() {
     val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("z", "zee")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
+    xmlElement.setAttribute("z", "zee")
     xmlElement.setAttribute("width", "bogus.3")
     xmlElement.setAttribute("depth", "bogus.4")
 
@@ -111,9 +146,9 @@ internal class FloorTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from z attribute",
         "Unable to read floating-point number from x attribute",
         "Unable to read floating-point number from y attribute",
+        "Unable to read floating-point number from z attribute",
         "Unable to read floating-point number from width attribute",
         "Unable to read floating-point number from depth attribute",
       )

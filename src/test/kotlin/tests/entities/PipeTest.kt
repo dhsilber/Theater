@@ -17,6 +17,7 @@ import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.assertj.core.api.SoftAssertions
 import org.w3c.dom.Element
 import javax.imageio.metadata.IIOMetadataNode
@@ -142,6 +143,21 @@ class PipeTest {
   }
 
   @Test
+  fun `registers optional attributes when vertical pipe is parent`() {
+    val xmlElement = minimalXmlWithVerticalPipeParent()
+    xmlElement.setAttribute("offsety", "30")
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+
+    val instance = Pipe.factory(xmlElement, verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.offsety).isEqualTo(30f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
   fun `notes error for missing required attributes when there is no parent`() {
     val xmlElement = IIOMetadataNode()
 
@@ -192,6 +208,41 @@ class PipeTest {
   }
 
   @Test
+  fun `repositions origin due to offset attribute when vertical pipe is parent`() {
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+    val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
+    val baseOrigin = pipeBase.origin
+    val expectedOrigin = StagePoint(baseOrigin.x - 11.25f + 3f, baseOrigin.y, baseOrigin.z + 40f)
+    val xmlElement = minimalXmlWithVerticalPipeParent()
+    xmlElement.setAttribute("offset", "3")
+
+    val instance = Pipe.factory(xmlElement, verticalPipe)
+
+    SoftAssertions().apply {
+      assertThat(instance.origin).isEqualTo(expectedOrigin)
+      assertThat(instance.length).isEqualTo(22.5f)
+      assertThat(instance.hasError).isFalse
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for attributes when vertical pipe is not parent`() {
+    val xmlElement = minimalXmlWithNoParent()
+    xmlElement.setAttribute("offset", "3")
+    xmlElement.setAttribute("offsety", "30")
+
+    val instance = Pipe.factory(xmlElement, null)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsOnly(
+        "Without a vertical pipe parent, the offset attribute is not allowed",
+        "Unable to offset drawing of pipe when it is not a child of a vertical pipe",
+      )
+    }.assertAll()
+  }
+
+  @Test
   fun `notes error for badly specified attributes`() {
     val xmlElement = IIOMetadataNode()
     xmlElement.setAttribute("id", "name")
@@ -209,6 +260,24 @@ class PipeTest {
         "Unable to read floating-point number from y attribute",
         "Unable to read floating-point number from z attribute",
         "Unable to read positive floating-point number from length attribute",
+      )
+    }.assertAll()
+  }
+
+  @Test
+  fun `notes error for badly specified attributes when vertical pipe is parent`() {
+    val xmlElement = minimalXmlWithVerticalPipeParent()
+    xmlElement.setAttribute("offset", "three")
+    xmlElement.setAttribute("offsety", "thirty")
+    val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
+
+    val instance = Pipe.factory(xmlElement, pipeBase)
+
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsOnly(
+        "Unable to read optional floating-point number from offset attribute",
+        "Unable to read optional floating-point number from offsety attribute",
       )
     }.assertAll()
   }

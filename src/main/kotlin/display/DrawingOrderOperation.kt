@@ -6,4 +6,5 @@ enum class DrawingOrderOperation {
   RECTANGLE, // Rectangle data is: x, y, width, height
   FILLED_RECTANGLE, // Rectangle data is: x, y, width, height
   USE, // Use data is: x, y. useType must be provided.
+  FILLED_RIGHT_TRIANGLE, // Triangle data is: three sets of x,y coordinates
 }

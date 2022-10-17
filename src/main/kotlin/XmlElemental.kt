@@ -2,6 +2,7 @@ import com.mobiletheatertech.plot.exception.InvalidXMLException
 import coordinates.Point
 import coordinates.StagePoint
 import coordinates.VenuePoint
+import entities.Pipe
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 
@@ -95,13 +96,15 @@ abstract class XmlElemental(val xmlElement: Element) {
     return value
   }
 
-  fun getHorizontalPlane(): HorizontalPlane {
-    return HorizontalPlane(
-      getFloatAttribute("z"),
-      getFloatAttribute("x"),
-      getFloatAttribute("y"),
-      getFloatAttribute("width"),
-      getFloatAttribute("depth")
+  fun getPlane(): Surface {
+    return Surface(
+      x = getFloatAttribute("x"),
+      y = getFloatAttribute("y"),
+      z = getFloatAttribute("z"),
+      zDepth = getOptionalFloatAttribute("z-depth"),
+      // "Height at y + depth"
+      width = getFloatAttribute("width"),
+      depth = getFloatAttribute("depth"),
     )
   }
 
@@ -159,7 +162,7 @@ abstract class XmlElemental(val xmlElement: Element) {
 
   protected open fun getOptionalFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
-    var value = 0.0f
+    var value = Float.MIN_VALUE
     try {
       if (valueString.isNotEmpty()) {
         value = valueString.toFloat()
@@ -237,6 +240,22 @@ abstract class XmlElemental(val xmlElement: Element) {
     } else {
       throw InvalidXMLException("luminaire-definition", "svg", "Expected luminaire-definition to have an svg child")
     }
+  }
+
+  fun getOffsetAttribute(parentEntity: XmlElemental?): Float {
+    val offset = getOptionalFloatAttribute("offset")
+    if (Float.MIN_VALUE != offset && parentEntity !is Pipe) {
+      errors.add("Without a vertical pipe parent, the offset attribute is not allowed")
+    }
+    return offset
+  }
+
+  fun getOffsetYAttribute(parentEntity: XmlElemental?): Float {
+    val offset = getOptionalFloatAttribute("offsety")
+    if (Float.MIN_VALUE != offset && parentEntity !is Pipe) {
+      errors.add("Unable to offset drawing of pipe when it is not a child of a vertical pipe")
+    }
+    return offset
   }
 
 //  protected open fun getDoubleAttribute(name: String): Double {

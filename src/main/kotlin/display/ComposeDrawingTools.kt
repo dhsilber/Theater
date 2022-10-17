@@ -9,6 +9,7 @@ import display.DrawingOrderOperation.CIRCLE
 import display.DrawingOrderOperation.LINE
 import display.DrawingOrderOperation.RECTANGLE
 import display.DrawingOrderOperation.FILLED_RECTANGLE
+import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
 import display.DrawingOrderOperation.USE
 import entities.LuminaireDefinition
 import entities.Pipe
@@ -23,6 +24,7 @@ fun composeDraw(drawScope: DrawScope, orders: List<DrawingOrder>) {
       RECTANGLE -> drawRectangle(drawScope, it, color)
       FILLED_RECTANGLE -> drawFilledRectangle(drawScope, it, color)
       USE -> drawUse(drawScope, it)
+      FILLED_RIGHT_TRIANGLE -> {}
     }
   }
 }
