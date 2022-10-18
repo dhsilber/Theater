@@ -4,6 +4,7 @@ import display.SvgBoundary
 import display.addAttribute
 import display.drawRectangle
 import display.drawSvgPlan
+import display.drawUse
 import display.generateSvgSymbols
 import entities.Drawing
 import entities.Event
@@ -24,6 +25,7 @@ import entities.Venue
 import j2html.TagCreator.body
 import j2html.TagCreator.div
 import j2html.TagCreator.each
+import j2html.TagCreator.filter
 import j2html.TagCreator.h1
 import j2html.TagCreator.h2
 import j2html.TagCreator.head
@@ -35,9 +37,11 @@ import j2html.TagCreator.table
 import j2html.TagCreator.td
 import j2html.TagCreator.tr
 import j2html.tags.DomContent
+import j2html.tags.DomContentJoiner
 import j2html.tags.specialized.H2Tag
 import j2html.tags.specialized.SpanTag
 import java.io.File
+import java.lang.Float.max
 
 class Html {
   companion object {
@@ -69,6 +73,7 @@ fun Drawing.writePipeDetailDrawing() {
 }
 
 fun Drawing.writeSinglePipeDrawing(pipe: Pipe, svgDocument: SvgDocument) {
+  println()
   println("Writing drawing for $id to $filename, showing $pipe")
 
   pipe.svgHighlightBox(svgDocument)
@@ -106,11 +111,18 @@ fun Drawing.writeSingleBoomDrawing(base: PipeBase, svgDocument: SvgDocument) {
     ),
     body(
       informationHeaderBlock(),
-      rawHtml(generatedSvgText),
-//      table(
-//        drawPipeDescendentsHtmlTableHeadings(),
-//        pipe.drawHtmlDecendents()
-//      )
+      div(style(),
+        rawHtml(generatedSvgText)
+      ),
+      table(
+        drawPipeDescendentsHtmlTableHeadings(),
+        each(
+          filter(base.upright?.dependents) { thingy -> thingy.hangable is Pipe }
+        ) { thingy ->
+          (thingy.hangable as Pipe).drawHtmlDecendents()
+        }
+
+      )
     ),
   ).renderFormatted()
 
@@ -129,18 +141,32 @@ fun unfinishedSvgHighlightBox(svgDocument: SvgDocument): DrawingResults {
   return drawingResults
 }
 
+
+// This and its descendants are a total hack.
+//
+// Just sayin`
 private fun PipeBase.drawBoomDetailSvg(svgDocument: SvgDocument): String {
   val highlight = unfinishedSvgHighlightBox(svgDocument).element
   val baseDrawingBoundary = this.drawFrontViewSvg(svgDocument)
-  val viewBox = "${baseDrawingBoundary.xMin * 2f} ${baseDrawingBoundary.yMin - 15} 100 100"
+  println("baseDrawingBoundary: $baseDrawingBoundary")
+  val viewBox = "${baseDrawingBoundary.xMin * 2f} ${baseDrawingBoundary.yMin - 15} 200 200"
+  println("viewbos: $viewBox")
   val root = svgDocument.root
-  root.setAttribute("width", "1200")
-  root.setAttribute("height", (170).toString())
+  root.setAttribute("width", "600")
+  root.setAttribute("height", (270).toString())
   root.setAttribute("viewBox", viewBox)
-  highlight.setAttribute("x", (baseDrawingBoundary.xMin - 50).toString())
-  highlight.setAttribute("y", (baseDrawingBoundary.yMin - 50).toString())
+  val x = baseDrawingBoundary.xMin - 50
+  highlight.setAttribute("x", x.toString())
+  highlight.setAttribute("y", (baseDrawingBoundary.yMin - 150).toString())
   highlight.setAttribute("width", (baseDrawingBoundary.width + 100f).toString())
-  highlight.setAttribute("height", (baseDrawingBoundary.height + 100).toString())
+  highlight.setAttribute("height", (baseDrawingBoundary.height + 300).toString())
+  val centerX = baseDrawingBoundary.xMin - 50 + (baseDrawingBoundary.width + 100) / 2
+  val centerY = baseDrawingBoundary.yMin - 150 + (baseDrawingBoundary.height + 200) / 2
+  root.setAttribute(
+    "transform",
+    "rotate(180 $centerX $centerY)" +
+        "translate(${x * 2})"
+  )
   return finishSvgString(svgDocument)
 }
 
@@ -154,30 +180,91 @@ private fun Pipe.drawPipeSvg(svgDocument: SvgDocument): String {
   return finishSvgString(svgDocument)
 }
 
+fun PipeBase.findWidth(): Float {
+  var width = PipeBase.Radius * 2
+  if (null != upright) {
+    width = max(width, (upright as Pipe).findWidth())
+  }
+  return width
+}
+
+// This is wrong because it presumes the pipes are centered
+// However, it will do as a first approximation
+fun Pipe.findWidth(): Float {
+  var width = Pipe.Diameter
+  dependents.forEach {
+    if (it.hangable is Pipe) {
+      width = max(width, it.hangable.length)
+    }
+  }
+  return width
+}
+
 fun PipeBase.drawFrontViewSvg(svgDocument: SvgDocument): SvgBoundary {
   val place = origin.venue
-  val drawingResults = drawRectangle(svgDocument, place.x - PipeBase.Radius, 0f, PipeBase.Radius * 2, 3f)
+  val offsetX = place.x - findWidth() / 2
+  val drawingResults = drawRectangle(
+    svgDocument = svgDocument,
+    x = place.x - PipeBase.Radius - offsetX,
+    y = 0f,
+    width = PipeBase.Radius * 2,
+    height = 3f,
+    fillColor = "black"
+  )
   var boundary = drawingResults.boundary
   println("Boundary: $boundary")
   if (null !== upright) {
-    val pipeDrawingResults = (upright as Pipe).drawFrontViewSvg(svgDocument)
-    boundary += pipeDrawingResults.boundary
+    boundary += (upright as Pipe).drawFrontViewSvg(svgDocument, offsetX)
   }
   println("Boundary: $boundary")
   return boundary
 }
 
-fun Pipe.drawFrontViewSvg(svgDocument: SvgDocument): DrawingResults {
+fun Pipe.drawFrontViewSvg(svgDocument: SvgDocument, offsetX: Float): SvgBoundary {
   val place = origin.venue
   val parentPlace = (parentEntity as PipeBase).origin.venue
-  return drawRectangle(
-    svgDocument,
-    place.x - Pipe.Diameter / 2,
-    place.z - parentPlace.z,
-    Pipe.Diameter,
-    length,
+  var result = drawRectangle(
+    svgDocument = svgDocument,
+    x = place.x - Pipe.Diameter / 2 - offsetX,
+    y = place.z - parentPlace.z,
+    width = Pipe.Diameter,
+    height = length,
     fillColor = "black"
   )
+  var boundary = result.boundary
+  println("Vertical pipe: $this")
+  println("Vertical coordinates: ${place.x - Pipe.Diameter / 2}, ${place.z} - ${parentPlace.z}")
+  dependents.forEach {
+    if (it.hangable is Pipe) {
+      val pipe = it.hangable
+      val place1 = pipe.origin.venue
+      val partialResult = drawRectangle(
+        svgDocument = svgDocument,
+        x = place1.x - offsetX,
+        y = place1.z,
+        width = pipe.length,
+        height = Pipe.Diameter,
+        fillColor = "black",
+      )
+      println("Horizontal pipe: $it")
+      println("Horizontal coordinates: ${place1.x - length / 2}, ${place1.z}")
+      val pipeStartX = place1.x + pipe.length / 2 - pipe.offset
+      boundary += partialResult.boundary
+
+      pipe.dependents.forEach {
+        if (it.hangable is Luminaire) {
+          val luminaire = it.hangable
+          drawUse(
+            svgDocument = svgDocument,
+            type = luminaire.type,
+            x = pipeStartX + luminaire.location - offsetX,
+            y = place1.z,
+          )
+        }
+      }
+    }
+  }
+  return boundary
 }
 
 fun Drawing.informationHeaderBlock(): SpanTag {
@@ -217,7 +304,9 @@ fun drawPipeDescendentsHtmlTableHeadings(): DomContent {
 }
 
 fun Pipe.drawHtmlDecendents(): DomContent {
-  return each(dependents) { hanger: Locator ->
+  return each(
+    filter(dependents) { it -> it.hangable is Luminaire }
+  ) { hanger: Locator ->
     val thing = hanger.hangable as Luminaire
     tr(
       td(thing.type),
