@@ -74,7 +74,7 @@ class SvgDrawingToolsTest {
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
 
-    drawRectangle(svgDocument, 1f, 2f, 3f, 4f, "cyan")
+    drawRectangle(svgDocument, 1f, 2f, 3f, 4f, fillColor = "cyan")
 
     val rectangles = svgDocument.root.getElementsByTagName("rect")
     assertThat(rectangles.length).isEqualTo(1)
@@ -88,7 +88,7 @@ class SvgDrawingToolsTest {
     val svgDocument = startSvg()
     val initialNodeCount = svgDocument.root.childNodes.length
 
-    drawRectangle(svgDocument, 1f, 2f, 3f, 4f, "cyan", "27")
+    drawRectangle(svgDocument, 1f, 2f, 3f, 4f, fillColor = "cyan", opacity = "27")
 
     val rectangles = svgDocument.root.getElementsByTagName("rect")
     assertThat(rectangles.length).isEqualTo(1)

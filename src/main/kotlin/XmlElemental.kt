@@ -162,7 +162,7 @@ abstract class XmlElemental(val xmlElement: Element) {
 
   protected open fun getOptionalFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
-    var value = Float.MIN_VALUE
+    var value = 0f
     try {
       if (valueString.isNotEmpty()) {
         value = valueString.toFloat()

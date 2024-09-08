@@ -33,6 +33,7 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   PipeBase.instances.map { svgDraw(svgDocument, it.drawPlan()) }
 //  Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
+  Device.instances.map { svgDraw(svgDocument, it.drawPlan()) }
   Setpiece.instances.map { it.drawSvgPlan(svgDocument) }
 
   svgDocument.root.setAttribute("height", (boundary.yMax + 50).toString())

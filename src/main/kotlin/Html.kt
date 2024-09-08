@@ -131,12 +131,12 @@ fun Drawing.writeSingleBoomDrawing(base: PipeBase, svgDocument: SvgDocument) {
 
 fun Pipe.svgHighlightBox(svgDocument: SvgDocument) {
   val place = origin.venue
-  val drawingResults = drawRectangle(svgDocument, place.x - 50, place.y - 50, length + 100, 100f, "teal")
+  val drawingResults = drawRectangle(svgDocument, place.x - 50, place.y - 50, length + 100, 100f, fillColor = "teal")
   drawingResults.element.addAttribute("opacity", "0.3")
 }
 
 fun unfinishedSvgHighlightBox(svgDocument: SvgDocument): DrawingResults {
-  val drawingResults = drawRectangle(svgDocument, 0f, 0f, 0f, 0f, "teal")
+  val drawingResults = drawRectangle(svgDocument, 0f, 0f, 0f, 0f, fillColor = "teal")
   drawingResults.element.addAttribute("opacity", "0.3")
   return drawingResults
 }

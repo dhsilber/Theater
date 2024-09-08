@@ -21,7 +21,6 @@ class LuminaireDefinition(elementPassthrough: Element, parentEntity: XmlElementa
 
   companion object : CreateWithXmlElement<LuminaireDefinition>() {
     const val Tag = "luminaire-definition"
-    const val Diameter = 2f
 
     fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): LuminaireDefinition =
       create(xmlElement, parentEntity, ::LuminaireDefinition)

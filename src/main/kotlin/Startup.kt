@@ -1,4 +1,6 @@
 import coordinates.VenuePoint
+import entities.Device
+import entities.DeviceTemplate
 import entities.Drawing
 import entities.Event
 import entities.Floor
@@ -20,6 +22,7 @@ class Startup {
 
     fun startup(pathName: String) {
       TagRegistry.registerTagProcessor(LuminaireDefinition.Tag, LuminaireDefinition::factory)
+      TagRegistry.registerTagProcessor(DeviceTemplate.Tag, DeviceTemplate::factory)
       TagRegistry.registerTagProcessor(Venue.Tag, Venue::factory)
       TagRegistry.registerTagProcessor(Floor.Tag, Floor::factory)
       TagRegistry.registerTagProcessor(Proscenium.Tag, Proscenium::factory)
@@ -33,6 +36,7 @@ class Startup {
       TagRegistry.registerTagProcessor(SetPlatform.Tag, SetPlatform::factory)
       TagRegistry.registerTagProcessor(Shape.Tag, Shape::factory)
       TagRegistry.registerTagProcessor(Drawing.Tag, Drawing::factory)
+      TagRegistry.registerTagProcessor(Device.Tag, Device::factory)
 
       println("Reading Theater Plot XML file at $pathName")
       Xml.read(pathName)
@@ -44,6 +48,7 @@ class Startup {
       TagRegistry.tagToCallback.clear()
 
       LuminaireDefinition.clear()
+      DeviceTemplate.clear()
       Venue.clear()
       Floor.clear()
       Proscenium.clear()
@@ -57,6 +62,7 @@ class Startup {
       SetPlatform.clear()
       Shape.clear()
       Drawing.clear()
+      Device.clear()
 
       VenuePoint.clear()
     }

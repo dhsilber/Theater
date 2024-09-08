@@ -3,6 +3,8 @@ package tests
 import TagRegistry
 import Xml
 import Startup
+import entities.Device
+import entities.DeviceTemplate
 import entities.Drawing
 import entities.Event
 import entities.Floor
@@ -57,6 +59,8 @@ class StartupTest {
       SetPlatform.Tag,
       Shape.Tag,
       Drawing.Tag,
+      Device.Tag,
+      DeviceTemplate.Tag,
     )
   }
 

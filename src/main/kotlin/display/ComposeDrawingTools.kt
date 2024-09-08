@@ -1,9 +1,12 @@
 package display
 
 import PipeManager
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
 import coordinates.PagePoint
 import display.DrawingOrderOperation.CIRCLE
 import display.DrawingOrderOperation.LINE
@@ -57,17 +60,38 @@ private fun drawLine(drawScope: DrawScope, drawingOrder: DrawingOrder) =
     end = PagePoint.drawingOffset(drawingOrder.data[2], drawingOrder.data[3]),
   )
 
+//private fun drawRectangle(
+//  drawScope: DrawScope,
+//  drawingOrder: DrawingOrder,
+//  color: Color,
+//) =
+//  drawScope.drawRect(
+//    color = color,
+//    topLeft = PagePoint.drawingOffset(drawingOrder.data[0], drawingOrder.data[1]),
+//    size = PagePoint.size(drawingOrder.data[2], drawingOrder.data[3]),
+//    style = Stroke(width = 2f),
+//  )
+
 private fun drawRectangle(
   drawScope: DrawScope,
   drawingOrder: DrawingOrder,
   color: Color,
-) =
-  drawScope.drawRect(
-    color = color,
-    topLeft = PagePoint.drawingOffset(drawingOrder.data[0], drawingOrder.data[1]),
-    size = PagePoint.size(drawingOrder.data[2], drawingOrder.data[3]),
-    style = Stroke(width = 2f),
-  )
+) {
+  val x = drawingOrder.data[0]
+  val y = drawingOrder.data[1]
+  val width = drawingOrder.data[2]
+  val depth = drawingOrder.data[3]
+  val rotation = if( drawingOrder.data.size > 4) drawingOrder.data[4] else 0f
+  val center = PagePoint.drawingOffset(x + width / 2, y + depth / 2)
+  drawScope.rotate(degrees = rotation, pivot = center) {
+    drawRect(
+      color = color,
+      topLeft = PagePoint.drawingOffset(x, y),
+      size = PagePoint.size(width, depth),
+      style = Stroke(width = 2f),
+    )
+  }
+}
 
 private fun drawFilledRectangle(
   drawScope: DrawScope,

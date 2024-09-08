@@ -124,6 +124,7 @@ fun drawRectangle(
   height: Float,
   fillColor: String = "white",
   opacity: String = "1",
+  rotation: Float = 0f,
 ): DrawingResults {
   val rect = makeElementInDocument(svgDocument, "rect")
   rect.setAttribute("x", x.toString())
@@ -132,6 +133,7 @@ fun drawRectangle(
   rect.setAttribute("height", height.toString())
   rect.setAttribute("fill", fillColor)
   rect.setAttribute("opacity", opacity)
+//  rect.setAttribute("transform", "rotate($rotation,$x,$y)")
 
   return DrawingResults(rect, SvgBoundary(x, y, x + width, y + height))
 }
