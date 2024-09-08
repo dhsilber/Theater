@@ -1,21 +1,18 @@
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
-import entities.Wall
 import display.drawContent
+import entities.Wall
 
 class Display {
 
   companion object {
 
-    @OptIn(ExperimentalComposeUiApi::class)
+//    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
       drawingWalls: Boolean,

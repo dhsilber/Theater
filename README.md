@@ -283,9 +283,12 @@ Attributes:
 The UI shows a plan view, but Luminaire icons are not yet displayed.
 I will need to figure out how to render SVG elements in Compose.
 
-Currently, the app opens up the file named `$HOME/Theater/plotfile.xml`.
+Currently, the app opens up the file named `$HOME/TheaterPlot/plotfile.xml`.
 That is less than optimal, but enough for me to get by while I bring this codebase up to matching what the old code did.
 Eventually this will need a file picker and perhaps a command-line argument to choose a file.
+
+Currently, the app needs the directory `$HOME/TheaterPlot/out` to exist.
+Again, less than optimal.
 
 Buttons will turn on additional features.
 The only one yet implemented displays the lighting instruments hung on each of the pipes.

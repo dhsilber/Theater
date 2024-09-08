@@ -1,26 +1,9 @@
 package display
 
-import androidx.compose.animation.core.exponentialDecay
-import display.DrawingOrderOperation.CIRCLE
-import display.DrawingOrderOperation.LINE
-import display.DrawingOrderOperation.RECTANGLE
-import display.DrawingOrderOperation.FILLED_RECTANGLE
-import display.DrawingOrderOperation.USE
 import androidx.compose.ui.graphics.Color
-import coordinates.Point
-import coordinates.StagePoint
 import coordinates.VenuePoint
-import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
-import entities.Floor
-import entities.Luminaire
-import entities.Pipe
-import entities.PipeBase
-import entities.Proscenium
-import entities.SetPlatform
-import entities.Setpiece
-import entities.Shape
-import entities.Stair
-import entities.Venue
+import display.DrawingOrderOperation.*
+import entities.*
 import java.lang.Float.min
 
 fun Proscenium.drawPlan(): List<DrawingOrder> {
