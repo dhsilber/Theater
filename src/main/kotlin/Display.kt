@@ -33,13 +33,13 @@ class Display {
       var width by remember { mutableStateOf(0f) }
       var height by remember { mutableStateOf(0f) }
 
-      var fraction = if (share) 0.7f else 1f
+      var fraction = if (share) 0.7f else 0.95f
   print("Fraction of width shown: $fraction")
 
       Canvas(
         Modifier
           .fillMaxWidth(fraction)
-          .fillMaxHeight(1.0f)
+          .fillMaxHeight(0.95f)
 //          .onPointerEvent(PointerEventType.Press) {
 //            x10 = x20
 //            y10 = y20

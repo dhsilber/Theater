@@ -41,7 +41,7 @@ fun App() {
         var drawingWalls by remember { mutableStateOf(false) }
         var pipeDisplay by remember { mutableStateOf(false) }
         var viewSection by remember { mutableStateOf(false) }
-        var flareVenueCorners by remember { mutableStateOf(false) }
+        var flareVenueCorners by remember { mutableStateOf(true) }
 
         Row(
             Modifier
