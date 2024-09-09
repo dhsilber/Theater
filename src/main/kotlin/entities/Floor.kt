@@ -9,7 +9,6 @@ class Floor(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEleme
 
   companion object : CreateWithXmlElement<Floor>() {
     const val Tag = "floor"
-    const val Radius = 18f
 
     fun factory(xmlElement: Element, parentEntity: XmlElemental? = null): Floor =
       Floor.create(xmlElement, parentEntity, ::Floor)

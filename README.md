@@ -295,4 +295,28 @@ The only one yet implemented displays the lighting instruments hung on each of t
 Selecting a section highlights the appropriate pipe in the drawing.
 I expect to build on this to allow the data to be edited.
 
+## Implementation Notes
+
+### Point
+
+Point is just (x, y, z) coordinates in a data class.
+Values are Float.
+
+### StagePoint
+
+### VenuePoint
+
+VenuePoint is relative to the origin of the Venue? Maybe?
+
+Wall start and end points are VenuePoint.
+Proscenium.origin is VenuePoint.
+
+VenuePoint keeps track of the largest and smallest value for each dimension.
+VenuePoint will report the difference between the smallest and largest value for each dimension.
+
+width, depth, and height 
+
+### PagePoint
+
+
 

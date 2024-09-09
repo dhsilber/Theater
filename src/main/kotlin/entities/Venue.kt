@@ -2,6 +2,7 @@ package entities
 
 import CreateWithXmlElement
 import XmlElemental
+import coordinates.VenuePoint
 import org.w3c.dom.Element
 
 class Venue(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
@@ -11,6 +12,9 @@ class Venue(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlEleme
   var depth = getPositiveIntegerAttribute("depth")
   var height = getPositiveIntegerAttribute("height")
   var circuiting = getOptionalStringAttribute("circuiting")
+
+  val origin = VenuePoint(0f, 0f, 0f)
+  val opposite = VenuePoint(width, depth, height)
 
   init {
     println("New Venue: $building - $room.")
