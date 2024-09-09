@@ -19,9 +19,11 @@ import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
 import entities.Venue
 import sidebar.PipeSideBar
+import ui.DisplayState
 import ui.PipeButton
 import ui.ReloadButton
 import ui.ToggleButton as ViewButton
+import ui.ToggleButton as FlareVenueButton
 import ui.WallButton
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -29,91 +31,106 @@ import ui.WallButton
 @Preview
 fun App() {
 
-  var text by remember { mutableStateOf("Hello, World!") }
-  var x by remember { mutableStateOf(0) }
-  var y by remember { mutableStateOf(0) }
+    var text by remember { mutableStateOf("Hello, World!") }
+    var x by remember { mutableStateOf(0) }
+    var y by remember { mutableStateOf(0) }
 
 
-  MaterialTheme {
+    MaterialTheme {
 
-    var drawingWalls by remember { mutableStateOf(false) }
-    var pipeDisplay by remember { mutableStateOf(false) }
-    var viewSection by remember { mutableStateOf(false) }
+        var drawingWalls by remember { mutableStateOf(false) }
+        var pipeDisplay by remember { mutableStateOf(false) }
+        var viewSection by remember { mutableStateOf(false) }
+        var flareVenueCorners by remember { mutableStateOf(false) }
 
-    Row(
-      Modifier
-        .fillMaxSize()
-        .onPointerEvent(PointerEventType.Press) {
-          text = it.awtEvent.locationOnScreen.toString()
-          x = it.awtEvent.locationOnScreen.x
-          y = it.awtEvent.locationOnScreen.y
-        },
-      Arrangement.spacedBy(5.dp)
-    ) {
-      Column(
-        Modifier.padding(8.dp)
-      )
-      {
-        WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
-        PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = {
-          pipeDisplay = !pipeDisplay
-          PipeManager.display = pipeDisplay
-        })
-        Button(onClick = { Svg.writePlanView() }) {
-          Text("Write SVG")
-        }
-        ReloadButton()
-        ViewButton(viewSection, "Switch View", Color.White, Color.Cyan, toggle = {
-          viewSection = !viewSection
-        })
-      }
-      Display.display(
-        drawingWalls,
-        share = pipeDisplay,
-        x, y,
-        viewSection = viewSection
-      )
-      if (pipeDisplay) {
-        PipeSideBar.pipeLister(PipeManager.list)
+        Row(
+            Modifier
+                .fillMaxSize()
+                .onPointerEvent(PointerEventType.Press) {
+                    text = it.awtEvent.locationOnScreen.toString()
+                    x = it.awtEvent.locationOnScreen.x
+                    y = it.awtEvent.locationOnScreen.y
+                },
+            Arrangement.spacedBy(5.dp)
+        ) {
+            Column(
+                Modifier.padding(8.dp)
+            )
+            {
+                WallButton(drawingWalls = drawingWalls, onDrawingChange = { drawingWalls = !drawingWalls })
+                PipeButton(pipeDisplay = pipeDisplay, togglePipeDisplay = {
+                    pipeDisplay = !pipeDisplay
+                    PipeManager.display = pipeDisplay
+                })
+                Button(onClick = { Svg.writePlanView() }) {
+                    Text("Write SVG")
+                }
+                ReloadButton()
+                ViewButton(
+                    viewSection,
+                    toggle = {
+                        viewSection = !viewSection
+                    },
+                    displayStateOff = DisplayState(Color.White, Color.Black, "Show Section"),
+                    displayStateOn = DisplayState(Color.Cyan, Color.Black, "Show Plan"),
+                )
+                FlareVenueButton(
+                    flareVenueCorners,
+                    toggle = {
+                        flareVenueCorners = !flareVenueCorners
+                    },
+                    displayStateOff = DisplayState(Color.White, Color.Black, "Flare Venue Corners"),
+                    displayStateOn = DisplayState(Color.Magenta, Color.Black, "Hide Venue Corners"),
+                )
+            }
+            Display.display(
+                drawingWalls,
+                share = pipeDisplay,
+                x, y,
+                viewSection = viewSection,
+                flareVenueCorners = flareVenueCorners,
+            )
+            if (pipeDisplay) {
+                PipeSideBar.pipeLister(PipeManager.list)
 //        PipeSideBar.pipeLister(PipeManager.list, PipeManager::makeCurrent)
-      }
+            }
 
+        }
     }
-  }
 }
 
 var title = ""
 
 fun load() {
-  Startup.startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
-  title = try {
-    Venue.instances[0].building + " - " + Venue.instances[0].room
-  } catch (exception: Exception) {
-    "Missing venue"
-  }
+    Startup.startup("${Configuration.plotDirectory}/${Configuration.plotFilename}")
+    title = try {
+        Venue.instances[0].building + " - " + Venue.instances[0].room
+    } catch (exception: Exception) {
+        "Missing venue"
+    }
 
-  PipeManager.buildList(0)
-  Svg.writeAll()
-  Html.writeAll()
+    PipeManager.buildList(0)
+    Svg.writeAll()
+    Html.writeAll()
 }
 
 fun reload() {
-  Startup.clear()
+    Startup.clear()
 
-  title = ""
-  PipeManager.clear()
-  load()
+    title = ""
+    PipeManager.clear()
+    load()
 }
 
 
 fun main() = application {
-  Configuration
-  load()
+    Configuration
+    load()
 //  exitApplication()
 
-  val state = rememberWindowState(placement = WindowPlacement.Maximized)
+    val state = rememberWindowState(placement = WindowPlacement.Maximized)
 
-  Window(onCloseRequest = ::exitApplication, title = title, state = state) {
-    App()
-  }
+    Window(onCloseRequest = ::exitApplication, title = title, state = state) {
+        App()
+    }
 }

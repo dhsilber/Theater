@@ -23,6 +23,7 @@ class Display {
       viewSection: Boolean = false,
 //      text: String
 //      resetter: (text: String) -> Unit
+      flareVenueCorners: Boolean,
     ) {
       var x10 by remember { mutableStateOf(0) }
       var y10 by remember { mutableStateOf(0) }
@@ -70,9 +71,9 @@ class Display {
         }
 
         if(viewSection)
-          drawSectionContent(this)
+          drawSectionContent(this, flareVenueCorners)
         else
-          drawPlanContent(this)
+          drawPlanContent(this, flareVenueCorners)
 
 
       }

@@ -450,3 +450,87 @@ fun Shape.drawSection(placement: VenuePoint, platformPlacement: VenuePoint): Lis
 
   return drawingOrders.toList()
 }
+
+fun Venue.drawPlan(): List<DrawingOrder> {
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  val red = IndependentColor(Color.Red, "red")
+  val pink = IndependentColor(Color.Red, "pink")
+  val purple = IndependentColor(Color.Magenta, "purple")
+
+  fun flare(x: Float, y: Float) {
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 4f),
+        color = red
+      )
+    )
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 12f),
+        color = pink
+      )
+    )
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 16f),
+        color = purple
+      )
+    )
+  }
+  flare(0f, 0f)
+  flare(width.toFloat(),0f)
+  flare(width.toFloat(), depth.toFloat())
+  flare(0f, depth.toFloat())
+
+  return drawingOrders.toList()
+}
+
+fun Venue.drawSection(): List<DrawingOrder> {
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  val red = IndependentColor(Color.Red, "red")
+  val pink = IndependentColor(Color.Red, "pink")
+  val purple = IndependentColor(Color.Magenta, "purple")
+
+  fun flare(x: Float, y: Float) {
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 4f),
+        color = red
+      )
+    )
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 12f),
+        color = pink
+      )
+    )
+    drawingOrders.add(
+      DrawingOrder(
+        operation = CIRCLE,
+        entity = this,
+        data = listOf(x, y, 16f),
+        color = purple
+      )
+    )
+  }
+  flare(0f, 0f)
+  flare(depth.toFloat(),0f)
+  flare(depth.toFloat(), height.toFloat())
+  flare(0f, height.toFloat())
+
+  return drawingOrders.toList()
+}

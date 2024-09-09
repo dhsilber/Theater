@@ -10,7 +10,7 @@ import coordinates.Point
 import coordinates.VenuePoint
 import entities.*
 
-fun drawPlanContent(drawScope: DrawScope) {
+fun drawPlanContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
   Grid.instance.drawPlan(drawScope)
 
   for (instance in Wall.instances) {
@@ -25,6 +25,7 @@ fun drawPlanContent(drawScope: DrawScope) {
 
   }
 
+  if (flareVenueCorners) Venue.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Floor.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Stair.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Proscenium.instances.map { composeDraw(drawScope, it.drawPlan()) }
@@ -36,13 +37,14 @@ fun drawPlanContent(drawScope: DrawScope) {
   }
 }
 
-fun drawSectionContent(drawScope: DrawScope) {
+fun drawSectionContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
   Grid.instance.drawSection(drawScope)
 
 //  for (instance in Wall.instances) {
 //    instance.draw(drawScope)
 //  }
 
+  if (flareVenueCorners) Venue.instances.map { composeDraw(drawScope, it.drawSection()) }
   Floor.instances.map { composeDraw(drawScope, it.drawSection()) }
   Stair.instances.map { composeDraw(drawScope, it.drawSection()) }
   Proscenium.instances.map { composeDraw(drawScope, it.drawSection()) }
