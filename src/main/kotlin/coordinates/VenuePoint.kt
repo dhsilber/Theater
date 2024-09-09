@@ -53,6 +53,9 @@ data class VenuePoint(
     val VenueDepth
       get() = LargeY - SmallY
 
+    val VenueHeight
+      get() = LargeZ - SmallZ
+
     fun clear() {
       SmallX = Float.MAX_VALUE
       SmallY = Float.MAX_VALUE

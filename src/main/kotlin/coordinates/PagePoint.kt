@@ -16,13 +16,22 @@ class PagePoint {
       Scale = scale
     }
 
-    fun Setup(size: Size) {
+    fun setupForPlanView(size: Size) {
       val widthRatio = size.width / (VenuePoint.VenueWidth + Grid.ContentSpacer * 2)
       val depthRatio = size.height / (VenuePoint.VenueDepth + Grid.ContentSpacer * 2)
       scale(min(widthRatio, depthRatio) * 0.97f)
 
       OffsetX = 0f - VenuePoint.SmallX
       OffsetY = 0f - VenuePoint.SmallY
+    }
+
+    fun setupForSectionView(size: Size) {
+      val widthRatio = size.width / (VenuePoint.VenueDepth + Grid.ContentSpacer * 2)
+      val depthRatio = size.height / (VenuePoint.VenueHeight + Grid.ContentSpacer * 2)
+      scale(min(widthRatio, depthRatio) * 0.97f)
+
+      OffsetX = 0f - VenuePoint.SmallY
+      OffsetY = 0f - VenuePoint.SmallZ
     }
 
     fun drawingOffset(x: Float, y: Float): Offset {

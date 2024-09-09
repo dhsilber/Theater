@@ -5,7 +5,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import display.drawContent
+import display.drawPlanContent
+import display.drawSectionContent
 import entities.Wall
 
 class Display {
@@ -19,6 +20,7 @@ class Display {
       share: Boolean,
       x: Int,
       y: Int,
+      viewSection: Boolean = false,
 //      text: String
 //      resetter: (text: String) -> Unit
     ) {
@@ -30,7 +32,8 @@ class Display {
       var width by remember { mutableStateOf(0f) }
       var height by remember { mutableStateOf(0f) }
 
-      var fraction = if (share) 0.5f else 1f
+      var fraction = if (share) 0.7f else 1f
+  print("Fraction of width shown: $fraction")
 
       Canvas(
         Modifier
@@ -66,7 +69,11 @@ class Display {
           Wall.createNew(x10.toFloat(), y10.toFloat(), x20.toFloat(), y20.toFloat())
         }
 
-        drawContent(this)
+        if(viewSection)
+          drawSectionContent(this)
+        else
+          drawPlanContent(this)
+
 
       }
 //      Text("Width: $width - height: $height")
