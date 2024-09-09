@@ -1,6 +1,7 @@
 package display
 
 import Grid
+import Grid.Companion.MeasureSize
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.nativeCanvas
@@ -11,8 +12,24 @@ import entities.Proscenium
 import org.jetbrains.skia.Font
 import org.jetbrains.skia.Paint
 
-fun Grid.draw(drawScope: DrawScope) {
-  PagePoint.Setup(drawScope.size)
+fun Grid.drawPlan(drawScope: DrawScope) {
+  PagePoint.setupForPlanView(drawScope.size)
+  Grid.Setup(drawScope.size)
+
+//  drawScope.drawLine(Color.Green, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(0f, Grid.Depth - 0))
+//  drawScope.drawLine(Color.Red, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(Grid.Width, 0f))
+//  drawScope.drawLine(Color.Blue,
+//    PagePoint.pageOffset(0f, Grid.Depth - 0),
+//    PagePoint.pageOffset(Grid.Width, Grid.Depth - 0))
+//  drawScope.drawLine(Color.Cyan, PagePoint.pageOffset(Grid.Width, 0f), PagePoint.pageOffset(Grid.Width, Grid.Depth))
+
+  verticalGridLines(drawScope)
+
+  horizontalGridLines(drawScope)
+}
+
+fun Grid.drawSection(drawScope: DrawScope) {
+  PagePoint.setupForSectionView(drawScope.size)
   Grid.Setup(drawScope.size)
 
 //  drawScope.drawLine(Color.Green, PagePoint.pageOffset(0f, 0f), PagePoint.pageOffset(0f, Grid.Depth - 0))
@@ -28,7 +45,7 @@ fun Grid.draw(drawScope: DrawScope) {
 }
 
 private fun horizontalGridLines(drawScope: DrawScope) {
-  val negativeYFromOrigin = (StagePoint.OriginY(0f) / Grid.MeasureSize).toInt()
+  val negativeYFromOrigin = (StagePoint.OriginY(0f) / MeasureSize).toInt()
   val yStart = StagePoint.OriginY(0f) - (negativeYFromOrigin * Grid.MeasureSize)
   val yFinish = VenuePoint.LargeY + VenuePoint.LargeY % Grid.MeasureSize
   val xBegin = 0f - PagePoint.OffsetX

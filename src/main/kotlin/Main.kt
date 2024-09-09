@@ -1,17 +1,14 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-import androidx.compose.material.MaterialTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEvent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
@@ -20,25 +17,12 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
-import entities.Drawing
-import entities.Event
-import entities.Floor
-import entities.Luminaire
-import entities.LuminaireDefinition
-import entities.Pipe
-import entities.PipeBase
-import entities.Proscenium
-import entities.SetPlatform
-import entities.Setpiece
-import entities.Shape
 import entities.Venue
-import entities.Wall
 import sidebar.PipeSideBar
 import ui.PipeButton
 import ui.ReloadButton
+import ui.ToggleButton as ViewButton
 import ui.WallButton
-
-//import org.jetbrains.compose.splitpane.demo.uiTop
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -54,12 +38,13 @@ fun App() {
 
     var drawingWalls by remember { mutableStateOf(false) }
     var pipeDisplay by remember { mutableStateOf(false) }
+    var viewSection by remember { mutableStateOf(false) }
 
     Row(
       Modifier
         .fillMaxSize()
         .onPointerEvent(PointerEventType.Press) {
-          text = it.awtEvent.locationOnScreen?.toString().orEmpty()
+          text = it.awtEvent.locationOnScreen.toString()
           x = it.awtEvent.locationOnScreen.x
           y = it.awtEvent.locationOnScreen.y
         },
@@ -78,11 +63,15 @@ fun App() {
           Text("Write SVG")
         }
         ReloadButton()
+        ViewButton(viewSection, "Switch View", Color.White, Color.Cyan, toggle = {
+          viewSection = !viewSection
+        })
       }
       Display.display(
         drawingWalls,
         share = pipeDisplay,
         x, y,
+        viewSection = viewSection
       )
       if (pipeDisplay) {
         PipeSideBar.pipeLister(PipeManager.list)

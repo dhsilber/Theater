@@ -1,9 +1,6 @@
 package ui
 
-//import androidx.compose.foundation.layout.fillMaxWidth
-
 // https://dev.to/zachklipp/remember-mutablestateof-a-cheat-sheet-10ma
-//import androidx.compose.ui.Modifier
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text

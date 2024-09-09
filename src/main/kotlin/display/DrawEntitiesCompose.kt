@@ -10,8 +10,8 @@ import coordinates.Point
 import coordinates.VenuePoint
 import entities.*
 
-fun drawContent(drawScope: DrawScope) {
-  Grid.instance.draw(drawScope)
+fun drawPlanContent(drawScope: DrawScope) {
+  Grid.instance.drawPlan(drawScope)
 
   for (instance in Wall.instances) {
 //          Text(instance.toString())
@@ -34,6 +34,24 @@ fun drawContent(drawScope: DrawScope) {
   for (instance in Setpiece.instances) {
     instance.draw(drawScope)
   }
+}
+
+fun drawSectionContent(drawScope: DrawScope) {
+  Grid.instance.drawSection(drawScope)
+
+//  for (instance in Wall.instances) {
+//    instance.draw(drawScope)
+//  }
+
+  Floor.instances.map { composeDraw(drawScope, it.drawSection()) }
+  Stair.instances.map { composeDraw(drawScope, it.drawSection()) }
+  Proscenium.instances.map { composeDraw(drawScope, it.drawSection()) }
+  PipeBase.instances.map { composeDraw(drawScope, it.drawSection()) }
+  PipeManager.list.map { composeDraw(drawScope, it.pipe.drawSection()) }
+
+//  for (instance in Setpiece.instances) {
+//    instance.draw(drawScope)
+//  }
 }
 
 fun Wall.draw(drawScope: DrawScope) {
