@@ -455,6 +455,8 @@ fun Venue.drawPlan(): List<DrawingOrder> {
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
 
+  println("About to flare plan: width: $width - depth $depth")
+
   val red = IndependentColor(Color.Red, "red")
   val pink = IndependentColor(Color.Red, "pink")
   val purple = IndependentColor(Color.Magenta, "purple")
@@ -496,6 +498,7 @@ fun Venue.drawPlan(): List<DrawingOrder> {
 fun Venue.drawSection(): List<DrawingOrder> {
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+  println("About to flare section: depth $depth - height: $height")
 
   val red = IndependentColor(Color.Red, "red")
   val pink = IndependentColor(Color.Red, "pink")

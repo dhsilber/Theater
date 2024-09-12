@@ -11,6 +11,7 @@ abstract class CreateWithXmlElement<Klass : XmlElemental> {
   ): Klass {
     val instance: Klass = factory(xmlElement, parentEntity)
     instances.add(instance)
+    MessageMinder.Messages.addAll(instance.errors)
     return instance
   }
 

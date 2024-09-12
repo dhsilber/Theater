@@ -34,7 +34,7 @@ class Display {
       var height by remember { mutableStateOf(0f) }
 
       var fraction = if (share) 0.7f else 1f
-  print("Fraction of width shown: $fraction")
+  println("Fraction of width shown: $fraction")
 
       Canvas(
         Modifier

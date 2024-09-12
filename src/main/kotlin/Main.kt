@@ -18,11 +18,13 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
 import entities.Venue
+import sidebar.MessageSideBar
 import sidebar.PipeSideBar
 import ui.DisplayState
 import ui.PipeButton
 import ui.ReloadButton
 import ui.ToggleButton as ViewButton
+import ui.ToggleButton as MessageButton
 import ui.ToggleButton as FlareVenueButton
 import ui.WallButton
 
@@ -40,6 +42,7 @@ fun App() {
 
         var drawingWalls by remember { mutableStateOf(false) }
         var pipeDisplay by remember { mutableStateOf(false) }
+        var messagesDisplay by remember { mutableStateOf(true) }
         var viewSection by remember { mutableStateOf(false) }
         var flareVenueCorners by remember { mutableStateOf(true) }
 
@@ -66,6 +69,15 @@ fun App() {
                     Text("Write SVG")
                 }
                 ReloadButton()
+                MessageButton(
+                    messagesDisplay,
+                    toggle = {
+                        messagesDisplay = !messagesDisplay
+//                        PipeManager.display = messagesDisplay
+                    },
+                    displayStateOff = DisplayState(Color.White, Color.Black, "Show Messages"),
+                    displayStateOn = DisplayState(Color.Cyan, Color.Black, "Hide Messages"),
+                )
                 ViewButton(
                     viewSection,
                     toggle = {
@@ -85,11 +97,14 @@ fun App() {
             }
             Display.display(
                 drawingWalls,
-                share = pipeDisplay,
+                share = pipeDisplay || messagesDisplay,
                 x, y,
                 viewSection = viewSection,
                 flareVenueCorners = flareVenueCorners,
             )
+            if (messagesDisplay) {
+                MessageSideBar.messageLister()
+            }
             if (pipeDisplay) {
                 PipeSideBar.pipeLister(PipeManager.list)
 //        PipeSideBar.pipeLister(PipeManager.list, PipeManager::makeCurrent)
@@ -119,6 +134,7 @@ fun reload() {
 
     title = ""
     PipeManager.clear()
+    MessageMinder.Messages.clear()
     load()
 }
 

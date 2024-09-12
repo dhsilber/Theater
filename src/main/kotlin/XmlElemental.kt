@@ -20,7 +20,7 @@ abstract class XmlElemental(val xmlElement: Element) {
   fun getStringAttribute(name: String): String {
     val value = xmlElement.getAttribute(name)
     if (value.isEmpty()) {
-      errors.add("Missing required $name attribute")
+      errors.add("${xmlElement.tagName} missing required $name attribute")
     }
     return value
   }
@@ -37,11 +37,11 @@ abstract class XmlElemental(val xmlElement: Element) {
     try {
       val value = valueString.toInt()
       if (1 != value) {
-        errors.add("Unable to read boolean 1 from $name attribute")
+        errors.add("${xmlElement.tagName} unable to read boolean 1 from $name attribute")
         return false
       }
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read boolean 1 from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read boolean 1 from $name attribute")
       return false
     }
     return true
@@ -50,17 +50,17 @@ abstract class XmlElemental(val xmlElement: Element) {
   fun getPositiveIntegerAttribute(name: String): Int {
     val valueString = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("Missing required $name attribute")
+      errors.add("${xmlElement.tagName} missing required $name attribute")
       return 0
     }
     var value = 0
     try {
       value = valueString.toInt()
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read positive integer from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive integer from $name attribute")
     }
     if (0 > value) {
-      errors.add("Unable to read positive integer from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive integer from $name attribute")
     }
     return value
   }
@@ -73,10 +73,10 @@ abstract class XmlElemental(val xmlElement: Element) {
         value = valueString.toInt()
       }
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read positive integer from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive integer from $name attribute")
     }
     if (0 > value) {
-      errors.add("Unable to read positive integer from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive integer from $name attribute")
     }
     return value
   }
@@ -84,14 +84,14 @@ abstract class XmlElemental(val xmlElement: Element) {
   protected open fun getFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("Missing required $name attribute")
+      errors.add("${xmlElement.tagName} missing required $name attribute")
       return 0.0f
     }
     var value = 0.0f
     try {
       value = valueString.toFloat()
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read floating-point number from $name attribute")
     }
     return value
   }
@@ -168,7 +168,7 @@ abstract class XmlElemental(val xmlElement: Element) {
         value = valueString.toFloat()
       }
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read optional floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read optional floating-point number from $name attribute")
     }
     return value
   }
@@ -176,17 +176,17 @@ abstract class XmlElemental(val xmlElement: Element) {
   protected open fun getPositiveFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("Missing required $name attribute")
+      errors.add("M${xmlElement.tagName} missing required $name attribute")
       return 0.0f
     }
     var value = 0.0f
     try {
       value = valueString.toFloat()
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read positive floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive floating-point number from $name attribute")
     }
     if (0 > value) {
-      errors.add("Unable to read positive floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive floating-point number from $name attribute")
     }
     return value
   }
@@ -200,10 +200,10 @@ abstract class XmlElemental(val xmlElement: Element) {
     try {
       value = valueString.toFloat()
     } catch (exception: NumberFormatException) {
-      errors.add("Unable to read positive floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive floating-point number from $name attribute")
     }
     if (0 > value) {
-      errors.add("Unable to read positive floating-point number from $name attribute")
+      errors.add("${xmlElement.tagName} unable to read positive floating-point number from $name attribute")
     }
     return value
   }
@@ -211,7 +211,7 @@ abstract class XmlElemental(val xmlElement: Element) {
   protected open fun getRectangleAttribute(name: String): Rectangle {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("Missing required $name attribute")
+      errors.add("${xmlElement.tagName} missing required $name attribute")
       return Rectangle.Empty
     }
 
@@ -223,11 +223,11 @@ abstract class XmlElemental(val xmlElement: Element) {
         val depth = parameters[1]
         return Rectangle(width, depth)
       } else {
-        errors.add("Unable to read rectangle specification from $name attribute containing '$valueString'")
+        errors.add("${xmlElement.tagName} unable to read rectangle specification from $name attribute containing '$valueString'")
         return Rectangle.Empty
       }
     } catch (exception: Exception) {
-      errors.add("Unable to read rectangle specification from $name attribute containing '$valueString'")
+      errors.add("${xmlElement.tagName} unable to read rectangle specification from $name attribute containing '$valueString'")
       return Rectangle.Empty
     }
   }
@@ -245,7 +245,7 @@ abstract class XmlElemental(val xmlElement: Element) {
   fun getOffsetAttribute(parentEntity: XmlElemental?): Float {
     val offset = getOptionalFloatAttribute("offset")
     if (Float.MIN_VALUE != offset && parentEntity !is Pipe) {
-      errors.add("Without a vertical pipe parent, the offset attribute is not allowed")
+      errors.add("${xmlElement.tagName} without a vertical pipe parent, the offset attribute is not allowed")
     }
     return offset
   }
@@ -253,7 +253,7 @@ abstract class XmlElemental(val xmlElement: Element) {
   fun getOffsetYAttribute(parentEntity: XmlElemental?): Float {
     val offset = getOptionalFloatAttribute("offsety")
     if (Float.MIN_VALUE != offset && parentEntity !is Pipe) {
-      errors.add("Unable to offset drawing of pipe when it is not a child of a vertical pipe")
+      errors.add("${xmlElement.tagName} unable to offset drawing of pipe when it is not a child of a vertical pipe")
     }
     return offset
   }
@@ -268,7 +268,7 @@ abstract class XmlElemental(val xmlElement: Element) {
 //    try {
 //      value = valueString.toDouble()
 //    } catch (exception: NumberFormatException) {
-//      errors.add("Unable to read double number from $name attribute")
+//      errors.add("${xmlElement.tagName} unable to read double number from $name attribute")
 //    }
 //    return value
 //  }
@@ -283,10 +283,10 @@ abstract class XmlElemental(val xmlElement: Element) {
 //    try {
 //      value = valueString.toDouble()
 //    } catch (exception: NumberFormatException) {
-//      errors.add("Unable to read positive double number from $name attribute")
+//      errors.add("${xmlElement.tagName} unable to read positive double number from $name attribute")
 //    }
 //    if (0 > value) {
-//      errors.add("Unable to read positive double number from $name attribute")
+//      errors.add("${xmlElement.tagName} unable to read positive double number from $name attribute")
 //      return 0.0
 //    }
 //    return value
