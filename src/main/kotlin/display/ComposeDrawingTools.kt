@@ -2,11 +2,13 @@ package display
 
 import PipeManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import coordinates.PagePoint
 import display.DrawingOrderOperation.CIRCLE
 import display.DrawingOrderOperation.LINE
+import display.DrawingOrderOperation.DASHED_LINE
 import display.DrawingOrderOperation.RECTANGLE
 import display.DrawingOrderOperation.FILLED_RECTANGLE
 import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
@@ -21,6 +23,7 @@ fun composeDraw(drawScope: DrawScope, orders: List<DrawingOrder>) {
     when (it.operation) {
       CIRCLE -> drawCircle(drawScope, it)
       LINE -> drawLine(drawScope, it)
+      DASHED_LINE -> drawDashedLine(drawScope, it)
       RECTANGLE -> drawRectangle(drawScope, it, color)
       FILLED_RECTANGLE -> drawFilledRectangle(drawScope, it, color)
       USE -> drawUse(drawScope, it)
@@ -55,6 +58,14 @@ private fun drawLine(drawScope: DrawScope, drawingOrder: DrawingOrder) =
     color = drawingOrder.color.compose,
     start = PagePoint.drawingOffset(drawingOrder.data[0], drawingOrder.data[1]),
     end = PagePoint.drawingOffset(drawingOrder.data[2], drawingOrder.data[3]),
+  )
+
+private fun drawDashedLine(drawScope: DrawScope, drawingOrder: DrawingOrder) =
+  drawScope.drawLine(
+    color = drawingOrder.color.compose,
+    start = PagePoint.drawingOffset(drawingOrder.data[0], drawingOrder.data[1]),
+    end = PagePoint.drawingOffset(drawingOrder.data[2], drawingOrder.data[3]),
+    pathEffect = PathEffect.dashPathEffect(floatArrayOf(3f, 3f), 0f)
   )
 
 private fun drawRectangle(

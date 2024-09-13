@@ -48,7 +48,7 @@ fun Proscenium.drawPlan(): List<DrawingOrder> {
   ))
   // US side of proscenium arch
   drawingOrders.add(DrawingOrder(
-    operation = LINE,
+    operation = DASHED_LINE,
     entity = this,
     data = listOf(startX, endY, endX, endY),
     color = IndependentColor(Color.Gray, "grey")

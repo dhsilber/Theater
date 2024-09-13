@@ -1,10 +1,10 @@
 package display
 
 import SvgDocument
-import androidx.compose.material.DrawerDefaults
 import coordinates.VenuePoint
 import display.DrawingOrderOperation.CIRCLE
 import display.DrawingOrderOperation.LINE
+import display.DrawingOrderOperation.DASHED_LINE
 import display.DrawingOrderOperation.RECTANGLE
 import display.DrawingOrderOperation.FILLED_RECTANGLE
 import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
@@ -194,6 +194,7 @@ fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>): SvgBoundary {
     val result: DrawingResults = when (it.operation) {
       CIRCLE -> drawCircle(svgDocument, it)
       LINE -> drawLine(svgDocument, it)
+      DASHED_LINE -> drawDashedLine(svgDocument, it)
       RECTANGLE -> drawRectangle(svgDocument, it)
       FILLED_RECTANGLE -> drawFilledRectangle(svgDocument, it)
       USE -> drawUse(svgDocument, it)
@@ -224,6 +225,20 @@ private fun drawLine(svgDocument: SvgDocument, it: DrawingOrder): DrawingResults
     end = VenuePoint(it.data[2], it.data[3], 0f),
   )
   result.element.addAttribute("stroke", it.color.svg)
+  if (it.explanation.isNotEmpty()) {
+    result.element.setAttribute("explanation", it.explanation)
+  }
+  return result
+}
+
+private fun drawDashedLine(svgDocument: SvgDocument, it: DrawingOrder): DrawingResults {
+  val result = drawLineWithResults(
+    svgDocument = svgDocument,
+    start = VenuePoint(it.data[0], it.data[1], 0f),
+    end = VenuePoint(it.data[2], it.data[3], 0f),
+  )
+  result.element.addAttribute("stroke", it.color.svg)
+  result.element.addAttribute("stroke-dasharray", "3 3")
   if (it.explanation.isNotEmpty()) {
     result.element.setAttribute("explanation", it.explanation)
   }
