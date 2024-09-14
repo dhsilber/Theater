@@ -90,22 +90,37 @@ fun Proscenium.drawSection(): List<DrawingOrder> {
 //    data = listOf(originY, floorHeight, originSize),
 //    cyan
 //  ))
+  // audience side
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
     data = listOf(originY, floorHeight, originY, floorHeight - height),
     color = IndependentColor(Color.Green, "green")
   ))
+  // wall above audience side
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
+    data = listOf(originY, floorHeight - height, originY, venue.height.toFloat()),
+  ))
+  // stage side
+  drawingOrders.add(DrawingOrder(
+    operation = DASHED_LINE,
+    entity = this,
     data = listOf(originY + depth, floorHeight, originY + depth, floorHeight - height),
   ))
+  // wall above stage side
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY + depth, floorHeight - height, originY + depth, venue.height.toFloat()),
+  ))
+  // top of opening
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
     data = listOf(originY, floorHeight - height, originY + depth, floorHeight - height),
-    color = IndependentColor(Color.Gray, "grey")
+//    color = IndependentColor(Color.Gray, "grey")
   ))
 
   return drawingOrders.toList()
