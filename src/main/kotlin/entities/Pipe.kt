@@ -18,7 +18,7 @@ class Pipe(elementPassthrough: Element, val parentEntity: XmlElemental?) :
   val length = getPositiveFloatAttribute("length")
 
   override var location = when (parentEntity) {
-    is Pipe -> getPositiveFloatAttribute("location")
+      is Pipe -> getPositiveFloatAttribute("location")
     else -> -1f
   }
 

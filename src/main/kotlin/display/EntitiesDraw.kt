@@ -101,7 +101,7 @@ fun Proscenium.drawSection(): List<DrawingOrder> {
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(originY, floorHeight - height, originY, venue.height.toFloat()),
+    data = listOf(originY, floorHeight - height, originY, 0f),
   ))
   // stage side
   drawingOrders.add(DrawingOrder(
@@ -113,7 +113,7 @@ fun Proscenium.drawSection(): List<DrawingOrder> {
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(originY + depth, floorHeight - height, originY + depth, venue.height.toFloat()),
+    data = listOf(originY + depth, floorHeight - height, originY + depth, 0f),
   ))
   // top of opening
   drawingOrders.add(DrawingOrder(
