@@ -28,7 +28,7 @@ import kotlin.test.assertIs
 class PipeTest {
 
   fun minimalXmlWithNoParent(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "1.2")
     xmlElement.setAttribute("y", "2.3")
@@ -38,13 +38,13 @@ class PipeTest {
   }
 
   fun minimalXmlWithPipeBaseParent(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("length", "47.5")
     return xmlElement
   }
 
   private fun minimalXmlWithVerticalPipeParent(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("length", "22.5")
     xmlElement.setAttribute("location", "38")
     return xmlElement
@@ -57,7 +57,7 @@ class PipeTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
 
     val pipe = Pipe.factory(xmlElement, null)
 
@@ -66,7 +66,7 @@ class PipeTest {
 
   @Test
   fun `is hangable`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
 
     val pipe = Pipe.factory(xmlElement, null)
 
@@ -159,18 +159,18 @@ class PipeTest {
 
   @Test
   fun `notes error for missing required attributes when there is no parent`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
 
     val instance = Pipe.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsOnly(
-        "Missing required id attribute",
-        "Missing required x attribute",
-        "Missing required y attribute",
-        "Missing required z attribute",
-        "Missing required length attribute",
+        "pipe missing required id attribute",
+        "pipe missing required x attribute",
+        "pipe missing required y attribute",
+        "pipe missing required z attribute",
+        "pipe missing required length attribute",
       )
     }.assertAll()
   }
@@ -178,14 +178,14 @@ class PipeTest {
   @Test
   fun `notes error for missing required attributes when pipe base is parent`() {
     val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
 
     val instance = Pipe.factory(xmlElement, pipeBase)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required length attribute",
+        "pipe missing required length attribute",
       )
     }.assertAll()
   }
@@ -194,15 +194,15 @@ class PipeTest {
   fun `notes error for missing required attributes when vertical pipe is parent`() {
     val pipeBase = PipeBase.factory(PipeBaseTest().minimalXml(), null)
     val verticalPipe = Pipe.factory(minimalXmlWithPipeBaseParent(), pipeBase)
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
 
     val instance = Pipe.factory(xmlElement, verticalPipe)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required length attribute",
-        "Missing required location attribute",
+        "pipe missing required length attribute",
+        "pipe missing required location attribute",
       )
     }.assertAll()
   }
@@ -236,15 +236,15 @@ class PipeTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsOnly(
-        "Without a vertical pipe parent, the offset attribute is not allowed",
-        "Unable to offset drawing of pipe when it is not a child of a vertical pipe",
+        "pipe without a vertical pipe parent, the offset attribute is not allowed",
+        "pipe unable to offset drawing of pipe when it is not a child of a vertical pipe",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
@@ -256,10 +256,10 @@ class PipeTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsOnly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
-        "Unable to read floating-point number from z attribute",
-        "Unable to read positive floating-point number from length attribute",
+        "pipe unable to read floating-point number from x attribute",
+        "pipe unable to read floating-point number from y attribute",
+        "pipe unable to read floating-point number from z attribute",
+        "pipe unable to read positive floating-point number from length attribute",
       )
     }.assertAll()
   }
@@ -276,8 +276,8 @@ class PipeTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsOnly(
-        "Unable to read optional floating-point number from offset attribute",
-        "Unable to read optional floating-point number from offsety attribute",
+        "pipe unable to read optional floating-point number from offset attribute",
+        "pipe unable to read optional floating-point number from offsety attribute",
       )
     }.assertAll()
   }
@@ -333,7 +333,7 @@ class PipeTest {
   @Test
   fun `reorient using proscenium coordinates`() {
     Proscenium.instances.clear()
-    val prosceniumElement = IIOMetadataNode()
+    val prosceniumElement = IIOMetadataNode("pipe")
     prosceniumElement.setAttribute("x", "120")
     prosceniumElement.setAttribute("y", "230")
     prosceniumElement.setAttribute("z", "34")
@@ -343,7 +343,7 @@ class PipeTest {
     assertThat(Proscenium.inUse()).isFalse
     Proscenium.factory(prosceniumElement, null)
     assertThat(Proscenium.inUse()).isTrue
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "10")
     xmlElement.setAttribute("y", "20")
@@ -360,7 +360,7 @@ class PipeTest {
   @Test
   fun `find pipe by id`() {
     Pipe.instances.clear()
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipe")
     xmlElement.setAttribute("id", "name")
     xmlElement.setAttribute("x", "10")
     xmlElement.setAttribute("y", "20")
@@ -417,20 +417,20 @@ class PipeTest {
   @Test
   fun `keeps track of child entities according to location on pipe`() {
     Pipe.instances.clear()
-    val pipeElement = IIOMetadataNode()
+    val pipeElement = IIOMetadataNode("pipe")
     pipeElement.setAttribute("id", "name")
     pipeElement.setAttribute("x", "10")
     pipeElement.setAttribute("y", "20")
     pipeElement.setAttribute("z", "300")
     pipeElement.setAttribute("length", "4.5")
     val pipe = Pipe.factory(pipeElement, null)
-    val luminaireElement = IIOMetadataNode()
+    val luminaireElement = IIOMetadataNode("pipe")
     luminaireElement.setAttribute("type", "Type value")
     luminaireElement.setAttribute("location", "17.6")
     luminaireElement.setAttribute("owner", "Owner name")
     luminaireElement.setAttribute("address", "124")
     val luminaire = Luminaire.factory(luminaireElement, null)
-    val luminaireElement2 = IIOMetadataNode()
+    val luminaireElement2 = IIOMetadataNode("pipe")
     luminaireElement2.setAttribute("type", "Type value")
     luminaireElement2.setAttribute("location", "-17.6")
     luminaireElement2.setAttribute("owner", "Owner name")

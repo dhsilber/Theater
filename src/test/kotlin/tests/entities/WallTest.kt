@@ -20,7 +20,7 @@ import kotlin.test.assertIs
 class WallTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("wall")
     xmlElement.setAttribute("x1", "0.1")
     xmlElement.setAttribute("y1", "0.2")
     xmlElement.setAttribute("x2", "0.3")
@@ -35,7 +35,7 @@ class WallTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("wall")
 
     val wall = Wall.factory(xmlElement, null)
 
@@ -81,24 +81,24 @@ class WallTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("wall")
 
     val instance = Wall.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x1 attribute",
-        "Missing required y1 attribute",
-        "Missing required x2 attribute",
-        "Missing required y2 attribute",
+        "wall missing required x1 attribute",
+        "wall missing required y1 attribute",
+        "wall missing required x2 attribute",
+        "wall missing required y2 attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("wall")
     xmlElement.setAttribute("x1", "bogus.1")
     xmlElement.setAttribute("y1", "bogus.2")
     xmlElement.setAttribute("x2", "bogus.3")
@@ -109,10 +109,10 @@ class WallTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x1 attribute",
-        "Unable to read floating-point number from y1 attribute",
-        "Unable to read floating-point number from x2 attribute",
-        "Unable to read floating-point number from y2 attribute",
+        "wall unable to read floating-point number from x1 attribute",
+        "wall unable to read floating-point number from y1 attribute",
+        "wall unable to read floating-point number from x2 attribute",
+        "wall unable to read floating-point number from y2 attribute",
       )
     }.assertAll()
   }

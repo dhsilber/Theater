@@ -36,7 +36,7 @@ class Luminaire(elementPassthrough: Element, val parentEntity: XmlElemental?) :
       // find Pipe that has matching name
       pipe = Pipe.queryById(on)
       if (null === pipe) {
-        errors.add("Unable to find pipe \"$on\" to hang this on")
+        errors.add("luminaire unable to find pipe \"$on\" to hang this on")
       } else {
         pipe.hang(this)
       }

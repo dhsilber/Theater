@@ -20,7 +20,7 @@ import kotlin.test.assertIs
 class SetpieceTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("setpiece")
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
     return xmlElement
@@ -33,7 +33,7 @@ class SetpieceTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("setpiece")
 
     val setPiece = Setpiece.factory(xmlElement, null)
 
@@ -78,22 +78,22 @@ class SetpieceTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("setpiece")
 
     val instance = Setpiece.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x attribute",
-        "Missing required y attribute",
+        "setpiece missing required x attribute",
+        "setpiece missing required y attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("setpiece")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
 
@@ -102,8 +102,8 @@ class SetpieceTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
+        "setpiece unable to read floating-point number from x attribute",
+        "setpiece unable to read floating-point number from y attribute",
       )
     }.assertAll()
   }
@@ -112,7 +112,7 @@ class SetpieceTest {
   fun `adopt keeps a reference to child shape`() {
     val instance = Setpiece.factory(minimalXml(), null)
 
-    val setPlatformElement = IIOMetadataNode()
+    val setPlatformElement = IIOMetadataNode("setpiece")
     setPlatformElement.setAttribute("x", "17.6")
     setPlatformElement.setAttribute("y", "124")
 //    setPlatformElement.setAttribute("rectangle", "17.6  124")

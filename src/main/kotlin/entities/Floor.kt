@@ -7,6 +7,10 @@ import org.w3c.dom.Element
 class Floor(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemental(elementPassthrough) {
   val surface = getPlane()
 
+  init {
+      println( this )
+  }
+
   companion object : CreateWithXmlElement<Floor>() {
     const val Tag = "floor"
 

@@ -1,4 +1,4 @@
-package tests.entities
+  package tests.entities
 
 import CreateWithXmlElement
 import Xml
@@ -22,14 +22,16 @@ import kotlin.test.assertIs
 class FlatTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("x", "0.1")
-    xmlElement.setAttribute("y", "0.2")
+    val xmlElement = IIOMetadataNode("flat")
+    xmlElement.setAttribute("x1", "0.1")
+    xmlElement.setAttribute("y1", "0.2")
+    xmlElement.setAttribute("x2", "0.3")
+    xmlElement.setAttribute("y2", "0.4")
     return xmlElement
   }
 
   private fun minimalSetPiece(): Setpiece {
-    val setPieceElement = IIOMetadataNode()
+    val setPieceElement = IIOMetadataNode("flat")
     setPieceElement.setAttribute("x", "0.1")
     setPieceElement.setAttribute("y", "0.2")
     return Setpiece.factory(setPieceElement, null)
@@ -42,7 +44,7 @@ class FlatTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("flat")
 
     val setPiece = Flat.factory(xmlElement, null)
 
@@ -88,34 +90,38 @@ class FlatTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("flat")
 
     val instance = Flat.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x1 attribute",
-        "Missing required y1 attribute",
-        "Missing required x2 attribute",
-        "Missing required y2 attribute",
+        "flat missing required x1 attribute",
+        "flat missing required y1 attribute",
+        "flat missing required x2 attribute",
+        "flat missing required y2 attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
-    xmlElement.setAttribute("x", "bogus.1")
-    xmlElement.setAttribute("y", "bogus.2")
+    val xmlElement = IIOMetadataNode("flat")
+    xmlElement.setAttribute("x1", "bogus.1")
+    xmlElement.setAttribute("y1", "bogus.2")
+    xmlElement.setAttribute("x2", "bogus.1")
+    xmlElement.setAttribute("y2", "bogus.2")
 
     val instance = Flat.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
+        "flat unable to read floating-point number from x1 attribute",
+        "flat unable to read floating-point number from y1 attribute",
+        "flat unable to read floating-point number from x2 attribute",
+        "flat unable to read floating-point number from y2 attribute",
       )
     }.assertAll()
   }
@@ -124,7 +130,7 @@ class FlatTest {
 //  fun `adopt keeps a reference to child shape`() {
 //    val instance = Flat.factory(minimalXml(), null)
 //
-//    val setPlatformElement = IIOMetadataNode()
+//    val setPlatformElement = IIOMetadataNode("flat)
 //    setPlatformElement.setAttribute("x", "17.6")
 //    setPlatformElement.setAttribute("y", "124")
 ////    setPlatformElement.setAttribute("rectangle", "17.6  124")

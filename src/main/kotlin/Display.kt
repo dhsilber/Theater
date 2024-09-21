@@ -16,14 +16,14 @@ class Display {
 //    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun display(
-      drawingWalls: Boolean,
-      share: Boolean,
-      x: Int,
-      y: Int,
-      viewSection: Boolean = false,
+  drawingWalls: Boolean,
+  share: Boolean,
+  x: Int,
+  y: Int,
+  viewSection: Boolean = false,
 //      text: String
 //      resetter: (text: String) -> Unit
-      flareVenueCorners: Boolean,
+  showSet: Boolean,
     ) {
       var x10 by remember { mutableStateOf(0) }
       var y10 by remember { mutableStateOf(0) }
@@ -71,9 +71,9 @@ class Display {
         }
 
         if(viewSection)
-          drawSectionContent(this, flareVenueCorners)
+          drawSectionContent(this, showSet)
         else
-          drawPlanContent(this, flareVenueCorners)
+          drawPlanContent(this, showSet)
 
 
       }

@@ -21,7 +21,7 @@ import kotlin.test.assertIs
 internal class PipeBaseTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipebase")
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
     xmlElement.setAttribute("z", "0")
@@ -35,7 +35,7 @@ internal class PipeBaseTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipebase")
 
     val instance = PipeBase.factory(xmlElement, null)
 
@@ -95,23 +95,23 @@ internal class PipeBaseTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipebase")
 
     val instance = PipeBase.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x attribute",
-        "Missing required y attribute",
-        "Missing required z attribute",
+        "pipebase missing required x attribute",
+        "pipebase missing required y attribute",
+        "pipebase missing required z attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("pipebase")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
     xmlElement.setAttribute("z", "zee")
@@ -121,9 +121,9 @@ internal class PipeBaseTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
-        "Unable to read floating-point number from z attribute",
+        "pipebase unable to read floating-point number from x attribute",
+        "pipebase unable to read floating-point number from y attribute",
+        "pipebase unable to read floating-point number from z attribute",
       )
     }.assertAll()
   }

@@ -28,7 +28,7 @@ class SetPlatformTest {
   val z = 9.5f
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("set-platform")
     xmlElement.setAttribute("x", x.toString())
     xmlElement.setAttribute("y", y.toString())
     xmlElement.setAttribute("z", z.toString())
@@ -37,7 +37,7 @@ class SetPlatformTest {
   }
 
   private fun minimalSetPiece(): Setpiece {
-    val setPieceElement = IIOMetadataNode()
+    val setPieceElement = IIOMetadataNode("set-platform")
     setPieceElement.setAttribute("x", "0.1")
     setPieceElement.setAttribute("y", "0.2")
     return Setpiece.factory(setPieceElement, null)
@@ -50,7 +50,7 @@ class SetPlatformTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("set-platform")
 
     val setPlatform = SetPlatform.factory(xmlElement, null)
 
@@ -110,23 +110,23 @@ class SetPlatformTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("set-platform")
 
     val instance = SetPlatform.factory(xmlElement, minimalSetPiece())
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x attribute",
-        "Missing required y attribute",
-        "Missing required z attribute",
+        "set-platform missing required x attribute",
+        "set-platform missing required y attribute",
+        "set-platform missing required z attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("set-platform")
     xmlElement.setAttribute("x", "unavailable setPiece")
     xmlElement.setAttribute("y", "Type value")
     xmlElement.setAttribute("z", "Type value")
@@ -136,9 +136,9 @@ class SetPlatformTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
-        "Unable to read floating-point number from z attribute",
+        "set-platform unable to read floating-point number from x attribute",
+        "set-platform unable to read floating-point number from y attribute",
+        "set-platform unable to read floating-point number from z attribute",
       )
     }.assertAll()
   }
@@ -149,7 +149,7 @@ class SetPlatformTest {
     setPieceElement.setAttribute("id", "setPiece-name")
     val setPiece = Setpiece.factory(setPieceElement, null)
 
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("set-platform")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
 
@@ -177,7 +177,7 @@ class SetPlatformTest {
 
 //  @Test
 //  fun `registers self with linked setPiece`() {
-//    val setPieceElement = IIOMetadataNode()
+//    val setPieceElement = IIOMetadataNode("set-platform)
 //    setPieceElement.setAttribute("id", "setPiece name")
 //    setPieceElement.setAttribute("x", "1.2")
 //    setPieceElement.setAttribute("y", "2.3")
@@ -185,7 +185,7 @@ class SetPlatformTest {
 //    setPieceElement.setAttribute("length", "4.5")
 //    val setPiece = SetPiece.factory(setPieceElement, null)
 //
-//    val xmlElement = IIOMetadataNode()
+//    val xmlElement = IIOMetadataNode("set-platform)
 //    xmlElement.setAttribute("on", "setPiece name")
 //    xmlElement.setAttribute("type", "Type value")
 //    xmlElement.setAttribute("location", "17.6")
@@ -203,7 +203,7 @@ class SetPlatformTest {
   fun `adopt keeps a reference to child shape`() {
     val instance = SetPlatform.factory(minimalXml(), null)
 
-    val shapeElement = IIOMetadataNode()
+    val shapeElement = IIOMetadataNode("set-platform")
     shapeElement.setAttribute("rectangle", "17.6  124")
     val shape = Shape.factory(shapeElement, instance)
 

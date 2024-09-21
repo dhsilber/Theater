@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -21,7 +22,7 @@ import kotlin.test.assertTrue
 class VenueTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("venue")
     xmlElement.setAttribute("building", "Building value")
     xmlElement.setAttribute("room", "Room value")
     xmlElement.setAttribute("width", "12")
@@ -37,7 +38,7 @@ class VenueTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("venue")
 
     val luminaire = Venue.factory(xmlElement, null)
 
@@ -84,7 +85,7 @@ class VenueTest {
 
   @Test
   fun `registers optional attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("venue")
     xmlElement.setAttribute("building", "Building value")
     xmlElement.setAttribute("room", "Room value")
     xmlElement.setAttribute("width", "12")
@@ -100,22 +101,25 @@ class VenueTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("venue")
 
     val instance = Venue.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals(5, instance.errors.size)
-    assertEquals("Missing required building attribute", instance.errors[0])
-    assertEquals("Missing required room attribute", instance.errors[1])
-    assertEquals("Missing required width attribute", instance.errors[2])
-    assertEquals("Missing required depth attribute", instance.errors[3])
-    assertEquals("Missing required height attribute", instance.errors[4])
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "venue missing required building attribute",
+        "venue missing required room attribute",
+        "venue missing required width attribute",
+        "venue missing required depth attribute",
+        "venue missing required height attribute",
+      )
+    }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("venue")
     xmlElement.setAttribute("building", "Building value")
     xmlElement.setAttribute("room", "Room value")
     xmlElement.setAttribute("width", "bogus.1")
@@ -124,11 +128,14 @@ class VenueTest {
 
     val instance = Venue.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals("Unable to read positive integer from width attribute", instance.errors[0])
-    assertEquals("Unable to read positive integer from depth attribute", instance.errors[1])
-    assertEquals("Unable to read positive integer from height attribute", instance.errors[2])
-    assertEquals(3, instance.errors.size)
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "venue unable to read positive integer from width attribute",
+        "venue unable to read positive integer from depth attribute",
+        "venue unable to read positive integer from height attribute",
+      )
+    }.assertAll()
   }
 
 

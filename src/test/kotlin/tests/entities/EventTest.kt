@@ -19,7 +19,7 @@ import kotlin.test.assertIs
 class EventTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("event")
     xmlElement.setAttribute("id", "Name of event")
     return xmlElement
   }
@@ -31,7 +31,7 @@ class EventTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("event")
 
     val event = Event.factory(xmlElement, null)
 
@@ -76,14 +76,14 @@ class EventTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("event")
 
     val instance = Event.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required id attribute",
+        "event missing required id attribute",
       )
     }.assertAll()
   }

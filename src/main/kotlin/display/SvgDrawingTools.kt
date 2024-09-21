@@ -2,13 +2,7 @@ package display
 
 import SvgDocument
 import coordinates.VenuePoint
-import display.DrawingOrderOperation.CIRCLE
-import display.DrawingOrderOperation.LINE
-import display.DrawingOrderOperation.DASHED_LINE
-import display.DrawingOrderOperation.RECTANGLE
-import display.DrawingOrderOperation.FILLED_RECTANGLE
-import display.DrawingOrderOperation.FILLED_RIGHT_TRIANGLE
-import display.DrawingOrderOperation.USE
+import display.DrawingOrderOperation.*
 import entities.LuminaireDefinition
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -194,6 +188,7 @@ fun svgDraw(svgDocument: SvgDocument, orders: List<DrawingOrder>): SvgBoundary {
     val result: DrawingResults = when (it.operation) {
       CIRCLE -> drawCircle(svgDocument, it)
       LINE -> drawLine(svgDocument, it)
+      THICK_LINE -> drawLine(svgDocument, it)
       DASHED_LINE -> drawDashedLine(svgDocument, it)
       RECTANGLE -> drawRectangle(svgDocument, it)
       FILLED_RECTANGLE -> drawFilledRectangle(svgDocument, it)

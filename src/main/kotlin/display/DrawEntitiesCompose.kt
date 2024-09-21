@@ -10,7 +10,7 @@ import coordinates.Point
 import coordinates.VenuePoint
 import entities.*
 
-fun drawPlanContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
+fun drawPlanContent(drawScope: DrawScope, showSet: Boolean) {
   Grid.instance.drawPlan(drawScope)
 
   for (instance in Wall.instances) {
@@ -25,26 +25,29 @@ fun drawPlanContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
 
   }
 
-  if (flareVenueCorners) Venue.instances.map { composeDraw(drawScope, it.drawPlan()) }
+  Venue.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Floor.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Stair.instances.map { composeDraw(drawScope, it.drawPlan()) }
   Proscenium.instances.map { composeDraw(drawScope, it.drawPlan()) }
   PipeBase.instances.map { composeDraw(drawScope, it.drawPlan()) }
   PipeManager.list.map { composeDraw(drawScope, it.pipe.drawPlan()) }
 
-  for (instance in Setpiece.instances) {
-    instance.draw(drawScope)
+  if (showSet) {
+    for (instance in Setpiece.instances) {
+      instance.draw(drawScope)
+    }
+    Flat.instances.map { composeDraw(drawScope, it.drawPlan()) }
   }
 }
 
-fun drawSectionContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
+fun drawSectionContent(drawScope: DrawScope, showSet: Boolean) {
   Grid.instance.drawSection(drawScope)
 
 //  for (instance in Wall.instances) {
 //    instance.draw(drawScope)
 //  }
 
-  if (flareVenueCorners) Venue.instances.map { composeDraw(drawScope, it.drawSection()) }
+  Venue.instances.map { composeDraw(drawScope, it.drawSection()) }
   Floor.instances.map { composeDraw(drawScope, it.drawSection()) }
   Stair.instances.map { composeDraw(drawScope, it.drawSection()) }
   Proscenium.instances.map { composeDraw(drawScope, it.drawSection()) }
@@ -54,10 +57,6 @@ fun drawSectionContent(drawScope: DrawScope, flareVenueCorners: Boolean) {
 //  for (instance in Setpiece.instances) {
 //    instance.draw(drawScope)
 //  }
-}
-
-fun Wall.draw(drawScope: DrawScope) {
-  drawScope.drawLine(Color.Black, start.toOffset(), end.toOffset())
 }
 
 fun PipeBase.draw(drawScope: DrawScope) {
@@ -133,3 +132,8 @@ fun Shape.draw(drawScope: DrawScope, placement: VenuePoint) {
 //    platform.draw(origin)
 //  }
 }
+
+fun Wall.draw(drawScope: DrawScope) {
+  drawScope.drawLine(Color.Black, start.toOffset(), end.toOffset())
+}
+

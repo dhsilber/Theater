@@ -32,7 +32,7 @@ class StagePointTest {
   @Test
   fun storesCoordinatesWithProscenium() {
     Proscenium.instances.clear()
-    val prosceniumElement = IIOMetadataNode()
+    val prosceniumElement = IIOMetadataNode("proscenium")
     prosceniumElement.setAttribute("x", prosceniumX.toString())
     prosceniumElement.setAttribute("y", prosceniumY.toString())
     prosceniumElement.setAttribute("z", prosceniumZ.toString())

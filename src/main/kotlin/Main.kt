@@ -25,7 +25,7 @@ import ui.PipeButton
 import ui.ReloadButton
 import ui.ToggleButton as ViewButton
 import ui.ToggleButton as MessageButton
-import ui.ToggleButton as FlareVenueButton
+import ui.ToggleButton as SetButton
 import ui.WallButton
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,7 +44,7 @@ fun App() {
         var pipeDisplay by remember { mutableStateOf(false) }
         var messagesDisplay by remember { mutableStateOf(true) }
         var viewSection by remember { mutableStateOf(false) }
-        var flareVenueCorners by remember { mutableStateOf(true) }
+        var showSet by remember { mutableStateOf(true) }
 
         Row(
             Modifier
@@ -86,13 +86,13 @@ fun App() {
                     displayStateOff = DisplayState(Color.White, Color.Black, "Show Section"),
                     displayStateOn = DisplayState(Color.Cyan, Color.Black, "Show Plan"),
                 )
-                FlareVenueButton(
-                    flareVenueCorners,
+                SetButton(
+                    showSet,
                     toggle = {
-                        flareVenueCorners = !flareVenueCorners
+                        showSet = !showSet
                     },
-                    displayStateOff = DisplayState(Color.White, Color.Black, "Flare Venue Corners"),
-                    displayStateOn = DisplayState(Color.Magenta, Color.Black, "Hide Venue Corners"),
+                    displayStateOff = DisplayState(Color.White, Color.Green, "Show Set"),
+                    displayStateOn = DisplayState(Color.Green, Color.Black, "Hide Set"),
                 )
             }
             Display.display(
@@ -100,7 +100,7 @@ fun App() {
                 share = pipeDisplay || messagesDisplay,
                 x, y,
                 viewSection = viewSection,
-                flareVenueCorners = flareVenueCorners,
+                showSet = showSet,
             )
             if (messagesDisplay) {
                 MessageSideBar.messageLister()

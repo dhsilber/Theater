@@ -19,7 +19,7 @@ import kotlin.test.assertIs
 class DrawingTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("drawing")
     xmlElement.setAttribute("id", "Name of drawing")
     xmlElement.setAttribute("filename", "file-name")
     return xmlElement
@@ -32,7 +32,7 @@ class DrawingTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("drawing")
 
     val drawing = Drawing.factory(xmlElement, null)
 
@@ -78,7 +78,7 @@ class DrawingTest {
 
   @Test
   fun `registers optional attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("drawing")
     xmlElement.setAttribute("pipe", "pipe-name")
 
     val instance = Drawing.factory(xmlElement, null)
@@ -88,15 +88,15 @@ class DrawingTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("drawing")
 
     val instance = Drawing.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required id attribute",
-        "Missing required filename attribute",
+        "drawing missing required id attribute",
+        "drawing missing required filename attribute",
       )
     }.assertAll()
   }
@@ -110,7 +110,7 @@ class DrawingTest {
 
   @Test
   fun `hasPipe is true when there is a pipe`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("drawing")
     xmlElement.setAttribute("pipe", "pipe-name")
 
     val instance = Drawing.factory(xmlElement, null)

@@ -22,7 +22,7 @@ import kotlin.test.assertIs
 internal class StairTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("stair")
     xmlElement.setAttribute("x", "11")
     xmlElement.setAttribute("y", "12")
     xmlElement.setAttribute("z", "3")
@@ -40,7 +40,7 @@ internal class StairTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("stair")
 
     val instance = Stair.factory(xmlElement, null)
 
@@ -89,27 +89,27 @@ internal class StairTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("stair")
 
     val instance = Stair.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x attribute",
-        "Missing required y attribute",
-        "Missing required z attribute",
-        "Missing required width attribute",
-        "Missing required steps attribute",
-        "Missing required run attribute",
-        "Missing required rise attribute",
+        "stair missing required x attribute",
+        "stair missing required y attribute",
+        "stair missing required z attribute",
+        "stair missing required width attribute",
+        "stair missing required steps attribute",
+        "stair missing required run attribute",
+        "stair missing required rise attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("stair")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
     xmlElement.setAttribute("z", "zee")
@@ -123,13 +123,13 @@ internal class StairTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
-        "Unable to read floating-point number from z attribute",
-        "Unable to read floating-point number from width attribute",
-        "Unable to read positive integer from steps attribute",
-        "Unable to read floating-point number from run attribute",
-        "Unable to read floating-point number from rise attribute",
+        "stair unable to read floating-point number from x attribute",
+        "stair unable to read floating-point number from y attribute",
+        "stair unable to read floating-point number from z attribute",
+        "stair unable to read floating-point number from width attribute",
+        "stair unable to read positive integer from steps attribute",
+        "stair unable to read floating-point number from run attribute",
+        "stair unable to read floating-point number from rise attribute",
       )
     }.assertAll()
   }

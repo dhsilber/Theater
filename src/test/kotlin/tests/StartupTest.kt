@@ -74,7 +74,7 @@ class StartupTest {
   @Test
   fun `pipes are given an opportunity to perform post-parsing work`() {
     Proscenium.instances.clear()
-    val prosceniumElement = IIOMetadataNode()
+    val prosceniumElement = IIOMetadataNode("proscenium")
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
     prosceniumElement.setAttribute("z", "3.4")

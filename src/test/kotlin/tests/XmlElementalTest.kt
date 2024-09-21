@@ -35,7 +35,7 @@ class XmlElementalTest {
   }
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("element")
     xmlElement.setAttribute("venue-x", venueX.toString())
     xmlElement.setAttribute("venue-y", venueY.toString())
     xmlElement.setAttribute("stage-x", stageX.toString())
@@ -79,38 +79,38 @@ class XmlElementalTest {
 
   @Test
   fun `getRectangleAttribute sets error for invalid data`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("element")
     val text = "Not good rectangle data"
     xmlElement.setAttribute("data", text)
 
     val badRectangleEntity = BadRectangleEntity(xmlElement, null)
 
     assertThat(badRectangleEntity.errors).containsExactly(
-      "Unable to read rectangle specification from data attribute containing '$text'",
+      "element unable to read rectangle specification from data attribute containing '$text'",
     )
   }
 
   @Test
   fun `getRectangleAttribute sets error for not enough data`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("element")
     val text = "5.6"
     xmlElement.setAttribute("data", text)
 
     val badRectangleEntity = BadRectangleEntity(xmlElement, null)
 
     assertThat(badRectangleEntity.errors).containsExactly(
-      "Unable to read rectangle specification from data attribute containing '$text'",
+      "element unable to read rectangle specification from data attribute containing '$text'",
     )
   }
 
   @Test
   fun `getRectangleAttribute sets error for missing data`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("element")
 
     val badRectangleEntity = BadRectangleEntity(xmlElement, null)
 
     assertThat(badRectangleEntity.errors).containsExactly(
-      "Missing required data attribute",
+      "element missing required data attribute",
     )
   }
 

@@ -22,7 +22,7 @@ import kotlin.test.assertIs
 class LuminaireTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
     return xmlElement
@@ -35,7 +35,7 @@ class LuminaireTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
 
     val luminaire = Luminaire.factory(xmlElement, null)
 
@@ -44,7 +44,7 @@ class LuminaireTest {
 
   @Test
   fun `is hangable`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
 
     val luminaire = Luminaire.factory(xmlElement, null)
 
@@ -90,7 +90,7 @@ class LuminaireTest {
 
   @Test
   fun `registers optional attributes`() {
-    val pipeElement = IIOMetadataNode()
+    val pipeElement = IIOMetadataNode("pipe")
     pipeElement.setAttribute("id", "pipe name")
     pipeElement.setAttribute("x", "1.2")
     pipeElement.setAttribute("y", "2.3")
@@ -98,7 +98,7 @@ class LuminaireTest {
     pipeElement.setAttribute("length", "4.5")
     Pipe.factory(pipeElement, null)
 
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("on", "pipe name")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
@@ -133,22 +133,22 @@ class LuminaireTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
 
     val instance = Luminaire.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required type attribute",
-        "Missing required location attribute",
+        "luminaire missing required type attribute",
+        "luminaire missing required location attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("on", "unavailable pipe")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "bogus17.6")
@@ -163,19 +163,19 @@ class LuminaireTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from location attribute",
-        "Unable to read positive integer from dimmer attribute",
-        "Unable to read positive integer from channel attribute",
-        "Unable to read positive integer from address attribute",
-        "Unable to read optional floating-point number from rotation attribute",
-        "Unable to find pipe \"unavailable pipe\" to hang this on",
+        "luminaire unable to read floating-point number from location attribute",
+        "luminaire unable to read positive integer from dimmer attribute",
+        "luminaire unable to read positive integer from channel attribute",
+        "luminaire unable to read positive integer from address attribute",
+        "luminaire unable to read optional floating-point number from rotation attribute",
+        "luminaire unable to find pipe \"unavailable pipe\" to hang this on",
       )
     }.assertAll()
   }
 
   @Test
   fun `registers self with parent pipe`() {
-    val pipeElement = IIOMetadataNode()
+    val pipeElement = IIOMetadataNode("pipe")
     pipeElement.setAttribute("id", "pipe name")
     pipeElement.setAttribute("x", "1.2")
     pipeElement.setAttribute("y", "2.3")
@@ -183,7 +183,7 @@ class LuminaireTest {
     pipeElement.setAttribute("length", "4.5")
     val pipe = Pipe.factory(pipeElement, null)
 
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
 
@@ -198,7 +198,7 @@ class LuminaireTest {
 
   @Test
   fun `registers self with linked pipe`() {
-    val pipeElement = IIOMetadataNode()
+    val pipeElement = IIOMetadataNode("pipe")
     pipeElement.setAttribute("id", "pipe name")
     pipeElement.setAttribute("x", "1.2")
     pipeElement.setAttribute("y", "2.3")
@@ -206,7 +206,7 @@ class LuminaireTest {
     pipeElement.setAttribute("length", "4.5")
     val pipe = Pipe.factory(pipeElement, null)
 
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("on", "pipe name")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
@@ -222,7 +222,7 @@ class LuminaireTest {
 
   @Test
   fun `change in address updates xmlElement and saves file`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("luminaire")
     xmlElement.setAttribute("type", "Type value")
     xmlElement.setAttribute("location", "17.6")
     xmlElement.setAttribute("owner", "Owner name")

@@ -1,127 +1,60 @@
 package display
 
 import androidx.compose.ui.graphics.Color
+import coordinates.StagePoint
 import coordinates.VenuePoint
 import display.DrawingOrderOperation.*
 import entities.*
 import java.lang.Float.min
 
-fun Proscenium.drawPlan(): List<DrawingOrder> {
-
-  val startX = origin.x - width / 2
-  val startY = origin.y
-  val endX = origin.x + width / 2
-  val endY = origin.y - depth
-  val originSize = 7f
+fun Flat.drawPlan(): List<DrawingOrder> {
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
 
-  val cyan = IndependentColor(Color.Cyan, "cyan")
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(origin.x - originSize, origin.y - originSize, origin.x + originSize, origin.y + originSize),
-    color = cyan
-  ))
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(origin.x + originSize, origin.y - originSize, origin.x - originSize, origin.y + originSize),
-    color = cyan
-  ))
+  val data = listOf(StagePoint.OriginX(start.x), StagePoint.OriginY(start.y),
+    StagePoint.OriginX(end.x - start.x), StagePoint.OriginY(end.y - start.y))
+
+  println("$this - $data")
+
+  val backsideXOffset: Float = when {
+    start.y < end.y -> -4f
+    start.y > end.y -> 4f
+    else -> 0f
+  }
+  val backsideYOffset: Float = when {
+    start.x < end.x -> -4f
+    start.x > end.x -> 4f
+    else -> 0f
+  }
+
 //  drawingOrders.add(DrawingOrder(
-//    CIRCLE,
-//    data = listOf(origin.x, endY, originSize),
-//    cyan
+//    operation = FILLED_RECTANGLE,
+//    entity = this,
+//    data = listOf(start.venue.x, start.venue.y, 300f, 400f),
+//    color = IndependentColor(Color.Green, "green"),
 //  ))
-  // SR end of proscenium arch
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(startX, startY, startX, endY),
-  ))
-  // SL end of proscenium arch
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(endX, startY, endX, endY),
-  ))
-  // US side of proscenium arch
-  drawingOrders.add(DrawingOrder(
-    operation = DASHED_LINE,
-    entity = this,
-    data = listOf(startX, endY, endX, endY),
-    color = IndependentColor(Color.Gray, "grey")
-  ))
-  // DS side of proscenium arch
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(startX, startY, endX, startY),
-    color = IndependentColor(Color.LightGray, "lightgrey")
-  ))
-
-  return drawingOrders.toList()
-}
-
-fun Proscenium.drawSection(): List<DrawingOrder> {
-  val venue = Venue.instances.first()
-  val floorHeight = venue.height - origin.z
-  val originY = venue.depth - origin.y
-  val originSize = 7f
-
-  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
-
-  val cyan = IndependentColor(Color.Cyan, "cyan")
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(originY - originSize, floorHeight - originSize, originY + originSize, floorHeight + originSize),
-    color = cyan
-  ))
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(originY + originSize, floorHeight - originSize, originY - originSize, floorHeight + originSize),
-    color = cyan
-  ))
 //  drawingOrders.add(DrawingOrder(
-//    CIRCLE,
-//    data = listOf(originY, floorHeight, originSize),
-//    cyan
+//    operation = RECTANGLE,
+//    entity = this,
+//    data = listOf(start.venue.x, start.venue.y, end.x - start.x, end.y - start.y),
+//    color = IndependentColor(Color.Green, "green"),
 //  ))
-  // audience side
+
+  drawingOrders.add(DrawingOrder(
+    operation = THICK_LINE,
+    entity = this,
+    data = listOf(start.venue.x, start.venue.y, end.venue.x, end.venue.y ),
+    color = IndependentColor(Color.Green, "green"),
+  ))
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
-    data = listOf(originY, floorHeight, originY, floorHeight - height),
-    color = IndependentColor(Color.Green, "green")
+    data = listOf(start.venue.x + backsideXOffset, start.venue.y + backsideYOffset,
+      end.venue.x + backsideXOffset, end.venue.y + backsideYOffset),
+    color = IndependentColor(Color.Green, "green"),
   ))
-  // wall above audience side
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(originY, floorHeight - height, originY, 0f),
-  ))
-  // stage side
-  drawingOrders.add(DrawingOrder(
-    operation = DASHED_LINE,
-    entity = this,
-    data = listOf(originY + depth, floorHeight, originY + depth, floorHeight - height),
-  ))
-  // wall above stage side
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(originY + depth, floorHeight - height, originY + depth, 0f),
-  ))
-  // top of opening
-  drawingOrders.add(DrawingOrder(
-    operation = LINE,
-    entity = this,
-    data = listOf(originY, floorHeight - height, originY + depth, floorHeight - height),
-//    color = IndependentColor(Color.Gray, "grey")
-  ))
+
+  println("$drawingOrders")
 
   return drawingOrders.toList()
 }
@@ -421,6 +354,126 @@ fun Pipe.drawSectionHorizontal(): List<DrawingOrder> {
   return drawingOrders.toList()
 }
 
+fun Proscenium.drawPlan(): List<DrawingOrder> {
+
+  val startX = origin.x - width / 2
+  val startY = origin.y
+  val endX = origin.x + width / 2
+  val endY = origin.y - depth
+  val originSize = 7f
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  val cyan = IndependentColor(Color.Cyan, "cyan")
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(origin.x - originSize, origin.y - originSize, origin.x + originSize, origin.y + originSize),
+    color = cyan
+  ))
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(origin.x + originSize, origin.y - originSize, origin.x - originSize, origin.y + originSize),
+    color = cyan
+  ))
+//  drawingOrders.add(DrawingOrder(
+//    CIRCLE,
+//    data = listOf(origin.x, endY, originSize),
+//    cyan
+//  ))
+  // SR end of proscenium arch
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(startX, startY, startX, endY),
+  ))
+  // SL end of proscenium arch
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(endX, startY, endX, endY),
+  ))
+  // US side of proscenium arch
+  drawingOrders.add(DrawingOrder(
+    operation = DASHED_LINE,
+    entity = this,
+    data = listOf(startX, endY, endX, endY),
+    color = IndependentColor(Color.Gray, "grey")
+  ))
+  // DS side of proscenium arch
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(startX, startY, endX, startY),
+    color = IndependentColor(Color.LightGray, "lightgrey")
+  ))
+
+  return drawingOrders.toList()
+}
+
+fun Proscenium.drawSection(): List<DrawingOrder> {
+  val venue = Venue.instances.first()
+  val floorHeight = venue.height - origin.z
+  val originY = venue.depth - origin.y
+  val originSize = 7f
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  val cyan = IndependentColor(Color.Cyan, "cyan")
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY - originSize, floorHeight - originSize, originY + originSize, floorHeight + originSize),
+    color = cyan
+  ))
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY + originSize, floorHeight - originSize, originY - originSize, floorHeight + originSize),
+    color = cyan
+  ))
+//  drawingOrders.add(DrawingOrder(
+//    CIRCLE,
+//    data = listOf(originY, floorHeight, originSize),
+//    cyan
+//  ))
+  // audience side
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY, floorHeight, originY, floorHeight - height),
+    color = IndependentColor(Color.Green, "green")
+  ))
+  // wall above audience side
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY, floorHeight - height, originY, 0f),
+  ))
+  // stage side
+  drawingOrders.add(DrawingOrder(
+    operation = DASHED_LINE,
+    entity = this,
+    data = listOf(originY + depth, floorHeight, originY + depth, floorHeight - height),
+  ))
+  // wall above stage side
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY + depth, floorHeight - height, originY + depth, 0f),
+  ))
+  // top of opening
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(originY, floorHeight - height, originY + depth, floorHeight - height),
+//    color = IndependentColor(Color.Gray, "grey")
+  ))
+
+  return drawingOrders.toList()
+}
+
 fun Setpiece.drawSection(): List<DrawingOrder> {
   return parts.flatMap { it.drawSection(origin.venue) }
 }
@@ -470,7 +523,7 @@ fun Venue.drawPlan(): List<DrawingOrder> {
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
 
-  println("About to flare plan: width: $width - depth $depth")
+//  println("About to flare plan: width: $width - depth $depth")
 
   val red = IndependentColor(Color.Red, "red")
   val pink = IndependentColor(Color.Red, "pink")
@@ -502,10 +555,10 @@ fun Venue.drawPlan(): List<DrawingOrder> {
       )
     )
   }
-  flare(0f, 0f)
-  flare(width.toFloat(),0f)
-  flare(width.toFloat(), depth.toFloat())
-  flare(0f, depth.toFloat())
+//  flare(0f, 0f)
+//  flare(width.toFloat(),0f)
+//  flare(width.toFloat(), depth.toFloat())
+//  flare(0f, depth.toFloat())
 
   return drawingOrders.toList()
 }
@@ -513,7 +566,19 @@ fun Venue.drawPlan(): List<DrawingOrder> {
 fun Venue.drawSection(): List<DrawingOrder> {
 
   val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
-  println("About to flare section: depth $depth - height: $height")
+
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(origin.y, origin.z, origin.y + opposite.y, origin.z ),
+  ))
+  drawingOrders.add(DrawingOrder(
+    operation = LINE,
+    entity = this,
+    data = listOf(origin.y + opposite.y, origin.z, origin.y + opposite.y, origin.z + opposite.z ),
+  ))
+
+//  println("About to flare section: depth $depth - height: $height")
 
   val red = IndependentColor(Color.Red, "red")
   val pink = IndependentColor(Color.Red, "pink")
@@ -545,10 +610,10 @@ fun Venue.drawSection(): List<DrawingOrder> {
       )
     )
   }
-  flare(0f, 0f)
-  flare(depth.toFloat(),0f)
-  flare(depth.toFloat(), height.toFloat())
-  flare(0f, height.toFloat())
+//  flare(0f, 0f)
+//  flare(depth.toFloat(),0f)
+//  flare(depth.toFloat(), height.toFloat())
+//  flare(0f, height.toFloat())
 
   return drawingOrders.toList()
 }

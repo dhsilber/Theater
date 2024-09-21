@@ -32,7 +32,7 @@ class TagRegistryTest {
     println("Stored: ${TagRegistry.tagToCallback[tag]}")
     println("Actual: ${StandIn.Companion::callback}")
 
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("wall")
     TagRegistry.registerProvider("wall", xmlElement, null)
     TagRegistry.registerProvider(tag, xmlElement, null)
     SoftAssertions().apply {

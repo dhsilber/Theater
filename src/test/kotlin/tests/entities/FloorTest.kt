@@ -20,7 +20,7 @@ import kotlin.test.assertIs
 internal class FloorTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("floor")
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
     xmlElement.setAttribute("z", "27")
@@ -30,7 +30,7 @@ internal class FloorTest {
   }
 
   fun minimalSlopedXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("floor")
     xmlElement.setAttribute("x", "0.1")
     xmlElement.setAttribute("y", "0.2")
     xmlElement.setAttribute("z", "27")
@@ -47,7 +47,7 @@ internal class FloorTest {
 
   @Test
   fun `is elemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("floor")
 
     val instance = Floor.factory(xmlElement, null)
 
@@ -116,25 +116,25 @@ internal class FloorTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("floor")
 
     val instance = Floor.factory(xmlElement, null)
 
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required x attribute",
-        "Missing required y attribute",
-        "Missing required z attribute",
-        "Missing required width attribute",
-        "Missing required depth attribute",
+        "floor missing required x attribute",
+        "floor missing required y attribute",
+        "floor missing required z attribute",
+        "floor missing required width attribute",
+        "floor missing required depth attribute",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("floor")
     xmlElement.setAttribute("x", "bogus.1")
     xmlElement.setAttribute("y", "bogus.2")
     xmlElement.setAttribute("z", "zee")
@@ -146,11 +146,11 @@ internal class FloorTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read floating-point number from x attribute",
-        "Unable to read floating-point number from y attribute",
-        "Unable to read floating-point number from z attribute",
-        "Unable to read floating-point number from width attribute",
-        "Unable to read floating-point number from depth attribute",
+        "floor unable to read floating-point number from x attribute",
+        "floor unable to read floating-point number from y attribute",
+        "floor unable to read floating-point number from z attribute",
+        "floor unable to read floating-point number from width attribute",
+        "floor unable to read floating-point number from depth attribute",
       )
     }.assertAll()
   }

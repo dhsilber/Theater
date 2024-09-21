@@ -84,14 +84,14 @@ abstract class XmlElemental(val xmlElement: Element) {
   protected open fun getFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("${xmlElement.tagName} missing required $name attribute")
+      errors.add("${xmlElement.nodeName} missing required $name attribute")
       return 0.0f
     }
     var value = 0.0f
     try {
       value = valueString.toFloat()
     } catch (exception: NumberFormatException) {
-      errors.add("${xmlElement.tagName} unable to read floating-point number from $name attribute")
+      errors.add("${xmlElement.nodeName} unable to read floating-point number from $name attribute")
     }
     return value
   }
@@ -176,7 +176,7 @@ abstract class XmlElemental(val xmlElement: Element) {
   protected open fun getPositiveFloatAttribute(name: String): Float {
     val valueString: String = xmlElement.getAttribute(name)
     if (valueString.isEmpty()) {
-      errors.add("M${xmlElement.tagName} missing required $name attribute")
+      errors.add("${xmlElement.tagName} missing required $name attribute")
       return 0.0f
     }
     var value = 0.0f

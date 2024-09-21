@@ -122,8 +122,8 @@ class LuminaireDefinitionTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Missing required name attribute",
-        "Missing required weight attribute",
+        "luminaire-definition missing required name attribute",
+        "luminaire-definition missing required weight attribute",
       )
     }.assertAll()
   }
@@ -144,10 +144,10 @@ class LuminaireDefinitionTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read positive floating-point number from weight attribute",
-        "Unable to read boolean 1 from complete attribute",
-        "Unable to read positive floating-point number from width attribute",
-        "Unable to read positive floating-point number from length attribute",
+        "luminaire-definition unable to read positive floating-point number from weight attribute",
+        "luminaire-definition unable to read boolean 1 from complete attribute",
+        "luminaire-definition unable to read positive floating-point number from width attribute",
+        "luminaire-definition unable to read positive floating-point number from length attribute",
       )
     }.assertAll()
   }

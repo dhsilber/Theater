@@ -13,4 +13,6 @@ class Flat(elementPassthrough: Element, parentEntity: XmlElemental?) : XmlElemen
     fun factory(xmlElement: Element, parentEntity: XmlElemental?): Flat =
       Flat.create(xmlElement, parentEntity, ::Flat)
   }
+
+  override fun toString(): String = "Flat start (${start.x}, ${start.y}) end (${end.x}, ${end.y})"
 }

@@ -25,13 +25,13 @@ class ShapeTest {
   private val depth = 17.6f
 
   private fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("shape")
     xmlElement.setAttribute("rectangle", "$width $depth")
     return xmlElement
   }
 
   private fun minimaSetPlatform(): SetPlatform {
-    val setPlatformElement = IIOMetadataNode()
+    val setPlatformElement = IIOMetadataNode("shape")
     setPlatformElement.setAttribute("x", "12.3")
     setPlatformElement.setAttribute("y", "15.0")
     return SetPlatform.factory(setPlatformElement, null)
@@ -44,7 +44,7 @@ class ShapeTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("shape")
 
     val shape = Shape.factory(xmlElement, null)
 
@@ -102,7 +102,7 @@ class ShapeTest {
 
 //  @Test
 //  fun `notes error for missing required attributes`() {
-//    val xmlElement = IIOMetadataNode()
+//    val xmlElement = IIOMetadataNode("shape)
 //
 //    val instance = Shape.factory(xmlElement, null)
 //
@@ -117,7 +117,7 @@ class ShapeTest {
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("shape")
     xmlElement.setAttribute("rectangle", "text instead of numbers")
 
     val instance = Shape.factory(xmlElement, minimaSetPlatform())
@@ -125,14 +125,14 @@ class ShapeTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read rectangle specification from rectangle attribute containing 'text instead of numbers'",
+        "shape unable to read rectangle specification from rectangle attribute containing 'text instead of numbers'",
       )
     }.assertAll()
   }
 
   @Test
   fun `notes error for missing value in rectangle string`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("shape")
     xmlElement.setAttribute("rectangle", "3.4")
 
     val instance = Shape.factory(xmlElement, minimaSetPlatform())
@@ -140,7 +140,7 @@ class ShapeTest {
     SoftAssertions().apply {
       assertThat(instance.hasError).isTrue
       assertThat(instance.errors).containsExactly(
-        "Unable to read rectangle specification from rectangle attribute containing '3.4'",
+        "shape unable to read rectangle specification from rectangle attribute containing '3.4'",
       )
     }.assertAll()
   }
@@ -150,7 +150,7 @@ class ShapeTest {
 //    val setPieceElement = minimalXml()
 //    setPieceElement.setAttribute("id", "setPiece-name")
 //    val setPiece = SetPiece.factory(setPieceElement, null)
-    val setPlatformElement = IIOMetadataNode()
+    val setPlatformElement = IIOMetadataNode("shape")
     setPlatformElement.setAttribute("x", "1.0")
     setPlatformElement.setAttribute("y", "2.0")
     val setPlatform = SetPlatform.factory(setPlatformElement, null)
@@ -181,7 +181,7 @@ class ShapeTest {
 
 //  @Test
 //  fun `registers self with linked setPiece`() {
-//    val setPieceElement = IIOMetadataNode()
+//    val setPieceElement = IIOMetadataNode("shape)
 //    setPieceElement.setAttribute("id", "setPiece name")
 //    setPieceElement.setAttribute("x", "1.2")
 //    setPieceElement.setAttribute("y", "2.3")
@@ -189,7 +189,7 @@ class ShapeTest {
 //    setPieceElement.setAttribute("length", "4.5")
 //    val setPiece = SetPiece.factory(setPieceElement, null)
 //
-//    val xmlElement = IIOMetadataNode()
+//    val xmlElement = IIOMetadataNode("shape)
 //    xmlElement.setAttribute("on", "setPiece name")
 //    xmlElement.setAttribute("type", "Type value")
 //    xmlElement.setAttribute("location", "17.6")
@@ -205,7 +205,7 @@ class ShapeTest {
 
 //  @Test
 //  fun `change in address updates xmlElement and saves file`() {
-//    val xmlElement = IIOMetadataNode()
+//    val xmlElement = IIOMetadataNode("shape)
 //    xmlElement.setAttribute("type", "Type value")
 //    xmlElement.setAttribute("location", "17.6")
 //    xmlElement.setAttribute("owner", "Owner name")

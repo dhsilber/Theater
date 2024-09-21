@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import javax.imageio.metadata.IIOMetadataNode
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -22,7 +23,7 @@ import kotlin.test.assertTrue
 class ProsceniumTest {
 
   fun minimalXml(): IIOMetadataNode {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("proscenium")
     xmlElement.setAttribute("x", "1.2")
     xmlElement.setAttribute("y", "2.3")
     xmlElement.setAttribute("z", "3.4")
@@ -39,7 +40,7 @@ class ProsceniumTest {
 
   @Test
   fun `is xmlElemental`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("proscenium")
 
     val luminaire = Proscenium.factory(xmlElement, null)
 
@@ -75,7 +76,7 @@ class ProsceniumTest {
   @Test
   fun `companion has test for the absence of a proscenium in this venue`() {
     Proscenium.instances.clear()
-//    val venueElement = IIOMetadataNode()
+//    val venueElement = IIOMetadataNode("proscenium")
 //    venueElement.setAttribute("building", "Building value")
 //    venueElement.setAttribute("room", "Room value")
 //    venueElement.setAttribute("width", "12")
@@ -88,14 +89,14 @@ class ProsceniumTest {
 
   @Test
   fun `companion has test for the presence of a proscenium in this venue`() {
-//    val venueElement = IIOMetadataNode()
+//    val venueElement = IIOMetadataNode("proscenium")
 //    venueElement.setAttribute("building", "Building value")
 //    venueElement.setAttribute("room", "Room value")
 //    venueElement.setAttribute("width", "12")
 //    venueElement.setAttribute("depth", "23")
 //    venueElement.setAttribute("height", "34")
 //    Venue.factory(venueElement, null)
-    val prosceniumElement = IIOMetadataNode()
+    val prosceniumElement = IIOMetadataNode("proscenium")
     prosceniumElement.setAttribute("x", "1.2")
     prosceniumElement.setAttribute("y", "2.3")
     prosceniumElement.setAttribute("z", "3.4")
@@ -122,23 +123,26 @@ class ProsceniumTest {
 
   @Test
   fun `notes error for missing required attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("proscenium")
 
     val instance = Proscenium.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals(6, instance.errors.size)
-    assertEquals("Missing required x attribute", instance.errors[0])
-    assertEquals("Missing required y attribute", instance.errors[1])
-    assertEquals("Missing required z attribute", instance.errors[2])
-    assertEquals("Missing required height attribute", instance.errors[3])
-    assertEquals("Missing required width attribute", instance.errors[4])
-    assertEquals("Missing required depth attribute", instance.errors[5])
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "proscenium missing required x attribute",
+        "proscenium missing required y attribute",
+        "proscenium missing required z attribute",
+        "proscenium missing required height attribute",
+        "proscenium missing required width attribute",
+        "proscenium missing required depth attribute",
+      )
+    }.assertAll()
   }
 
   @Test
   fun `notes error for badly specified attributes`() {
-    val xmlElement = IIOMetadataNode()
+    val xmlElement = IIOMetadataNode("proscenium")
     xmlElement.setAttribute("x", "bogus 1.2")
     xmlElement.setAttribute("y", "bogus 2.3")
     xmlElement.setAttribute("z", "bogus 3.4")
@@ -148,14 +152,17 @@ class ProsceniumTest {
 
     val instance = Proscenium.factory(xmlElement, null)
 
-    assertTrue(instance.hasError)
-    assertEquals("Unable to read floating-point number from x attribute", instance.errors[0])
-    assertEquals("Unable to read floating-point number from y attribute", instance.errors[1])
-    assertEquals("Unable to read floating-point number from z attribute", instance.errors[2])
-    assertEquals("Unable to read positive floating-point number from height attribute", instance.errors[3])
-    assertEquals("Unable to read positive floating-point number from width attribute", instance.errors[4])
-    assertEquals("Unable to read positive floating-point number from depth attribute", instance.errors[5])
-    assertEquals(6, instance.errors.size)
+    SoftAssertions().apply {
+      assertThat(instance.hasError).isTrue
+      assertThat(instance.errors).containsExactly(
+        "proscenium unable to read floating-point number from x attribute",
+        "proscenium unable to read floating-point number from y attribute",
+        "proscenium unable to read floating-point number from z attribute",
+        "proscenium unable to read positive floating-point number from height attribute",
+        "proscenium unable to read positive floating-point number from width attribute",
+        "proscenium unable to read positive floating-point number from depth attribute",
+      )
+    }.assertAll()
   }
 
 //  @Test
@@ -179,7 +186,7 @@ class ProsceniumTest {
 
 //  @Test
 //  fun `for svg drawing, proscenium is drawn`() {
-//    val prosceniumElement = IIOMetadataNode()
+//    val prosceniumElement = IIOMetadataNode("proscenium")
 //    prosceniumElement.setAttribute("x", "1.2")
 //    prosceniumElement.setAttribute("y", "2.3")
 //    prosceniumElement.setAttribute("z", "3.4")
@@ -211,7 +218,7 @@ class ProsceniumTest {
 //  @Test
 //  fun `for svg drawing, proscenium is drawn 2`() {
 //    Proscenium.instances.clear()
-//    val prosceniumElement = IIOMetadataNode()
+//    val prosceniumElement = IIOMetadataNode("proscenium")
 //    prosceniumElement.setAttribute("x", "1.2")
 //    prosceniumElement.setAttribute("y", "2.3")
 //    prosceniumElement.setAttribute("z", "3.4")
