@@ -1,11 +1,16 @@
 package display
 
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import coordinates.StagePoint
 import coordinates.VenuePoint
 import display.DrawingOrderOperation.*
 import entities.*
 import java.lang.Float.min
+
+@Stable
+val Color.Companion.DarkGreen: Color
+  get() = Color( 0xFF09AA21 )
 
 fun Flat.drawPlan(): List<DrawingOrder> {
 
@@ -44,14 +49,14 @@ fun Flat.drawPlan(): List<DrawingOrder> {
     operation = THICK_LINE,
     entity = this,
     data = listOf(start.venue.x, start.venue.y, end.venue.x, end.venue.y ),
-    color = IndependentColor(Color.Green, "green"),
+    color = IndependentColor(Color.DarkGreen, "green"),
   ))
   drawingOrders.add(DrawingOrder(
     operation = LINE,
     entity = this,
     data = listOf(start.venue.x + backsideXOffset, start.venue.y + backsideYOffset,
       end.venue.x + backsideXOffset, end.venue.y + backsideYOffset),
-    color = IndependentColor(Color.Green, "green"),
+    color = IndependentColor(Color.DarkGreen, "green"),
   ))
 
   println("$drawingOrders")

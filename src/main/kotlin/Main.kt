@@ -17,6 +17,7 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mobiletheatertech.plot.Configuration
+import display.DarkGreen
 import entities.Venue
 import sidebar.MessageSideBar
 import sidebar.PipeSideBar
@@ -91,8 +92,8 @@ fun App() {
                     toggle = {
                         showSet = !showSet
                     },
-                    displayStateOff = DisplayState(Color.White, Color.Green, "Show Set"),
-                    displayStateOn = DisplayState(Color.Green, Color.Black, "Hide Set"),
+                    displayStateOff = DisplayState(Color.White, Color.DarkGreen, "Show Set"),
+                    displayStateOn = DisplayState(Color.DarkGreen, Color.White, "Hide Set"),
                 )
             }
             Display.display(

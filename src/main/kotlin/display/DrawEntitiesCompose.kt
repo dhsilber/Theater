@@ -41,7 +41,7 @@ fun drawPlanContent(drawScope: DrawScope, showSet: Boolean) {
 }
 
 fun drawSectionContent(drawScope: DrawScope, showSet: Boolean) {
-  Grid.instance.drawSection(drawScope)
+//  Grid.instance.drawSection(drawScope)
 
 //  for (instance in Wall.instances) {
 //    instance.draw(drawScope)
