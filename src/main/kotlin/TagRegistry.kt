@@ -8,10 +8,7 @@ class TagRegistry {
     fun registerProvider(tag: String, xmlElement: Element, parentEntity: XmlElemental?)
         : XmlElemental? {
       val processor = tagToCallback[tag]
-      if (null !== processor) {
-        return processor.invoke(xmlElement, parentEntity)
-      }
-      return null
+      return processor?.invoke(xmlElement, parentEntity)
     }
 
     fun registerTagProcessor(tag: String, entityFactory: (Element, XmlElemental?) -> XmlElemental) {
