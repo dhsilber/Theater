@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 data class DrawingOrder(
   val operation: DrawingOrderOperation,
-  val entity: XmlElemental,
+  val entity: XmlElemental? = null, // Nullable only to support interactive creation of entitiesq
   val data: List<Float>,
   val useType: String = "",
   val color: IndependentColor = IndependentColor(Color.Black, "black"),

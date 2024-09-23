@@ -12,6 +12,9 @@ import entities.*
 
 fun drawPlanContent(drawScope: DrawScope, showSet: Boolean) {
   Grid.instance.drawPlan(drawScope)
+  println(Grid.toString())
+  println(Venue.toString())
+  println(VenuePoint.toString())
 
   for (instance in Wall.instances) {
 //          Text(instance.toString())

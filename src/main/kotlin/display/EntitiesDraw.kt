@@ -19,7 +19,7 @@ fun Flat.drawPlan(): List<DrawingOrder> {
   val data = listOf(StagePoint.OriginX(start.x), StagePoint.OriginY(start.y),
     StagePoint.OriginX(end.x - start.x), StagePoint.OriginY(end.y - start.y))
 
-  println("$this - $data")
+//  println("$this - $data")
 
   val backsideXOffset: Float = when {
     start.y < end.y -> -4f
@@ -59,7 +59,7 @@ fun Flat.drawPlan(): List<DrawingOrder> {
     color = IndependentColor(Color.DarkGreen, "green"),
   ))
 
-  println("$drawingOrders")
+//  println("$drawingOrders")
 
   return drawingOrders.toList()
 }

@@ -22,8 +22,8 @@ class Startup {
     fun startup(pathName: String) {
       TagRegistry.registerTagProcessor(LuminaireDefinition.Tag, LuminaireDefinition::factory)
       TagRegistry.registerTagProcessor(Venue.Tag, Venue::factory)
-      TagRegistry.registerTagProcessor(Floor.Tag, Floor::factory)
       TagRegistry.registerTagProcessor(Proscenium.Tag, Proscenium::factory)
+      TagRegistry.registerTagProcessor(Floor.Tag, Floor::factory)
       TagRegistry.registerTagProcessor(Wall.Tag, Wall::factory)
       TagRegistry.registerTagProcessor(Stair.Tag, Stair::factory)
       TagRegistry.registerTagProcessor(Pipe.Tag, Pipe::factory)

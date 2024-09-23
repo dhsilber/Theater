@@ -8,7 +8,10 @@ import androidx.compose.ui.graphics.nativeCanvas
 import coordinates.PagePoint
 import coordinates.StagePoint
 import coordinates.VenuePoint
+import display.DrawingOrderOperation.FILLED_RECTANGLE
+import display.DrawingOrderOperation.LINE
 import entities.Proscenium
+import entities.Venue
 import org.jetbrains.skia.Font
 import org.jetbrains.skia.Paint
 
@@ -102,4 +105,26 @@ private fun verticalGridLines(drawScope: DrawScope) {
     xMarker += Grid.MeasureSize
     xCounter += 4
   }
+}
+
+
+fun Grid.drawSection(): List<DrawingOrder> {
+
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+
+  val venue = Venue.instances.firstOrNull()
+
+  if (null != venue) {
+
+//    drawingOrders.add(
+//      DrawingOrder(
+//        operation = LINE,
+//        data = listOf(venue.origin.),
+//        color = IndependentColor(Color.Gray, "grey"),
+//        opacity = 0.2f,
+//      )
+//    )
+  }
+
+  return drawingOrders.toList()
 }

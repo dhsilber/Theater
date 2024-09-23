@@ -7,7 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.awtEvent
+import androidx.compose.ui.awt.awtEventOrNull
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -51,9 +51,9 @@ fun App() {
             Modifier
                 .fillMaxSize()
                 .onPointerEvent(PointerEventType.Press) {
-                    text = it.awtEvent.locationOnScreen.toString()
-                    x = it.awtEvent.locationOnScreen.x
-                    y = it.awtEvent.locationOnScreen.y
+                    text = it.awtEventOrNull?.locationOnScreen.toString()
+                    x = it.awtEventOrNull?.locationOnScreen?.x ?: 0
+                    y = it.awtEventOrNull?.locationOnScreen?.y ?: 0
                 },
             Arrangement.spacedBy(5.dp)
         ) {

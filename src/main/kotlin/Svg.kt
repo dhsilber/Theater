@@ -14,7 +14,7 @@ class Svg {
   companion object {
     fun writeAll() {
       writePlanView()
-      writeSectionView()
+//      writeSectionView()
 //      writePipeDrawings()
     }
 
@@ -24,6 +24,10 @@ class Svg {
       drawSvgPlanContent(svgDetails)
       finishSvgFile(svgDetails, "plan")
     }
+
+//    Somewhere in Svg.writeSectionView(), the venuePoint width is being set to something relating to the y value of this floor element:
+//
+//    I imagine that it has something to do with recasting the points to rotate the point of view.
 
     fun writeSectionView() {
       val svgDetails = startSvg()
