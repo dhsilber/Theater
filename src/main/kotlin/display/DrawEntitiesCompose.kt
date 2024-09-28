@@ -34,6 +34,7 @@ fun drawPlanContent(drawScope: DrawScope, showSet: Boolean) {
   Proscenium.instances.map { composeDraw(drawScope, it.drawPlan()) }
   PipeBase.instances.map { composeDraw(drawScope, it.drawPlan()) }
   PipeManager.list.map { composeDraw(drawScope, it.pipe.drawPlan()) }
+  Raceway.instances.map { composeDraw(drawScope, it.drawPlan()) }
 
   if (showSet) {
     for (instance in Setpiece.instances) {
@@ -56,6 +57,7 @@ fun drawSectionContent(drawScope: DrawScope, showSet: Boolean) {
   Proscenium.instances.map { composeDraw(drawScope, it.drawSection()) }
   PipeBase.instances.map { composeDraw(drawScope, it.drawSection()) }
   PipeManager.list.map { composeDraw(drawScope, it.pipe.drawSection()) }
+  Raceway.instances.map { composeDraw(drawScope, it.drawSection()) }
 
 //  for (instance in Setpiece.instances) {
 //    instance.draw(drawScope)

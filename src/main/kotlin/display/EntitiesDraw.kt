@@ -479,6 +479,60 @@ fun Proscenium.drawSection(): List<DrawingOrder> {
   return drawingOrders.toList()
 }
 
+fun Raceway.drawPlan(): List<DrawingOrder> {
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+  val place = origin.venue.copy(y = origin.venue.y + offsety)
+
+  println("Raceway.drawPlan")
+
+  drawingOrders.add(DrawingOrder(
+    operation = RECTANGLE,
+    entity = this,
+    data = listOf(place.x, place.y, length, Raceway.Width),
+    color = IndependentColor(Color.Magenta, "magenta")
+  ))
+//  val offsetToCenter = length / 2
+//  dependents.forEach {
+//    val location = place.x + it.location + offsetToCenter - offset
+//    if (it.hangable is Luminaire) {
+//      val luminaire = it.hangable
+//      drawingOrders.add(DrawingOrder(
+//        operation = USE,
+//        entity = luminaire,
+//        data = listOf(location, place.y),
+//        useType = luminaire.type,
+//      ))
+//    } else {
+//      val pipe = it.hangable as Pipe
+//      drawingOrders.add(DrawingOrder(
+//        operation = CIRCLE,
+//        entity = pipe,
+//        data = listOf(location, place.y, 2f),
+//      ))
+//    }
+//  }
+  return drawingOrders.toList()
+}
+
+fun Raceway.drawSection(): List<DrawingOrder> {
+  val drawingOrders: MutableList<DrawingOrder> = mutableListOf()
+  val place = origin.venue.copy(y = origin.venue.y + offsety)
+  val venue = Venue.instances.first()
+
+  drawingOrders.add(DrawingOrder(
+    operation = RECTANGLE,
+    entity = this,
+    data = listOf(
+      venue.depth - place.y - Raceway.Width / 2,
+      venue.height - place.z - Raceway.Height / 2,
+      venue.depth - place.y + Raceway.Width / 2,
+      venue.height - place.z + Raceway.Height / 2,
+    ),
+    color = IndependentColor(Color.Magenta, "magenta")
+  ))
+  return drawingOrders.toList()
+}
+
 fun Setpiece.drawSection(): List<DrawingOrder> {
   return parts.flatMap { it.drawSection(origin.venue) }
 }

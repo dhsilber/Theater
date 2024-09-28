@@ -1,19 +1,5 @@
 import coordinates.VenuePoint
-import entities.Drawing
-import entities.Event
-import entities.Flat
-import entities.Floor
-import entities.Luminaire
-import entities.LuminaireDefinition
-import entities.Pipe
-import entities.PipeBase
-import entities.Proscenium
-import entities.SetPlatform
-import entities.Setpiece
-import entities.Shape
-import entities.Stair
-import entities.Venue
-import entities.Wall
+import entities.*
 
 class Startup {
 
@@ -30,6 +16,7 @@ class Startup {
       TagRegistry.registerTagProcessor(Luminaire.Tag, Luminaire::factory)
       TagRegistry.registerTagProcessor(Event.Tag, Event::factory)
       TagRegistry.registerTagProcessor(PipeBase.Tag, PipeBase::factory)
+      TagRegistry.registerTagProcessor(Raceway.Tag, Raceway::factory)
       TagRegistry.registerTagProcessor(Setpiece.Tag, Setpiece::factory)
       TagRegistry.registerTagProcessor(Flat.Tag, Flat::factory)
       TagRegistry.registerTagProcessor(SetPlatform.Tag, SetPlatform::factory)
