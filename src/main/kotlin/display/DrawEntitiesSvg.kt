@@ -33,6 +33,7 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   PipeBase.instances.map { svgDraw(svgDocument, it.drawPlan()) }
 //  Pipe.instances.map { boundary += it.drawSvgPlan(svgDocument) }
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
+  Raceway.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
   Setpiece.instances.map { it.drawSvgPlan(svgDocument) }
 
   svgDocument.root.setAttribute("height", (boundary.yMax + 50).toString())
@@ -54,6 +55,7 @@ fun drawSvgSectionContent(svgDocument: SvgDocument) {
   Proscenium.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
   PipeBase.instances.map { svgDraw(svgDocument, it.drawSection()) }
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
+  Raceway.instances.map { boundary += svgDraw(svgDocument, it.drawSection()) }
   Setpiece.instances.map { svgDraw(svgDocument, it.drawSection()) }
 }
 
