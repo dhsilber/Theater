@@ -525,8 +525,8 @@ fun Raceway.drawSection(): List<DrawingOrder> {
     data = listOf(
       venue.depth - place.y - Raceway.Width / 2,
       venue.height - place.z - Raceway.Height / 2,
-      venue.depth - place.y + Raceway.Width / 2,
-      venue.height - place.z + Raceway.Height / 2,
+      Raceway.Width,
+      Raceway.Height,
     ),
     color = IndependentColor(Color.Magenta, "magenta")
   ))

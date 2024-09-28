@@ -39,7 +39,8 @@ private fun highlightIfCurrentPipe(drawingOrder: DrawingOrder) =
     && PipeManager.display
     && PipeManager.list[PipeManager.current].pipe == drawingOrder.entity
   ) {
-    Color.Magenta
+//    Color.Magenta
+    drawingOrder.color.compose
   } else {
     drawingOrder.color.compose
   }

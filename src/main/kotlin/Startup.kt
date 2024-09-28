@@ -42,6 +42,7 @@ class Startup {
       Luminaire.clear()
       Event.clear()
       PipeBase.clear()
+      Raceway.clear()
       Setpiece.clear()
       Flat.clear()
       SetPlatform.clear()

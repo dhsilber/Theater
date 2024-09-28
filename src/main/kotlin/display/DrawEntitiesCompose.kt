@@ -98,7 +98,7 @@ fun Pipe.drawVertical(drawScope: DrawScope) {
 }
 
 fun Pipe.drawHorizontal(drawScope: DrawScope, highlight: Boolean) {
-  val color = if (highlight) Color.Magenta else Color.Black
+  val color = /*if (highlight) Color.Magenta else*/ Color.Black
   drawScope.drawRect(
     color = color,
     topLeft = PagePoint.drawingOffset(origin.venue.x, origin.venue.y),
