@@ -35,6 +35,7 @@ fun drawSvgPlanContent(svgDocument: SvgDocument) {
   Pipe.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
   Raceway.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
   Setpiece.instances.map { it.drawSvgPlan(svgDocument) }
+  Flat.instances.map { boundary += svgDraw(svgDocument, it.drawPlan()) }
 
   svgDocument.root.setAttribute("height", (boundary.yMax + 50).toString())
 }
